@@ -29,5 +29,7 @@
     <main class="container-fluid">
       <%= yield %>
     </main>
+    <%= turbo_frame_tag "modal" %>
+    <%= turbo_frame_tag "toasts" %>
   </body>
 </html>
