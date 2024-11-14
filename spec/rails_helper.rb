@@ -68,6 +68,11 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
   #
+  config.before(:each, type: :system) do
+    driver = :selenium_chrome_headless
+    driver = :selenium_chrome if ENV['SHOW_CHROME']
+    driven_by(driver)
+  end
   Shoulda::Matchers.configure do |config|
     config.integrate do |with|
       with.test_framework :rspec
