@@ -14,6 +14,6 @@ class CompanyCategory < ApplicationRecord
                 .or(CompanyCategory.where("description LIKE ?", "%#{query}%"))
                 .or(CompanyCategory.where("quota LIKE ?", "%#{query}%"))
     end
-    category.order(name: :asc)
+    category.actives.order(name: :asc)
   end
 end
