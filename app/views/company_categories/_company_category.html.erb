@@ -1,0 +1,19 @@
+<%= tag.tr id: dom_id(company_category) do %>
+  <td><%= company_category.name %></td>
+  <td><%= company_category.quota %></td>
+  <td><%= company_category.description %></td>
+  <td>
+    <%= link_to edit_company_category_path(company_category), 
+      class: "btn btn-warning btn-sm btn-sm btn-icon text-white",
+      title: 'Editar',
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-pencil-square"></i>
+    <% end %>
+    <%= link_to modal_disable_company_category_path(company_category), 
+      class: "btn btn-sm btn-icon btn-danger",
+      title: 'Eliminar' ,
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-trash"></i>
+    <% end %>
+  </td>
+<% end %>

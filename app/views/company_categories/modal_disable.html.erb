@@ -1,0 +1,8 @@
+<%= render "shared/modal", title: "Dar de baja categoría", fade_in: true do %>
+  <p>Se va a dar de baja la categoría <b><%= @company_category.name %></b></p>
+  <%= form_with(url: disable_company_category_path(@company_category), method: 'PUT') do |form| %>
+      <%= form.submit 'Dar de baja', class: 'btn btn-danger' %>
+      <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+  <% end %>
+<% end %>
