@@ -65,4 +65,5 @@ group :test do
 end
 
 gem 'factory_bot_rails', '~> 6.4', '>= 6.4.4'
+gem 'pagy', '~> 9.2', '>= 9.2.2'
 
