@@ -63,6 +63,7 @@ end
 group :test do
   gem 'shoulda-matchers', '~> 6.4'
   gem 'capybara', '~> 3.40'
+  gem 'webdrivers', '~> 5.3', '>= 5.3.1'
 end
 
 gem 'factory_bot_rails', '~> 6.4', '>= 6.4.4'
