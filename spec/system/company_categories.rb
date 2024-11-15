@@ -8,7 +8,7 @@ RSpec.describe "CompanyCategories", type: :system do
     expect(trs.size).to eq(2)
 
     tbody = find("tbody")
-    ths = find_all("th"
+    ths = find_all("th")
     within tbody do
       tds = find_all("td")
       expect(tds.size).to eq(ths.size)
