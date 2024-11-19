@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  include Pundit::Authorization
   include Pagy::Backend
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
@@ -19,4 +20,12 @@ class ApplicationController < ActionController::Base
       Current.user_agent = request.user_agent
       Current.ip_address = request.ip
     end
+
+    def current_user
+	    if Current.user
+	      @current_user ||= User.find_by_id(Current.user.id)
+	    else
+	      @current_user = nil
+	    end
+	  end
 end
