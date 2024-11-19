@@ -1,9 +1,10 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+provinces = JSON.parse(File.read(Rails.root.join('db/seeds/provinces.json')))
+cities = JSON.parse(File.read(Rails.root.join('db/seeds/cities.json')))
+
+provinces.each do |province|
+  Province.create(id: province['id'], name: province['name'])
+end
+
+cities.each do |city|
+  City.create(id: city['id'], name: city['name'], province_id: city['province_id'])
+end
