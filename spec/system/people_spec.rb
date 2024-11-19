@@ -13,9 +13,9 @@ RSpec.describe "People", type: :system do
     rows = find_all("tr")
     expect(rows.size).to eq(2)
 
-    within rows.first do
-      td = find_all("td").third
-      expect(td).to have_text("Eragon")
+    within "tbody" do
+      td = find_all("td")
+      expect(td[2]).to have_text("Eragon")
     end
   end
 end
