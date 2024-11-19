@@ -4,7 +4,10 @@ Rails.application.routes.draw do
     put "disable", on: :member
   end
   root "home#index"
-  resources :people
+  resources :people, expect: [ :destroy ] do
+    get "modal_disable", on: :member
+    put "disable", on: :member
+  end
   draw(:authentication)
   draw(:errors)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

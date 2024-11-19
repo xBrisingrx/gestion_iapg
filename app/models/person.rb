@@ -6,7 +6,7 @@ class Person < ApplicationRecord
 
   validates :name, :last_name, :cuil, :birthdate, :phone, :celphone, :email, :direction, presence: true
   validates :cuil, uniqueness: { case_sensitive: true, message: "Ya existe una persona registrada con este cuil." }
-
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "debe ingresar un  email  válido" }
   before_save :set_province
 
   scope :actives, -> { where(active: true) }
@@ -17,6 +17,15 @@ class Person < ApplicationRecord
 
   def fullname
     "#{self.last_name} #{self.name}"
+  end
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "active", "birthdate", "celphone", "city_id", "code", "created_at", "cuil", "direction",
+      "email", "id", "id_value", "last_name", "name", "phone", "province_id", "updated_at" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "city", "province" ]
   end
 
   private

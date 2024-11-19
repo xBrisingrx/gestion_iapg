@@ -6,8 +6,12 @@
   <td><%= person.email %></td>
   <td>
     <%= link_to edit_person_path(person), 
-      class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' do %>
+      class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
       <i class="bi bi-pencil-square"></i>
+    <% end %>
+    <%= link_to modal_disable_person_path(person), 
+      class: "btn btn-danger btn-sm btn-icon",title: 'Eliminar' ,data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-trash"></i>
     <% end %>
   </td>
 <% end %>
