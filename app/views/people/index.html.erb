@@ -1,9 +1,12 @@
 <h1>Personas</h1>
 <div class="row justify-content-between mb-2">
   <div class="col-4">
-    <%= link_to "Registrar persona", 
-      new_person_path,
-      class: "btn btn-sm btn-primary" %>
+    <% if policy(@people).create? %>
+      <%= link_to "Registrar persona", 
+        new_person_path,
+        class: "btn btn-sm btn-primary" %>
+    <% end %>
+    
   </div>
 </div>
 <%= turbo_frame_tag 'table', id: 'people_table' do %>

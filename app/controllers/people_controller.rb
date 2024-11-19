@@ -14,6 +14,7 @@ class PeopleController < ApplicationController
   # GET /people/new
   def new
     @person = Person.new
+    authorize @person
   end
 
   # GET /people/1/edit
@@ -62,6 +63,7 @@ class PeopleController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_person
       @person = Person.find(params.expect(:id))
+      authorize @person
     end
 
     # Only allow a list of trusted parameters through.

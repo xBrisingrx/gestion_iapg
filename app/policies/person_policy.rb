@@ -9,6 +9,30 @@ class PersonPolicy < ApplicationPolicy
     user.admin?
   end
 
+  def create?
+    user.admin?
+  end
+
+  def new?
+    create?
+  end
+
+  def update?
+    user.admin?
+  end
+  
+  def edit?
+    update?
+  end
+
+  def disable?
+    user.admin?
+  end
+
+  def modal_disable
+    disable?
+  end
+
   class Scope < ApplicationPolicy::Scope
     # NOTE: Be explicit about which records you allow access to!
     # def resolve
