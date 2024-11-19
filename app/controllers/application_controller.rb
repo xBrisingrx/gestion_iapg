@@ -7,6 +7,10 @@ class ApplicationController < ActionController::Base
   before_action :set_current_request_details
   before_action :authenticate
 
+  helper_method :current_user
+
+  rescue_from Pundit::NotAuthorizedError, with: :user_not_authorized
+
   private
     def authenticate
       if session_record = Session.find_by_id(cookies.signed[:session_token])
@@ -22,10 +26,14 @@ class ApplicationController < ActionController::Base
     end
 
     def current_user
-	    if Current.user
-	      @current_user ||= User.find_by_id(Current.user.id)
-	    else
-	      @current_user = nil
-	    end
-	  end
+      if Current.user
+        @current_user ||= User.find_by_id(Current.user.id)
+      else
+        @current_user = nil
+      end
+    end
+
+    def user_not_authorized
+      redirect_to unauthorized_path
+    end
 end
