@@ -14,6 +14,19 @@
   <% end %>
 
   <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name, value: @user.name, required: true %>
+  </div>
+  <div>
+    <%= form.label :username, style: "display: block" %>
+    <%= form.text_field :username, value: @user.username, required: true %>
+  </div>
+  <div>
+    <%= form.label :role, style: "display: block" %>
+    <%= form.text_field :role, value: @user.role, required: true %>
+  </div>
+
+  <div>
     <%= form.label :email, style: "display: block" %>
     <%= form.email_field :email, value: @user.email, required: true, autofocus: true, autocomplete: "email" %>
   </div>
