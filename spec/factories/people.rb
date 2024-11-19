@@ -16,5 +16,9 @@ FactoryBot.define do
     trait :inactive do
       active { false }
     end
+
+    trait :invalid do
+      llast_name { "" }
+    end
   end
 end

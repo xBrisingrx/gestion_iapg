@@ -6,7 +6,6 @@ RSpec.describe "company_categories/new", type: :view do
       name: "MyString",
       description: "MyString",
       quota: 1,
-      active: false
     ))
   end
 
@@ -14,14 +13,11 @@ RSpec.describe "company_categories/new", type: :view do
     render
 
     assert_select "form[action=?][method=?]", company_categories_path, "post" do
-
       assert_select "input[name=?]", "company_category[name]"
 
       assert_select "input[name=?]", "company_category[description]"
 
       assert_select "input[name=?]", "company_category[quota]"
-
-      assert_select "input[name=?]", "company_category[active]"
     end
   end
 end

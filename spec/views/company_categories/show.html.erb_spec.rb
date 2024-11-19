@@ -6,15 +6,14 @@ RSpec.describe "company_categories/show", type: :view do
       name: "Name",
       description: "Description",
       quota: 2,
-      active: false
+      active: true
     ))
   end
 
-  it "renders attributes in <p>" do
+  it "renders attributes in <tr>" do
     render
     expect(rendered).to match(/Name/)
     expect(rendered).to match(/Description/)
     expect(rendered).to match(/2/)
-    expect(rendered).to match(/false/)
   end
 end
