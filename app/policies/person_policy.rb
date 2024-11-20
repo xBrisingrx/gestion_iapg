@@ -12,7 +12,7 @@ class PersonPolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin?
+    user.admin? || user.editor?
   end
 
   def create?
