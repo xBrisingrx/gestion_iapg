@@ -4,7 +4,6 @@ class PeopleController < ApplicationController
   # GET /people or /people.json
   def index
     @query = Person.actives.ransack(params[:query])
-    puts @query.result.count
     @pagy, @people = pagy(@query.result)
     authorize @people
   end
