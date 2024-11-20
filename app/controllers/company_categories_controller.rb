@@ -5,6 +5,7 @@ class CompanyCategoriesController < ApplicationController
   def index
     filter = CompanyCategory.filter(params[:query])
     @pagy, @company_categories = pagy(filter)
+    authorize @company_categories
   end
 
   # GET /company_categories/1 or /company_categories/1.json
@@ -25,14 +26,14 @@ class CompanyCategoriesController < ApplicationController
     @company_category = CompanyCategory.new(company_category_params)
     respond_to do |format|
       if @company_category.save
-        format.turbo_stream { 
+        format.turbo_stream {
           render turbo_stream: [
-            turbo_stream.prepend("tbody_company_categories", 
-              partial: "company_categories/company_category", 
+            turbo_stream.prepend("tbody_company_categories",
+              partial: "company_categories/company_category",
               locals: { company_category: @company_category }),
-            turbo_stream.replace("toasts", 
-              partial: "shared/toasts", 
-              locals: { message: 'Categoría registrada', status_class: 'primary' })
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Categoría registrada", status_class: "primary" })
           ]
         }
         format.html { redirect_to company_category_url(@company_category), notice: "Categoría registrada." }
@@ -48,12 +49,12 @@ class CompanyCategoriesController < ApplicationController
   def update
     respond_to do |format|
       if @company_category.update(company_category_params)
-        format.turbo_stream { 
+        format.turbo_stream {
           render turbo_stream: [
             turbo_stream.replace(@company_category),
-            turbo_stream.replace("toasts", 
-              partial: "shared/toasts", 
-              locals: { message: 'Categoría actualizada', status_class: 'primary' })
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Categoría actualizada", status_class: "primary" })
           ]
         }
         format.html { redirect_to @company_category, notice: "Categoría actualizada." }
@@ -84,10 +85,11 @@ class CompanyCategoriesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_company_category
       @company_category = CompanyCategory.find(params[:id])
+      authorize @company_category
     end
 
     # Only allow a list of trusted parameters through.
     def company_category_params
-      params.require(:company_category).permit(:name, :description, :quota)
+      params.expect(company_category: [ :name, :description, :quota ])
     end
 end

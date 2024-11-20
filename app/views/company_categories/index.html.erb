@@ -1,10 +1,12 @@
 <h1>Categorías de empresas</h1>
 <div class="row justify-content-between mb-2">
   <div class="col-4">
-    <%= link_to "Registrar categoría", 
-      new_company_category_path,
-      data: { turbo_frame: "modal"},
-      class: "btn btn-sm btn-primary" %>
+    <% if policy(@company_categories).new? %>
+      <%= link_to "Registrar categoría", 
+        new_company_category_path,
+        data: { turbo_frame: "modal"},
+        class: "btn btn-sm btn-primary" %>
+    <% end %>
   </div>
   <div class="col-6">
     <%= form_with url: company_categories_path, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
