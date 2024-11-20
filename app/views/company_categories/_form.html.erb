@@ -2,19 +2,19 @@
   <div class="form-group row mb-2">
     <%= form.label :name, "Nombre"%>
     <%= form.text_field :name, required: true %>
-    <%= inline_error_for(:name, company_category) %>
+    <%= inline_error_for(:name, company_category, "offset-3") %>
   </div>
 
   <div class="form-group row mb-2">
     <%= form.label :description, "Descripción"%>
     <%= form.text_field :description %>
-    <%= inline_error_for(:description, company_category) %>
+    <%= inline_error_for(:description, company_category, "offset-3") %>
   </div>
 
   <div class="form-group row mb-2">
     <%= form.label :quota, "Cupos que puede reservar"%>
     <%= form.number_field :quota, required: true %>
-    <%= inline_error_for(:quota, company_category) %>
+    <%= inline_error_for(:quota, company_category, "offset-3") %>
   </div>
 
   <div class='mt-2'>
