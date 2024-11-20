@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_20_032422) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_20_033847) do
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "province_id", null: false
@@ -107,6 +107,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_032422) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "rooms", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "description"
+    t.integer "capacity", null: false
+    t.bigint "headquarter_id", null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["headquarter_id"], name: "index_rooms_on_headquarter_id"
+  end
+
   create_table "sectionals", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "direction", null: false
@@ -160,6 +171,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_032422) do
   add_foreign_key "headquarters", "sectionals"
   add_foreign_key "people", "cities"
   add_foreign_key "people", "provinces"
+  add_foreign_key "rooms", "headquarters"
   add_foreign_key "sectionals", "cities"
   add_foreign_key "sectionals", "provinces"
   add_foreign_key "sessions", "users"

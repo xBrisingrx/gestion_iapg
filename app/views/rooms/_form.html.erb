@@ -1,0 +1,37 @@
+<%= form_with(model: room, builder: BootstrapBuilder) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :headquarter_id, "Sede" %>
+    <div class="col-6">
+      <%= form.select :headquarter_id, Headquarter.actives.collect { |headquarter| [ "#{headquarter.name}", headquarter.id ] },
+        {:include_blank => "Seleccione sede"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [room.headquarter_id]
+        },
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:headquarter_id, room, "offset-3") %>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :name, "Nombre"%>
+    <%= form.text_field :name, required: true %>
+    <%= inline_error_for(:name, room, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :capacity, "Capacidad"%>
+    <%= form.number_field :capacity, required: true %>
+    <%= inline_error_for(:capacity, room, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :description, "Descripción"%>
+    <%= form.text_field :description %>
+    <%= inline_error_for(:description, room, "offset-3") %>
+  </div>
+
+  <div class="mt-2">
+    <%= form.submit "Guardar" %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+<% end %>
