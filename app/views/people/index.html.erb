@@ -39,6 +39,7 @@
       </thead>
       <tbody id='tbody_people'>
         <%= render @people %>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 6}) if @people.empty?%>
       </tbody>
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>
