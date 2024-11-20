@@ -1,7 +1,7 @@
 class CompanyCategory < ApplicationRecord
   validates :name,
     presence: true,
-    uniqueness: { case_sensitive: true, message: "Esta categoría ya se encuentra registrada" }
+    uniqueness: { message: "Esta categoría ya se encuentra registrada" }
   validates :quota, presence: true, numericality: { only_integer: true }
 
   scope :actives, -> { where(active: true) }
