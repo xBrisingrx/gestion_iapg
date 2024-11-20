@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_20_111130) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_20_142301) do
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "province_id", null: false
@@ -166,6 +166,17 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_111130) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_sessions_on_user_id"
+  end
+
+  create_table "units", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "name", limit: 50, null: false
+    t.string "description"
+    t.string "fleet", limit: 20, null: false
+    t.string "methodology", limit: 20, null: false
+    t.string "category", limit: 20, null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
