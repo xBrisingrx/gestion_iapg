@@ -15,6 +15,7 @@ class SectorsController < ApplicationController
   # GET /sectors/new
   def new
     @sector = Sector.new
+    authorize @sector
   end
 
   # GET /sectors/1/edit

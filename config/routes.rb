@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  resources :sectors, expect: [ :destroy ] do
+    get "modal_disable", on: :member
+    put "disable", on: :member
+  end
   resources :company_categories, expect: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
