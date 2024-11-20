@@ -15,3 +15,14 @@ company_categories.each do |company_category|
     description: company_category['description'],
     quota: company_category['quota'])
 end
+
+headquarters = JSON.parse(File.read(Rails.root.join('db/seeds/headquarters.json')))
+headquarters.each do |headquarter|
+  Headquarter.create!(id: headquarter['id'],
+    name: headquarter['name'],
+    description: headquarter['description'],
+    location: headquarter['location'],
+    sectional_id: headquarter['sectional_id'],
+    can_make_psychometric: headquarter['can_make_psychometric'].to_i
+  )
+end

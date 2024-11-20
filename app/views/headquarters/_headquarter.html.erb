@@ -3,7 +3,8 @@
   <td><%= headquarter.description %></td>
   <td><%= headquarter.can_make_psychometric ? "Si" : "No" %></td>
   <td><%= headquarter.sectional.name %></td>
-  <td><%= "#{headquarter.city.name} #{headquarter.province.name}" %></td>
+  <td><%= headquarter.location %></td>
+  <td><%= "#{headquarter.city&.name} #{headquarter.province&.name}" %></td>
   <td>
     <% if policy(headquarter).edit? %>
       <%= link_to edit_headquarter_path(headquarter), 

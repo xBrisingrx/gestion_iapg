@@ -91,6 +91,6 @@ class HeadquartersController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def headquarter_params
-      params.expect(headquarter: [ :name, :description, :sectional_id, :province_id, :city_id, :can_make_psychometric ])
+      params.expect(headquarter: [ :name, :description, :location, :sectional_id, :province_id, :city_id, :can_make_psychometric ])
     end
 end

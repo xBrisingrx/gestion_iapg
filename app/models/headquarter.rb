@@ -1,12 +1,13 @@
 class Headquarter < ApplicationRecord
   belongs_to :sectional
-  belongs_to :province
-  belongs_to :city
+  belongs_to :province, optional: true
+  belongs_to :city, optional: true
 
   validates :name,
     presence: true,
     uniqueness: { message: "Esta sede ya se encuentra registrada." }
 
+  before_validation :set_city
   before_validation :set_province
 
   scope :actives, -> { where(active: true) }
@@ -20,6 +21,13 @@ class Headquarter < ApplicationRecord
   end
 
   private
+  def set_city
+    city = City.find_by(name: self.location)
+    if city
+      self.city = city
+    end
+  end
+
   def set_province
     self.province = self.city.province if !self.city_id.blank?
   end
