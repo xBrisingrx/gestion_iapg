@@ -1,7 +1,12 @@
 <%= form_with(model: company, builder: BootstrapBuilder) do |form| %>
   <div class="form-group row mb-2">
     <%= form.label :cuit %>
-    <%= form.text_field :cuit, required: true %>
+    <%= form.text_field :cuit,
+      data: {
+          controller: "forms--person",
+          forms__person_target: "cuil",
+          action: "change->forms--person#check_cuil" },
+      required: true %>
     <%= inline_error_for(:cuit, company, "offset-3") %>
   </div>
 
