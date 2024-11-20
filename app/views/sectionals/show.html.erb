@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @sectional %>
+
+<div>
+  <%= link_to "Edit this sectional", edit_sectional_path(@sectional) %> |
+  <%= link_to "Back to sectionals", sectionals_path %>
+
+  <%= button_to "Destroy this sectional", @sectional, method: :delete %>
+</div>

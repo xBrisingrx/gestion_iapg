@@ -1,0 +1,20 @@
+<%= tag.tr id: dom_id(sectional) do %>
+  <td><%= sectional.name %></td>
+  <td><%= sectional.direction %></td>
+  <td><%= sectional.province.name %></td>
+  <td><%= sectional.city.name %></td>
+  <td>
+    <% if policy(sectional).edit? %>
+      <%= link_to edit_sectional_path(sectional), 
+        class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-pencil-square"></i>
+      <% end %>
+    <% end %>
+    <% if policy(sectional).disable? %>
+      <%= link_to modal_disable_sectional_path(sectional), 
+        class: "btn btn-sm btn-icon btn-danger",title: 'Eliminar' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-trash"></i>
+      <% end %>
+    <% end %>
+  </td>
+<% end %>
