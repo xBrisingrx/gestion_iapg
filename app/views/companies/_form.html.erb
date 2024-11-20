@@ -1,0 +1,95 @@
+<%= form_with(model: company, builder: BootstrapBuilder) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :cuit %>
+    <%= form.text_field :cuit, required: true %>
+    <%= inline_error_for(:cuit, company, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :name, "Razón social" %>
+    <%= form.text_field :name, required: true %>
+    <%= inline_error_for(:name, company, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :iva_condition_id, "IVA" %>
+    <div class="col-6">
+      <%= form.select :iva_condition_id, IvaCondition.all.collect { |iva| [ "#{iva.name}", iva.id ] },
+        {:include_blank => "Seleccione condición de iva"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [company.iva_condition_id]
+        },
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:iva_condition_id, company, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :direction, "Dirección" %>
+    <%= form.text_field :direction %>
+    <%= inline_error_for(:direction, company, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :phone, "Teléfono" %>
+    <%= form.text_field :phone %>
+    <%= inline_error_for(:phone, company, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :city_id, "Ciudad" %>
+    <div class="col-6">
+      <%= form.select :city_id, City.all.includes(:province).collect { |city| [ "#{city.province.name} #{city.name}", city.id ] },
+        {:include_blank => "Seleccione ciudad"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [company.city_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:city_id, company, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :sector_id, "Rubro" %>
+    <div class="col-6">
+      <%= form.select :sector_id, Sector.all.collect { |sector| [ "#{sector.name}", sector.id ] },
+        {:include_blank => "Seleccione rubro"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [company.sector_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:sector_id, company, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :company_category_id, "Categoría" %>
+    <div class="col-6">
+      <%= form.select :company_category_id, CompanyCategory.all.collect { |category| [ "#{category.name}", category.id ] },
+        {:include_blank => "Seleccione categoría"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [company.company_category_id]
+        },
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:company_category_id, company, "offset-3") %>
+  </div>
+
+  <div class="form-check mb-2">
+    <%= form.check_box :operator, class: "form-check-input" %>
+    <%= form.label :operator, "Es operadora" %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :comment, "Comentario" %>
+    <%= form.text_area :comment %>
+    <%= inline_error_for(:comment, company, "offset-3") %>
+  </div>
+
+  <div class='mt-2'>
+    <%= form.submit 'Guardar' %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+<% end %>
