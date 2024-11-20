@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_20_033847) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_20_111130) do
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "province_id", null: false
@@ -55,12 +55,32 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_033847) do
     t.index ["name"], name: "index_company_categories_on_name", unique: true
   end
 
+  create_table "course_types", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "name", limit: 100, null: false
+    t.string "description", null: false
+    t.integer "max_quota", null: false
+    t.integer "min_quota", null: false
+    t.integer "min_score", null: false
+    t.integer "max_score", null: false
+    t.integer "passing_score", null: false
+    t.integer "number_of_repeat", null: false
+    t.boolean "need_code", default: false
+    t.integer "fleet", null: false
+    t.string "category", null: false
+    t.bigint "room_id", null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["room_id"], name: "index_course_types_on_room_id"
+  end
+
   create_table "headquarters", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "description"
+    t.string "location", limit: 100
     t.bigint "sectional_id", null: false
-    t.bigint "province_id", null: false
-    t.bigint "city_id", null: false
+    t.bigint "province_id"
+    t.bigint "city_id"
     t.boolean "can_make_psychometric", default: false
     t.boolean "active", default: true
     t.datetime "created_at", null: false
@@ -166,6 +186,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_20_033847) do
   add_foreign_key "companies", "iva_conditions"
   add_foreign_key "companies", "provinces"
   add_foreign_key "companies", "sectors"
+  add_foreign_key "course_types", "rooms"
   add_foreign_key "headquarters", "cities"
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"

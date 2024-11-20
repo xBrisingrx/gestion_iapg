@@ -26,3 +26,14 @@ headquarters.each do |headquarter|
     can_make_psychometric: headquarter['can_make_psychometric'].to_i
   )
 end
+
+rooms = JSON.parse(File.read(Rails.root.join('db/seeds/rooms.json')))
+rooms.each do |room|
+  Room.create(id: room['id'],
+    name: room['name'],
+    description: room['description'],
+    headquarter_id: room['headquarter_id'],
+    capacity: room['capacity'].to_i,
+    active: room['active'].to_i
+  )
+end

@@ -1,0 +1,32 @@
+<%= tag.tr id: dom_id(course_type) do %>
+  <td><%= course_type.name %></td>
+  <td><%= course_type.description %></td>
+  <td><%= course_type.min_quota %></td>
+  <td><%= course_type.max_quota %></td>
+  <td><%= course_type.min_score %></td>
+  <td><%= course_type.max_score %></td>
+  <td><%= course_type.passing_score %></td>
+  <td><%= course_type.number_of_repeat %></td>
+  <td><%= course_type.need_code ? "Si" : "No" %></td>
+  <td>
+    <% if policy(course_type).show? %>
+      <%= link_to course_type_path(course_type), 
+        class: "btn btn-success btn-sm btn-sm btn-icon text-white",title: 'Detalle' ,data: { turbo_frame: "_top"} do %>
+        <i class="bi bi-eye"></i>
+      <% end %>
+    <% end %>
+    <% if policy(course_type).edit? %>
+      <%= link_to edit_course_type_path(course_type), 
+        class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-pencil-square"></i>
+      <% end %>
+    <% end %>
+    <% if policy(course_type).disable? %>
+      <%= link_to modal_disable_course_type_path(course_type), 
+        class: "btn btn-danger btn-sm btn-icon",title: 'Eliminar' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-trash"></i>
+      <% end %>
+    <% end %>
+  </td>
+<% end %>
+

@@ -1,0 +1,97 @@
+<%= form_with(model: course_type, builder: BootstrapBuilder) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :name, "Nombre" %>
+    <%= form.text_field :name, required: true %>
+    <%= inline_error_for(:name, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :description, "Descripción" %>
+    <%= form.text_field :description, required: true %>
+    <%= inline_error_for(:description, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :min_quota, "Cupo mínimo" %>
+    <%= form.number_field :min_quota, required: true %>
+    <%= inline_error_for(:min_quota, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :max_quota, "Cupo máximo" %>
+    <%= form.number_field :max_quota, required: true %>
+    <%= inline_error_for(:max_quota, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :min_score, "Nota mínima" %>
+    <%= form.number_field :min_score, required: true %>
+    <%= inline_error_for(:min_score, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :max_score, "Nota máxima" %>
+    <%= form.number_field :max_score, required: true %>
+    <%= inline_error_for(:max_score, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :passing_score, "Aprueba con" %>
+    <%= form.number_field :passing_score, required: true %>
+    <%= inline_error_for(:passing_score, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :number_of_repeat, "Recuperatorios" %>
+    <%= form.number_field :number_of_repeat, required: true %>
+    <%= inline_error_for(:number_of_repeat, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :category, "Categoría" %>
+    <div class="col-6">
+      <%= form.select :category, [ "Inicio", "Renovación" ].map { |category| [ "#{category}", category ] },
+        {:include_blank => "Seleccione categoría"},
+        class: "form-control",
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:category, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :room_id, "Sala" %>
+    <div class="col-6">
+      <%= form.select :room_id, Room.actives.all.collect { |room| [ "#{room.name}", room.id ] },
+        {:include_blank => "Seleccione sala"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [course_type.room_id]
+        },
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:room_id, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :fleet, "Flota" %>
+    <div class="col-6">
+      <%= form.select :fleet, { light: 'Liviana', heavy: 'Pesada' }.map { |fleet| [ "#{fleet[1]}", fleet[0] ] },
+        {:include_blank => "Seleccione tipo flota"},
+        class: "form-control",
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:fleet, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-check mb-2">
+    <%= form.check_box :need_code, class: "form-check-input" %>
+    <%= form.label :need_code, "Requiere código" %>
+  </div>
+
+  <div class='mt-2'>
+    <%= form.submit 'Guardar' %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+<% end %>
