@@ -15,6 +15,16 @@
             <%= link_to 'Ver personas', people_path, class:"dropdown-item" %>
           </ul>
         </li>
+        <li class="nav-item dropdown">
+          <%= link_to 'Empresas', "#", 
+            role: 'button', data: {'bs-toggle': 'dropdown'}, aria: {expanded: 'false'}, class: 'nav-link dropdown-toggle' %>
+          <ul class="dropdown-menu">
+            <%= link_to 'Ver empresas', companies_path, class:"dropdown-item" %>
+            <%= link_to 'Ver categorías', company_categories_path, class:"dropdown-item" %>
+            <%= link_to 'Ver rubros', sectors_path, class:"dropdown-item" %>
+            <%= link_to 'Ver condición de iva', iva_conditions_path, class:"dropdown-item" %>
+          </ul>
+        </li>
         <li class="nav-item">
           <%= link_to 'Other link', '#', class: 'nav-link', data: { turbo: false } %>
         </li>
