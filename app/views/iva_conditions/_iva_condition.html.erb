@@ -1,0 +1,18 @@
+<%= tag.tr id: dom_id(iva_condition) do %>
+  <td><%= iva_condition.name %></td>
+  <td><%= iva_condition.description %></td>
+  <td>
+    <% if policy(iva_condition).edit? %>
+      <%= link_to edit_iva_condition_path(iva_condition), 
+        class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-pencil-square"></i>
+      <% end %>
+    <% end %>
+    <% if policy(iva_condition).disable? %>
+      <%= link_to modal_disable_iva_condition_path(iva_condition), 
+        class: "btn btn-sm btn-icon btn-danger",title: 'Eliminar' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-trash"></i>
+      <% end %>
+    <% end %>
+  </td>
+<% end %>

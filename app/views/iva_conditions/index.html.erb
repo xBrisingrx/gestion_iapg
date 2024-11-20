@@ -1,0 +1,30 @@
+<h1>Condición de iva</h1>
+<div class="row justify-content-between mb-2">
+  <div class="col-4">
+    <% if policy(@iva_conditions).new? %>
+      <%= link_to "Registrar condición", 
+        new_iva_condition_path,
+        data: { turbo_frame: "modal"},
+        class: "btn btn-sm btn-primary" %>
+    <% end %>
+  </div>
+  <%= render "shared/filter_form", url_path: iva_conditions_path %>
+</div>
+<%= turbo_frame_tag 'table', id: 'iva_conditions_table' do %>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id='tbody_iva_conditions'>
+        <%= render @iva_conditions %>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 3}) if @iva_conditions.empty?%>
+      </tbody>
+    </table>
+    <%== pagy_bootstrap_nav(@pagy) %>
+  </div>
+<% end %>

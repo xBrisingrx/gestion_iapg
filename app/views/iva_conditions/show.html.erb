@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @iva_condition %>
+
+<div>
+  <%= link_to "Edit this iva condition", edit_iva_condition_path(@iva_condition) %> |
+  <%= link_to "Back to iva conditions", iva_conditions_path %>
+
+  <%= button_to "Destroy this iva condition", @iva_condition, method: :delete %>
+</div>
