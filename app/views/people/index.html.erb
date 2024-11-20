@@ -29,11 +29,11 @@
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
-          <th>Cuil</th>
-          <th>Apellido</th>
-          <th>Nombre</th>
-          <th>Celular</th>
-          <th>Email</th>
+          <th><%= sort_link(@query, :cuil, "Cuil") %></th>
+          <th><%= sort_link(@query, :last_name, "Apellido") %></th>
+          <th><%= sort_link(@query, :name, "Nombre") %></th>
+          <th><%= sort_link(@query, :celphone, "Celular") %></th>
+          <th><%= sort_link(@query, :email, "Email") %></th>
           <th>Acciones</th>
         </tr>
       </thead>
