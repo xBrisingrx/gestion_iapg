@@ -34,12 +34,13 @@
           <th><%= sort_link(@query, :can_make_psychometric, "Realiza psicométrico") %></th>
           <th><%= sort_link(@query, :sectional_id, "Seccional") %></th>
           <th><%= sort_link(@query, :city_id, "Ubicación") %></th>
+          <th><%= sort_link(@query, :city_id, "Ciudad") %></th>
           <th>Acciones</th>
         </tr>
       </thead>
       <tbody id='tbody_headquarters'>
         <%= render @headquarters %>
-        <%= render(partial: "shared/not_found_data", locals: {colspan: 6}) if @headquarters.empty?%>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 7}) if @headquarters.empty?%>
       </tbody>
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>
