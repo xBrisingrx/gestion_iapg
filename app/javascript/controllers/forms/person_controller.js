@@ -8,17 +8,15 @@ export default class extends Controller {
   }
 
   check_cuil() {
+    if( this.cuilTarget.parentElement.querySelector(".invalid-feedback") !== null ) {
+      this.cuilTarget.parentElement.querySelector(".invalid-feedback").remove()
+    }
+    this.cuilTarget.classList.toggle("is-invalid", !this.cuil_is_valid())
     if(!this.cuil_is_valid()) {
-      this.cuilTarget.classList.add("is-invalid")
       this.cuilTarget.insertAdjacentHTML(
         "afterEnd",
         "<span class='invalid-feedback'>CUIL inválido</span>"
       )
-    } else {
-      this.cuilTarget.classList.remove("is-invalid")
-      if( this.cuilTarget.parentElement.querySelector(".invalid-feedback") !== null ) {
-        this.cuilTarget.parentElement.querySelector(".invalid-feedback").remove()
-      }
     }
   }
 
