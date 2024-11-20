@@ -15,6 +15,7 @@ class CompanyCategoriesController < ApplicationController
   # GET /company_categories/new
   def new
     @company_category = CompanyCategory.new
+    authorize @company_category
   end
 
   # GET /company_categories/1/edit
