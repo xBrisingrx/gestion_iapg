@@ -8,20 +8,7 @@
       class: "btn btn-sm btn-primary" %>
     <% end%>
   </div>
-  <div class="col-6 col-md-4 col-lg-3">
-    <%= form_with url: sectors_path, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
-    <div class="input-group input-group-sm">
-        <span class="input-group-text">
-          <i class="bi bi-search"></i>
-        </span>
-        <%= form.search_field :query,
-          placeholder: "Filtrar...",
-          class: "form-control form-control-sm",
-          autocomplete: "off",
-          data: { action: "input->filter#search" } %>
-      </div>
-    <% end %>
-  </div>
+  <%= render "shared/filter_form", url_path: sectors_path %>
 </div>
 <%= turbo_frame_tag 'table', id: 'sectors_table' do %>
   <div class="table-responsive">
