@@ -1,0 +1,15 @@
+[
+  { "id":1, "name": "Empresas No Socias 3", "description": "Empresas No Socias 3", "quota": 3 },
+  { "id":2, "name": "Empresas No Socias 2", "description": "Empresas No Socias 2", "quota": 2 },
+  { "id":3, "name": "Empresas No Socias 4", "description": "Empresas No Socias 4", "quota": 4 },
+  { "id":4, "name": "Empresas No Socias 5", "description": "Empresas No Socias 5", "quota": 5 },
+  { "id":5, "name": "Empresas Socias 2", "description": "Empresas Socias 2", "quota": 2},
+  { "id":6, "name": "Empresas Socias 3", "description": "Empresas Socias 3", "quota": 3},
+  { "id":7, "name": "Empresas Socias 4", "description": "Empresas Socias 4", "quota": 4},
+  { "id":8, "name": "Empresas Socias 5", "description": "Empresas Socias 5", "quota": 5},
+  { "id":10, "name": "Empresas No Socias 7", "description": "Empresas No Socias 7",  "quota": 7},
+  { "id":11, "name": "Empresas Socias 8", "description": "Empresas Socias 8", "quota": 8},
+  { "id":12, "name": "Empresas Socias 6", "description": "Empresas Socias 6", "quota": 6},
+  { "id":13, "name": "Empresas Socias 10", "description": "Empresas Socias 10", "quota": 20},
+  { "id":14, "name": "Empresas Socias 12", "description": "Empresas Socias 12", "quota": 12}
+]
