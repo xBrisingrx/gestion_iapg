@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :course_type do
-    name { "MyString" }
+    sequence(:name) { |n| "Tipo curso n #{n}" }
     description { "MyString" }
     min_quota { 1 }
     max_quota { 1 }
@@ -8,7 +8,8 @@ FactoryBot.define do
     max_score { 1 }
     passing_score { 1 }
     number_of_repeat { 1 }
-    room { nil }
+    fleet { :light }
+    room { association :room }
     active { false }
     category { "MyString" }
   end

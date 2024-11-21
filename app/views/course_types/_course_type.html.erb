@@ -10,6 +10,10 @@
   <td><%= course_type.need_code ? "Si" : "No" %></td>
   <td>
     <% if policy(course_type).show? %>
+      <%= link_to new_course_type_course_type_unit_path(course_type), 
+        class: "btn btn-info btn-sm btn-sm btn-icon text-white",title: 'Agregar módulo' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-plus"></i>
+      <% end %>
       <%= link_to course_type_path(course_type), 
         class: "btn btn-success btn-sm btn-sm btn-icon text-white",title: 'Detalle' ,data: { turbo_frame: "_top"} do %>
         <i class="bi bi-eye"></i>

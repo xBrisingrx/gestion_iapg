@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :sectional do
-    name { "MyString" }
+    sequence(:name) { |n| "Seccional n #{n}" }
     direction { "MyString" }
-    city { nil }
-    province { nil }
-    active { false }
+    city { association :city }
+    province { association :province }
+    active { true }
   end
 end

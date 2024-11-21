@@ -1,6 +1,8 @@
 class CourseType < ApplicationRecord
   belongs_to :room
-
+  has_many :course_type_units
+  has_many :units, through: :course_type_units
+  
   validates :description, :min_quota, :max_quota, :min_score, :max_score, :passing_score, :number_of_repeat, :fleet, :category, presence: true
   validates :min_quota, :max_quota, :min_score, :max_score, :passing_score, :number_of_repeat, numericality: { only_integer: true }
   validates :name, 

@@ -10,4 +10,12 @@ module ApplicationHelper
     end
     html.join.html_safe
   end
+
+  def date_format(date)
+    date.strftime("%d-%m-%y")
+  end
+
+  def hour_format(hour)
+    hour.strftime("%H:%M")
+  end
 end

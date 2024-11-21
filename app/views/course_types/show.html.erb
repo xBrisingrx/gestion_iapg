@@ -1,10 +1,75 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @course_type %>
-
-<div>
-  <%= link_to "Edit this course type", edit_course_type_path(@course_type) %> |
-  <%= link_to "Back to course types", course_types_path %>
-
-  <%= button_to "Destroy this course type", @course_type, method: :delete %>
-</div>
+  <h3>Detalle de <%= @course_type.name %></h3>
+  <section class="ms-2 border-bottom">
+    <div class="mb-3">
+      <h4>Descripción</h4>
+      <p><%= @course_type.description %></p>
+    </div>
+    <div class="mb-3 row">
+      <h4>Cupos</h4>
+      <div class="col-6 col-md-4 col-lg-2">
+        <label class="form-label">Mínimo</label>
+        <p><%= @course_type.min_quota %></p>
+      </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <label class="form-label">Máximo</label>
+        <p><%= @course_type.max_quota %></p>
+      </div>
+    </div>
+    <div class="mb-3 row">
+      <h4>Notas</h4>
+      <div class="col-4 col-md-3 col-lg-2">
+        <label class="form-label">Mínima</label>
+        <p><%= @course_type.min_score %></p>
+      </div>
+      <div class="col-4 col-md-3 col-lg-2">
+        <label class="form-label">Máxima</label>
+        <p><%= @course_type.max_score %></p>
+      </div>
+      <div class="col-4 col-md-3 col-lg-2">
+        <label class="form-label">Aprueba con</label>
+        <p><%= @course_type.passing_score %></p>
+      </div>
+    </div>
+    <div class="mb-3 row">
+      <div class="col-6 col-md-4 col-lg-2">
+        <h4>Recuperatorios</h4>
+        <p><%= @course_type.number_of_repeat %></p>
+      </div>
+      <div class="col-6">
+        <h4>Necesita código</h4>
+        <p><%= @course_type.need_code ? "Si" : "No" %></p>
+      </div>
+    </div>
+  </section>
+  <section class="ms-2">
+    <h3>Módulos</h3>
+    <% day = @course_type.course_type_units.first&.day %>
+    <% unit = '' %>
+    <% @course_type_units.each do |unit| %>
+      <% if day != unit.day || @course_type.course_type_units.first.id == unit.id %>
+        <h4>Día <%= unit.day %></h4>
+        <% day = unit.day %>
+      <% end %>
+      <div class="mb-3 row">
+        <div class="col-3">
+          <p class="fw-bold">Módulo</p>
+          <p><%= unit.unit.name %></p>
+        </div>
+        <div class="col-3">
+          <p class="fw-bold">Turno</p>
+          <p><%= unit.shift %></p>
+        </div>
+        <div class="col-3">
+          <p class="fw-bold">Horario</p>
+          <p><%= unit.schedule %></p>
+        </div>
+        <div class="col-3">
+          <% if unit.is_by_turn %>
+            <p class="fw-bold">Duración del turno</p>
+              <p>Turnos de <%= unit.shift_time %> minutos.</p>
+          <% end %>
+        </div>
+      </div>
+      <% unit = unit.unit.name %>
+    <% end %>
+  </section>

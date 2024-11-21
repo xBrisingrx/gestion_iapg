@@ -10,6 +10,9 @@ Rails.application.routes.draw do
   resources :course_types, expect: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
+    resources :course_type_units do
+      get "add_units_to_form", on: :collection
+    end
   end
   resources :rooms, expect: [ :destroy ] do
     get "modal_disable", on: :member

@@ -1,9 +1,9 @@
 FactoryBot.define do
   factory :room do
-    name { "MyString" }
+    sequence(:name) { |n| "Sala n #{n}" }
     description { "MyString" }
     capacity { 1 }
-    headquarter { nil }
-    active { false }
+    headquarter { association :headquarter }
+    active { true }
   end
 end

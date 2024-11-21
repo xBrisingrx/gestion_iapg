@@ -1,8 +1,8 @@
 FactoryBot.define do
   factory :headquarter do
-    name { "MyString" }
+    sequence(:name) { |n| "Sede n #{n}" }
     description { "MyString" }
-    sectional { nil }
+    sectional { association :sectional }
     province { nil }
     city { nil }
     can_make_psychometric { false }

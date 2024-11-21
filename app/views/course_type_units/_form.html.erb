@@ -1,0 +1,79 @@
+<%= form_with(model: [ course_type, course_type_unit ], builder: BootstrapBuilder, data: { controller: "forms--course-type-unit" }) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :unit_id, "Módulo" %>
+    <div class="col-6">
+      <%= form.select :unit_id, Unit.actives.all.collect { |unit| [ "#{unit.name}", unit.id ] },
+        {:include_blank => "Seleccione módulo"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [course_type_unit.unit_id]
+        },
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:unit_id, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :day, "Día" %>
+    <div class="col-6">
+      <%= form.select :day, [1,2,3].each { |day| [ "#{day}", day ] },
+        {:include_blank => "Seleccione día"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [course_type_unit.day]
+        },
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:day, course_type_unit, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :shift, "Turno" %>
+    <div class="col-6">
+      <%= form.select :shift, [ "Mañana", "Tarde", "Completo" ].map { |shift| [ "#{shift}", shift ] },
+        {:include_blank => "Seleccione turno"},
+        class: "form-control",
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:shift, course_type, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :start_hour, "Hora inicio" %>
+    <%= form.time_field :start_hour, required: true %>
+    <%= inline_error_for(:start_hour, course_type_unit, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :end_hour, "Hora fin" %>
+    <%= form.time_field :end_hour, required: true %>
+    <%= inline_error_for(:end_hour, course_type_unit, "offset-3") %>
+  </div>
+
+  <div class="form-check mb-2">
+    <%= form.check_box :is_by_turn, class: "form-check-input",
+      data: {
+        forms__course_type_unit_target: "isByTurn",
+        action: "click->forms--course-type-unit#is_by_turn"
+      }
+    %>
+    <%= form.label :is_by_turn, "Es por turnos" %>
+    <%= inline_error_for(:is_by_turn, course_type_unit, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :shift_time, "Tiempo del turno" %>
+    <%= form.number_field :shift_time,
+      data: {
+        forms__course_type_unit_target: "shiftTime"
+      }
+    %>
+    <%= inline_error_for(:shift_time, course_type_unit, "offset-3") %>
+  </div>
+
+  <div class='mt-2'>
+    <%= form.submit 'Guardar' %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+<% end %>
