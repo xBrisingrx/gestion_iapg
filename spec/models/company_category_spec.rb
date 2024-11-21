@@ -7,7 +7,7 @@ RSpec.describe CompanyCategory, type: :model do
     it { is_expected.to be_valid }
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:quota) }
-    it { is_expected.to validate_uniqueness_of(:name).with_message("Esta categoría ya se encuentra registrada") }
+    it { is_expected.to validate_uniqueness_of(:name).case_insensitive.with_message("Esta categoría ya se encuentra registrada") }
   end
 
   describe "scope" do
@@ -35,7 +35,7 @@ RSpec.describe CompanyCategory, type: :model do
         expect(CompanyCategory.filter("auto")).to eq([ company_category1 ])
         expect(CompanyCategory.filter("monotributista")).to eq([ company_category1, company_category2 ])
         expect(CompanyCategory.filter("10")).to eq([ company_category2 ])
-        expect(CompanyCategory.filter("abadacadabra")).to eq([ ])
+        expect(CompanyCategory.filter("abadacadabra")).to eq([])
       end # it
     end # describe filter
   end
