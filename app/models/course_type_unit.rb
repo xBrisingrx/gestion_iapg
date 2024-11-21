@@ -7,8 +7,8 @@ class CourseTypeUnit < ApplicationRecord
     if: :unit_is_by_turn?
   validates :start_hour, :end_hour, presence: true
   validate :start_hour_less_than_end_hour
-  validates :unit, uniqueness: { scope: [:shift, :course_type_id, :day] }
-  validate :hour_available
+  validates :unit, uniqueness: { scope: [ :shift, :course_type_id, :day ] }
+  validate :hour_available, on: :create
 
   def schedule
     "De #{self.start_hour&.strftime("%k:%M")} a #{self.end_hour&.strftime("%k:%M")}"
@@ -35,6 +35,15 @@ class CourseTypeUnit < ApplicationRecord
 
   def hour_available
     # no puedo agregar modulos en el mismo horario el mismo dia
-    
+    course_type_units = CourseTypeUnit.where(course_type: self.course_type, day: self.day)
+    course_type_units.each do |ctu|
+      record = CourseTypeUnit.where(course_type: ctu.course_type)
+                              .where(start_hour: ctu.start_hour..ctu.end_hour)
+                              .or(CourseTypeUnit.where(end_hour: ctu.end_hour..ctu.end_hour))
+      if !record.blank?
+        errors.add(:start_hour, "El horario se encuentra ocupado.") unless start_hour.blank?
+        return
+      end
+    end
   end
 end
