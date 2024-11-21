@@ -16,6 +16,6 @@ RSpec.describe CourseType, type: :model do
     it { is_expected.to validate_presence_of(:number_of_repeat) }
     it { is_expected.to validate_presence_of(:fleet) }
     it { is_expected.to validate_presence_of(:category) }
-    it { is_expected.to validate_uniqueness_of(:name).with_message("Este tipo de curso ya se encuentra registado.") }
+    it { is_expected.to validate_uniqueness_of(:name).case_insensitive.with_message("Este tipo de curso ya se encuentra registado.") }
   end
 end
