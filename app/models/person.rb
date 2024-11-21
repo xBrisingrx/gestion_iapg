@@ -5,7 +5,7 @@ class Person < ApplicationRecord
   normalizes :email, with: ->(email) {  email.strip.downcase }
 
   validates :name, :last_name, :cuil, :birthdate, :phone, :celphone, :email, :direction, presence: true
-  validates :cuil, uniqueness: { case_sensitive: true, message: "Ya existe una persona registrada con este cuil." }
+  validates :cuil, uniqueness: { message: "Ya existe una persona registrada con este cuil." }
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "debe ingresar un  email  válido" }
   before_save :set_province
 

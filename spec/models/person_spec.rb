@@ -19,7 +19,7 @@ RSpec.describe Person, type: :model do
     it { is_expected.to validate_presence_of(:celphone) }
     it { is_expected.to validate_presence_of(:email) }
     it { is_expected.to validate_presence_of(:direction) }
-    it { is_expected.to validate_uniqueness_of(:cuil).with_message("Ya existe una persona registrada con este cuil.") }
+    it { is_expected.to validate_uniqueness_of(:cuil).case_insensitive.with_message("Ya existe una persona registrada con este cuil.") }
   end
 
   describe "#fullname" do
