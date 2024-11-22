@@ -1,0 +1,82 @@
+<%= form_with(model: course, builder: BootstrapBuilder, 
+  data: {
+    controller: "forms--course",
+    action: "submit->forms--course#submit_form",
+    courses__form_target: "form"}) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :from_date, "Fecha" %>
+    <%= form.date_field :from_date %>
+    <div class="offset-3 text-danger course_from_date"></div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :course_type_id, "Tipo de curso" %>
+    <div class="col-6">
+      <%= form.select :course_type_id, 
+        CourseType.actives.all.collect { |course_type| [ "#{course_type.name}", course_type.id, data: { room: course_type.room_id } ] },
+        {:include_blank => "Seleccione tipo de curso"},
+        data: {
+          controller: "tselect",
+          forms__course_target: "courseType",
+          action: "forms--course#select_default_room",
+          tselect_ids_value: [course.course_type_id]
+        },
+        required: true
+      %>
+    </div>
+    <div class="offset-3 text-danger course_course_type_id"></div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :year_number, "Nro anual" %>
+    <%= form.number_field :year_number %>
+    <div class="offset-3 text-danger course_year_number"></div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :general_number, "Nro general" %>
+    <%= form.number_field :general_number %>
+    <div class="offset-3 text-danger course_general_number"></div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :room_id, "Sala" %>
+    <div class="col-6">
+      <%= form.select :room_id, Room.actives.all.collect { |room| [ "#{room.name} (#{room.capacity})", room.id, data: { capacity: room.capacity } ] },
+        {:include_blank => "Seleccione sala"},
+        required: true
+      %>
+    </div>
+    <div class="offset-3 text-danger course_room_id"></div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <div class="form-check col-4">
+      <%= form.check_box :is_company, 
+        data: {
+          controller: "courses--check-is-company",
+          courses__check_is_company_target: "isCompany",
+          action: "click->courses--check-is-company#check_is_company"
+        },
+        class: "form-check-input" %>
+      <%= form.label :is_company, "Es incompany?" %>
+    </div>
+    <div class="col-4">
+        <%= form.select :company_id, Company.actives.all.collect { |company| [ "#{company.name} - #{company.cuit}", company.id ] },
+          {:include_blank => "Seleccione empresa"},
+          data: {
+            controller: "tselect",
+            tselect_ids_value: course.company_id
+          }
+        %>
+        <div class="offset-3 text-danger course_company_id"></div>
+      </div>
+  </div>
+  <div class="col-12">
+    <%= turbo_frame_tag :units, data: { forms__course_target: "courseUnits" } %> 
+  </div> 
+  <div>
+    <%= form.submit "Guardar" %>
+    <%= link_to "Volver", courses_path, class: "btn btn-sm btn-danger" %>
+  </div>
+<% end %>

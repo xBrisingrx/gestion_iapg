@@ -1,0 +1,2 @@
+class FleetCategory < ApplicationRecord
+end

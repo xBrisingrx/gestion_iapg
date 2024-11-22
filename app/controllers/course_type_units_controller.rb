@@ -69,8 +69,8 @@ class CourseTypeUnitsController < ApplicationController
   def add_units_to_form
     course_type = CourseType.find(params[:course_type_id])
     course_type_units = course_type.course_type_units
-    instructors = Instructor.actives
-    render turbo_stream: turbo_stream.replace("units", partial: "add_units_to_form", locals: { course_type_units: course_type_units, instructors: instructors })
+    instructors = Instructor.actives.includes(:person)
+    render(partial: "add_units_to_form", locals: { course_type_units: course_type_units, instructors: instructors })
   end
 
   private

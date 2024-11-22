@@ -1,5 +1,6 @@
 class CourseType < ApplicationRecord
   belongs_to :room
+  has_many :courses
   has_many :course_type_units
   has_many :units, through: :course_type_units
 

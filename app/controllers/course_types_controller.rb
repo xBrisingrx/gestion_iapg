@@ -90,7 +90,7 @@ class CourseTypesController < ApplicationController
   end
 
   def get_yearly_and_general_number
-    render json: {yearly: @course_type.count_yearly_number , general: @course_type.courses.actives.count}
+    render json: { yearly: @course_type.count_yearly_number, general: @course_type.courses.actives.count }
   end
 
   private
@@ -102,7 +102,7 @@ class CourseTypesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_type_params
-      params.expect(course_type: [ :name, :description, :min_quota, :max_quota, :min_score, :max_score, 
+      params.expect(course_type: [ :name, :description, :min_quota, :max_quota, :min_score, :max_score,
         :passing_score, :number_of_repeat, :room_id, :category, :fleet ])
     end
 end

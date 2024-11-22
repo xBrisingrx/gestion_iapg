@@ -1,0 +1,34 @@
+<%= tag.tr id: dom_id(course) do %>
+  <td><%= date_format(course.from_date) %></td>
+  <td><%= course.course_type.name %></td>
+  <td><%= course.room.name %></td>
+  <td><%= course.company&.name %></td>
+  <td>
+    <% if policy(headquarter).edit? %>
+      <%= link_to course_path(course), 
+        class: "btn btn-info btn-sm btn-sm btn-icon text-white",
+        title: 'Detalles del curso', 
+        data: { turbo_frame: "_top"} do %>
+        <i class="bi bi-eye"></i>
+      <% end %>
+    <% end %>
+
+    <% if policy(headquarter).edit? %>
+      <%= link_to edit_course_path(course), 
+        class: "btn btn-warning btn-sm btn-sm btn-icon text-white",
+        title: 'Editar', 
+        data: { turbo: false} do %>
+        <i class="bi bi-pencil-square"></i>
+      <% end %>
+    <% end %>
+
+    <% if policy(headquarter).edit? %>
+      <%= link_to modal_disable_course_path(course), 
+        class: "btn btn-sm btn-icon btn-danger",
+        title: 'Eliminar',
+        data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-trash"></i>
+      <% end %>
+    <% end %>
+  </td>
+<% end %>

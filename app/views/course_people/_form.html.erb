@@ -1,0 +1,72 @@
+<%= form_with(model: course_person) do |form| %>
+  <% if course_person.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(course_person.errors.count, "error") %> prohibited this course_person from being saved:</h2>
+
+      <ul>
+        <% course_person.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :course_id, style: "display: block" %>
+    <%= form.text_field :course_id %>
+  </div>
+
+  <div>
+    <%= form.label :person_id, style: "display: block" %>
+    <%= form.text_field :person_id %>
+  </div>
+
+  <div>
+    <%= form.label :company_id, style: "display: block" %>
+    <%= form.text_field :company_id %>
+  </div>
+
+  <div>
+    <%= form.label :inscription_motive_id, style: "display: block" %>
+    <%= form.text_field :inscription_motive_id %>
+  </div>
+
+  <div>
+    <%= form.label :fleet_category_id, style: "display: block" %>
+    <%= form.text_field :fleet_category_id %>
+  </div>
+
+  <div>
+    <%= form.label :unit_id, style: "display: block" %>
+    <%= form.text_field :unit_id %>
+  </div>
+
+  <div>
+    <%= form.label :course_unit_id, style: "display: block" %>
+    <%= form.text_field :course_unit_id %>
+  </div>
+
+  <div>
+    <%= form.label :date, style: "display: block" %>
+    <%= form.date_field :date %>
+  </div>
+
+  <div>
+    <%= form.label :from_hour, style: "display: block" %>
+    <%= form.time_field :from_hour %>
+  </div>
+
+  <div>
+    <%= form.label :to_hour, style: "display: block" %>
+    <%= form.time_field :to_hour %>
+  </div>
+
+  <div>
+    <%= form.label :active, style: "display: block" %>
+    <%= form.checkbox :active %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

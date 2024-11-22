@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+  resources :courses, expect: [ :destroy ] do
+    get "modal_disable", on: :member
+    put "disable", on: :member
+    get "turns_by_unit", on: :member
+    get "turns", on: :member
+    get "search", on: :collection
+    resources :course_people, only: [ :index, :new, :create ]
+    resources :course_units, only: [ :new, :create ]
+    resources :turns, only: [ :index, :edit, :update ]
+  end
   resources :instructors, expect: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
@@ -10,6 +20,7 @@ Rails.application.routes.draw do
   resources :course_types, expect: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
+    get "get_yearly_and_general_number", on: :member
     resources :course_type_units do
       get "add_units_to_form", on: :collection
     end
