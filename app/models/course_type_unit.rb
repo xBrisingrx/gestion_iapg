@@ -8,7 +8,7 @@ class CourseTypeUnit < ApplicationRecord
   validates :start_hour, :end_hour, presence: true
   validate :start_hour_less_than_end_hour
   validates :unit, uniqueness: { scope: [ :shift, :course_type_id, :day ] }
-  validate :hour_available, on: :create
+  # validate :hour_available, on: :create
 
   def schedule
     "De #{self.start_hour&.strftime("%k:%M")} a #{self.end_hour&.strftime("%k:%M")}"
