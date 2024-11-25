@@ -42,4 +42,25 @@ export default class extends Controller {
   get_units() {
     this.courseUnitsTarget.src = `/course_types/${this.courseTypeTarget.value}/course_type_units/add_units_to_form`;
   }
+
+  remove_unit(event) {
+    event.target.parentElement.parentElement.parentElement.remove()
+  }
+
+  calc_quota(event) {
+    setTimeout(() => {
+      const row = event.target.parentElement.parentElement.parentElement
+      const shift_time = event.target.dataset.shiftTime
+      const row_index = event.target.dataset.index
+      const start_hour = row.querySelector(`#course_course_units_start_hour_${row_index}`).value
+      const end_hour = row.querySelector(`#course_course_units_end_hour_${row_index}`).value
+      const quota = row.querySelector("#calc_quota")
+      // Calcula los minutos de cada hora
+      var minutos_inicio = start_hour.split(':')
+      .reduce((p, c) => parseInt(p) * 60 + parseInt(c));
+      var minutos_final = end_hour.split(':')
+        .reduce((p, c) => parseInt(p) * 60 + parseInt(c));
+      quota.value = Math.round((minutos_final - minutos_inicio) / shift_time)
+    }, 1000) 
+  }
 }

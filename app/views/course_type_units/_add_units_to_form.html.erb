@@ -20,10 +20,18 @@
     <div class="form-group row mb-3">
       <div class="col-2">
         <label for=""> Día <%= course_type_unit.day %>: <%= course_type_unit.unit.name %> </label>
-        <input type="hidden" value=<%= course_type_unit.unit_id %> name="course[course_units_attributes][<%= index %>][unit_id]">
-        <input type="hidden" value=<%= course_type_unit.day %> name="course[course_units_attributes][<%= index %>][day]">
-        <input type="hidden" value=<%= course_type_unit.shift %> name="course[course_units_attributes][<%= index %>][shift]">
-        <input type="hidden" value=<%= course_type_unit.shift_time %> name="course[course_units_attributes][<%= index %>][shift_time]">
+        <input type="hidden" 
+          value=<%= course_type_unit.unit_id %> 
+          name="course[course_units_attributes][<%= index %>][unit_id]">
+        <input type="hidden" 
+          value=<%= course_type_unit.day %> 
+          name="course[course_units_attributes][<%= index %>][day]">
+        <input type="hidden" 
+          value=<%= course_type_unit.shift %> 
+          name="course[course_units_attributes][<%= index %>][shift]">
+        <input type="hidden" 
+          value=<%= course_type_unit.shift_time %> 
+          name="course[course_units_attributes][<%= index %>][shift_time]">
       </div>
       <div class="col-1">
         <label for=""> <%= course_type_unit.shift %> </label>
@@ -49,7 +57,7 @@
             value="<%= hour_format(course_type_unit.end_hour) %>"
             id="course_course_units_end_hour_<%= index %>"
             name="course[course_units_attributes][<%= index %>][end_hour]"
-            data-action="change->courses--select-course-type#calc_quota"
+            data-action="change->forms--course#calc_quota"
             data-shift-time="<%= course_type_unit.shift_time %>"
             data-index="<%= index %>"
             required />
@@ -65,7 +73,7 @@
             required>
             <option value="">Seleccione instructor</option>
             <% instructors.each do |instructor| %>
-              <option value="<%= instructor.id %>>"><%= instructor.person.fullname %></option>
+              <option value="<%= instructor.id %>"><%= instructor.person.fullname %></option>
             <% end %>
           </select>
             <div class="text-danger course_course_units_instructor"></div>
@@ -73,7 +81,7 @@
         <div class="col-2">
           <button type="button" 
             title="Qutar módulo" 
-            data-action="courses--select-course-type#remove_unit" class="btn btn-danger btn-sm"> X 
+            data-action="forms--course#remove_unit" class="btn btn-danger btn-sm"> X 
           </button>
         </div>
       </div>
