@@ -11,6 +11,8 @@ class CreateCourseUnits < ActiveRecord::Migration[8.0]
       t.date :date
       t.integer :shift_time
       t.integer :list
+      t.boolean :complete, default: false
+      t.boolean :active, default: true
 
       t.timestamps
     end

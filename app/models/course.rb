@@ -1,7 +1,7 @@
 class Course < ApplicationRecord
   belongs_to :course_type
   belongs_to :room
-  belongs_to :company
+  belongs_to :company, optional: true
   # has_many :course_people, dependent: :destroy
   # has_many :people, through: :course_people
   # has_many :turns, dependent: :destroy

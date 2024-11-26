@@ -2,7 +2,7 @@
   data: {
     controller: "forms--course",
     action: "submit->forms--course#submit_form",
-    courses__form_target: "form"}) do |form| %>
+    forms__course_target: "form"}) do |form| %>
   <div class="form-group row mb-2">
     <%= form.label :from_date, "Fecha" %>
     <%= form.date_field :from_date %>
