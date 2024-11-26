@@ -1,6 +1,6 @@
 <p style="color: green"><%= notice %></p>
 
-<p>Signed as <%= Current.user.email %></p>
+<p>Signed as <%= Current.user.email %> <%= Current.user.admin? %></p>
 
 <h2>Login and verification</h2>
 

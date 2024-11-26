@@ -4,7 +4,7 @@ class Course < ApplicationRecord
   belongs_to :company, optional: true
   # has_many :course_people, dependent: :destroy
   # has_many :people, through: :course_people
-  # has_many :turns, dependent: :destroy
+  has_many :turns, dependent: :destroy
   has_many :course_units, dependent: :destroy
   has_many :units, through: :course_units
   has_many :instructors, through: :course_units
@@ -40,7 +40,7 @@ class Course < ApplicationRecord
   private
   def set_to_date
     days = self.course_type.days - 1
-    self.update(to_date: self.from_date + days.day)
+    self.to_date = self.from_date + days.day
   end
 
   def course_is_company

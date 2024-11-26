@@ -4,16 +4,18 @@
   <td><%= course.room.name %></td>
   <td><%= course.company&.name %></td>
   <td>
-    <% if policy(headquarter).edit? %>
+    <% if policy(course).show? %>
       <%= link_to course_path(course), 
         class: "btn btn-info btn-sm btn-sm btn-icon text-white",
         title: 'Detalles del curso', 
         data: { turbo_frame: "_top"} do %>
         <i class="bi bi-eye"></i>
       <% end %>
+      <% else %>
+        <p>show</p>
     <% end %>
 
-    <% if policy(headquarter).edit? %>
+    <% if policy(course).edit? %>
       <%= link_to edit_course_path(course), 
         class: "btn btn-warning btn-sm btn-sm btn-icon text-white",
         title: 'Editar', 
@@ -22,7 +24,7 @@
       <% end %>
     <% end %>
 
-    <% if policy(headquarter).edit? %>
+    <% if policy(course).disable? %>
       <%= link_to modal_disable_course_path(course), 
         class: "btn btn-sm btn-icon btn-danger",
         title: 'Eliminar',
