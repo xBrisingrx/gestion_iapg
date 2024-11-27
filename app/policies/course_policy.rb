@@ -13,8 +13,7 @@ class CoursePolicy < ApplicationPolicy
     user.admin? || user.editor?
   end
 
-  def show
-    debugger
+  def show?
     index?
   end
 
