@@ -32,7 +32,7 @@ class CoursesController < ApplicationController
     respond_to do |format|
       if @course.save
         format.html { redirect_to courses_path, notice: "Curso registrado." }
-        format.json { render :show, status: :created, location: @course }
+        format.json { render json: { status: :success }, status: :created, location: @course }
       else
         # format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @course.errors.messages, status: :unprocessable_entity }

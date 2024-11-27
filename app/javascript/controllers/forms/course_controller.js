@@ -70,12 +70,20 @@ export default class extends Controller {
     fetch(this.formTarget.action, {
       method: "POST",
       headers:  {
+        'Accept': 'application/json',
         'X-CSRF-Token': document.querySelector("meta[name='csrf-token']").getAttribute('content'),
       },
       body: form_data
     })
-    .then(response => response.json())
     .then(response => {
+      if(response.status === 201) {
+        window.location.replace(response.url)
+      } else {
+        return response.json()
+      }
+    })
+    .then(response => {
+      document.querySelectorAll('.is-invalid').forEach( element => element.classList.remove('is-invalid') )
       document.querySelectorAll('.text-danger').forEach( element => element.innerHTML = '' )
       const response_keys = Object.keys(response)
       for (let i = 0; i < response_keys.length; i++) {
@@ -84,6 +92,7 @@ export default class extends Controller {
         response_keys[i].split('.').forEach(element => {
           input_class += `_${element}`
         })
+        document.querySelector(`#${input_class}`).classList.add('is-invalid')
         document.querySelector(`.${input_class}`).innerHTML = message
       }
     })
