@@ -1,72 +1,97 @@
-<%= form_with(model: course_person) do |form| %>
-  <% if course_person.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(course_person.errors.count, "error") %> prohibited this course_person from being saved:</h2>
-
-      <ul>
-        <% course_person.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= form_with(model: [ course, course_person ], builder: BootstrapBuilder) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :person_id, "Persona" %>
+    <div class="col-6">
+      <%= form.select :person_id, Person.select(:id, :name, :last_name, :cuil).actives.collect { |person| [ "#{person.fullname} - #{person.cuil}", person.id ] },
+        {:include_blank => "Seleccione persona"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [course_person.person_id]
+        }
+      %>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :course_id, style: "display: block" %>
-    <%= form.text_field :course_id %>
+    <%= inline_error_for(:person_id, course_person, "offset-3") %>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :company_id, "Empesa" %>
+    <div class="col-6">
+      <%= form.select :company_id, Company.actives.collect { |company| [ "#{company.name} - #{company.cuit}", company.id ] },
+        {:include_blank => "Seleccione empresa"},
+        data: {
+          controller: 'tselect courses--select-company',
+          courses__select_company_target: "company",
+          action: "courses--select-company#display_managers",
+          tselect_ids_value: [course_person.company_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:company_id, course_person, "offset-3") %>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :manager_id, "Referente" %>
+    <div class="col-6">
+      <%= form.select :manager_id, {}, {include_blank: "Seleccione referente"}, class: "form-control form-control-sm" %>
+    </div>
+    <%= inline_error_for(:manager_id, course_person, "offset-3") %>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :operator_id, "Operadora" %>
+    <div class="col-6">
+      <%= form.select :operator_id, Company.actives.where(operator: true).collect { |company| [ "#{company.name} - #{company.cuit}", company.id ] },
+        {:include_blank => "Seleccione operadora"},
+        data: {
+          controller: 'tselect',
+          tselect_ids_value: [course_person.operator_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:operator_id, course_person, "offset-3") %>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :fleet_category_id, "Flota" %>
+    <div class="col-6">
+      <%= form.select :fleet_category_id, FleetCategory.actives.collect { |fleet_category| [ fleet_category.name, fleet_category.id ] },
+        {:include_blank => "Seleccione categoría de flota"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [course_person.fleet_category_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:fleet_category_id, course_person, "offset-3") %>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :inscription_motive_id, "Motivo" %>
+    <div class="col-6">
+      <%= form.select :inscription_motive_id, InscriptionMotive.actives.collect { |motive| [ motive.name, motive.id ] },
+        {:include_blank => "Seleccione motivo"},
+        data: {
+          controller: 'tselect',
+          tselect_ids_value: [course_person.inscription_motive_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:inscription_motive_id, course_person, "offset-3") %>
   </div>
 
-  <div>
-    <%= form.label :person_id, style: "display: block" %>
-    <%= form.text_field :person_id %>
-  </div>
+  <%# @units.each do |unit| %>
+    <%# <div class="form-group row mb-2"> %>
+      <%# input_id = ( unit.unit.category == "Práctico" ? :practical_turn_id : :psicometrico_turn_id ) %>
+      <%# form.label input_id, unit.unit.name %>
+      <%# <div class="col-6"> %>
+        <%# form.select input_id, 
+          Turn.where(course_id: course.id, unit_id: unit.unit_id).where.not(status: :busy).collect { |turn| [ "#{hour_format(turn.hour)} #{(turn.reserved?) ? "Reservado" : ""}", turn.id ] },
+          {},
+          data: {
+            controller: 'tselect',
+            tselect_ids_value: @inscription_motive_id
+          }
+        %>
+      <%# </div> %>
+      <%# inline_error_for(:input_id, course_person, "offset-3") %>
+    <%# </div> %>
+  <%# end %>
 
   <div>
-    <%= form.label :company_id, style: "display: block" %>
-    <%= form.text_field :company_id %>
-  </div>
-
-  <div>
-    <%= form.label :inscription_motive_id, style: "display: block" %>
-    <%= form.text_field :inscription_motive_id %>
-  </div>
-
-  <div>
-    <%= form.label :fleet_category_id, style: "display: block" %>
-    <%= form.text_field :fleet_category_id %>
-  </div>
-
-  <div>
-    <%= form.label :unit_id, style: "display: block" %>
-    <%= form.text_field :unit_id %>
-  </div>
-
-  <div>
-    <%= form.label :course_unit_id, style: "display: block" %>
-    <%= form.text_field :course_unit_id %>
-  </div>
-
-  <div>
-    <%= form.label :date, style: "display: block" %>
-    <%= form.date_field :date %>
-  </div>
-
-  <div>
-    <%= form.label :from_hour, style: "display: block" %>
-    <%= form.time_field :from_hour %>
-  </div>
-
-  <div>
-    <%= form.label :to_hour, style: "display: block" %>
-    <%= form.time_field :to_hour %>
-  </div>
-
-  <div>
-    <%= form.label :active, style: "display: block" %>
-    <%= form.checkbox :active %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+    <%= form.submit "Guardar" %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
   </div>
 <% end %>

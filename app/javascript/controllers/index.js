@@ -10,6 +10,9 @@ application.register("filter", FilterController)
 import Forms__CourseController from "./forms/course_controller"
 application.register("forms--course", Forms__CourseController)
 
+import Forms__CoursePersonController from "./forms/course_person_controller"
+application.register("forms--course-person", Forms__CoursePersonController)
+
 import Forms__CourseTypeUnitController from "./forms/course_type_unit_controller"
 application.register("forms--course-type-unit", Forms__CourseTypeUnitController)
 

@@ -4,6 +4,12 @@
   <td><%= course.room.name %></td>
   <td><%= course.company&.name %></td>
   <td>
+    <%= link_to new_course_course_person_path(course), 
+      class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
+      title: 'Registrar cupo', 
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-person-add"></i>
+    <% end %>
     <% if policy(course).show? %>
       <%= link_to course_path(course), 
         class: "btn btn-info btn-sm btn-sm btn-icon text-white",
