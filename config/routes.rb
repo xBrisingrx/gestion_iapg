@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   resources :companies, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
-    resources :company_managers, except: [ :index, :new, :create ] do
+    resources :company_managers, except: [ :destroy ] do
       get "get_to_select", on: :collection
     end
   end
