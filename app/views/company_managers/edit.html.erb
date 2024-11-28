@@ -1,0 +1,12 @@
+<% content_for :title, "Editing company manager" %>
+
+<h1>Editing company manager</h1>
+
+<%= render "form", company_manager: @company_manager %>
+
+<br>
+
+<div>
+  <%= link_to "Show this company manager", @company_manager %> |
+  <%= link_to "Back to company managers", company_managers_path %>
+</div>

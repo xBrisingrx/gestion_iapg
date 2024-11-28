@@ -88,6 +88,7 @@ class CoursePeopleController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_person_params
-      params.expect(course_person: [ :course_id, :person_id, :company_id, :inscription_motive_id, :fleet_category_id, :unit_id, :course_unit_id, :date, :from_hour, :to_hour, :active ])
+      params.expect(course_person: [ :course_id, :person_id, :company_id, :manager_id, :operator_id, :inscription_motive_id, :fleet_category_id, :unit_id,
+        :course_unit_id, :date, :from_hour, :to_hour, :active ])
     end
 end

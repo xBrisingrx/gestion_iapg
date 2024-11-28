@@ -56,10 +56,10 @@
 #   )
 # end
 
-FleetCategory.create(name: "Automovil")
-FleetCategory.create(name: "Camioneta 4x2")
-FleetCategory.create(name: "Camioneta 4x4")
+# FleetCategory.create(name: "Automovil")
+# FleetCategory.create(name: "Camioneta 4x2")
+# FleetCategory.create(name: "Camioneta 4x4")
 
-InscriptionMotive.create(name: "Nuevo ingreso")
-InscriptionMotive.create(name: "Cambio de categoría")
-InscriptionMotive.create(name: "Scoring")
+# InscriptionMotive.create(name: "Nuevo ingreso")
+# InscriptionMotive.create(name: "Cambio de categoría")
+# InscriptionMotive.create(name: "Scoring")

@@ -9,6 +9,6 @@ export default class extends Controller {
 
   get_managers() {
     console.log('get')
-    this.selectManagersTarget.src = `/companies/${this.companyTarget.value}/managers/get_to_select`
+    this.selectManagersTarget.src = `/companies/${this.companyTarget.value}/company_managers/get_to_select`
   }
 }

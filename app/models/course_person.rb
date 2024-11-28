@@ -34,13 +34,13 @@ class CoursePerson < ApplicationRecord
         )
         course_person.date = course_date + (course_unit.day - 1).day
         if course_type_unit.is_by_turn
-          if course_type_unit.unit.category == "Psicométrico"
-            turn_id = self.psicometrico_turn_id
-          end
+          # if course_type_unit.unit.category == "Psicométrico"
+          #   turn_id = self.psicometrico_turn_id
+          # end
 
-          if course_type_unit.unit.category == "Práctico"
-            turn_id = self.practical_turn_id
-          end
+          # if course_type_unit.unit.category == "Práctico"
+          #   turn_id = self.practical_turn_id
+          # end
 
           course_person.from_hour = set_hour(course_unit.unit_id, self.course_id, course_person.date, course_type_unit.shift_time)
           # course_person.from_hour = set_turn(turn_id, course_person.date, course_type_unit.shift_time)
@@ -67,12 +67,12 @@ class CoursePerson < ApplicationRecord
     # seteamos la hora si es que el modulo va por turnos
     # debemos tener en cuenta que no se pise con turnos de otros ni con un turno q tenga esta persona
     # ya que el mismo dia puede tener practica y psicometrico
-    turn_available = Turn.where(course_id: course_id, unit_id: unit_id, available: true, status: :available).order(:hour)
+    turn_available = Turn.where(course_id: course_id, unit_id: unit_id, status: :available).order(:hour)
     turn_hour = nil
     turn_available.each do |turn|
       if self.person_is_available(shift_time, date, turn.hour)
         turn_hour = turn.hour
-        turn.update(available: false, person_id: self.person_id, status: :busy)
+        turn.update(person_id: self.person_id, status: :busy)
       end
       break if !turn_hour.blank?
     end

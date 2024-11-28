@@ -1,0 +1,2 @@
+module CompanyManagersHelper
+end

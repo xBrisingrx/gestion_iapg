@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_28_013013) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_28_160729) do
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "province_id", null: false
@@ -53,6 +53,19 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_28_013013) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_company_categories_on_name", unique: true
+  end
+
+  create_table "company_managers", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "person_id", null: false
+    t.string "email"
+    t.string "job"
+    t.boolean "notifications", default: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_company_managers_on_company_id"
+    t.index ["person_id"], name: "index_company_managers_on_person_id"
   end
 
   create_table "course_people", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -127,8 +140,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_28_013013) do
     t.date "date"
     t.integer "shift_time"
     t.integer "list"
-    t.boolean "complete", default: false
-    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_course_units_on_course_id"
@@ -209,19 +220,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_28_013013) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_iva_conditions_on_name", unique: true
-  end
-
-  create_table "managers", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.bigint "company_id", null: false
-    t.bigint "person_id", null: false
-    t.string "email", null: false
-    t.string "job"
-    t.boolean "notifications", default: true
-    t.boolean "active", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["company_id"], name: "index_managers_on_company_id"
-    t.index ["person_id"], name: "index_managers_on_person_id"
   end
 
   create_table "people", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -339,6 +337,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_28_013013) do
   add_foreign_key "companies", "iva_conditions"
   add_foreign_key "companies", "provinces"
   add_foreign_key "companies", "sectors"
+  add_foreign_key "company_managers", "companies"
+  add_foreign_key "company_managers", "people"
   add_foreign_key "course_people", "companies"
   add_foreign_key "course_people", "companies", column: "operator_id"
   add_foreign_key "course_people", "course_units"
@@ -361,8 +361,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_28_013013) do
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"
   add_foreign_key "instructors", "people"
-  add_foreign_key "managers", "companies"
-  add_foreign_key "managers", "people"
   add_foreign_key "people", "cities"
   add_foreign_key "people", "provinces"
   add_foreign_key "rooms", "headquarters"

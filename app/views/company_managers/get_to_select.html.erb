@@ -1,0 +1,8 @@
+<%= turbo_frame_tag :select_managers do %>
+  <select name="course_person[manager_id]" id="course_person_manager_id" data-controller="tselect">
+    <option value="">Seleccione referente</option>
+    <% @managers.each do |manager|%>
+      <option value="<%= manager.person_id %>"><%= manager.person.fullname %></option>
+    <% end %>
+  </select>
+<% end %>
