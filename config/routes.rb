@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  resources :courses, expect: [ :destroy ] do
+  resources :courses, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
     get "turns_by_unit", on: :member
@@ -9,15 +9,15 @@ Rails.application.routes.draw do
     resources :course_units, only: [ :new, :create ]
     resources :turns, only: [ :index, :edit, :update ]
   end
-  resources :instructors, expect: [ :destroy ] do
+  resources :instructors, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  resources :units, expect: [ :destroy ] do
+  resources :units, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  resources :course_types, expect: [ :destroy ] do
+  resources :course_types, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
     get "get_yearly_and_general_number", on: :member
@@ -25,39 +25,39 @@ Rails.application.routes.draw do
       get "add_units_to_form", on: :collection
     end
   end
-  resources :rooms, expect: [ :destroy ] do
+  resources :rooms, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  resources :headquarters, expect: [ :destroy ] do
+  resources :headquarters, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  resources :sectionals, expect: [ :destroy ] do
+  resources :sectionals, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  resources :companies, expect: [ :destroy ] do
+  resources :companies, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
-    resources :managers, only: [ :index, :new, :create ] do
+    resources :company_managers, except: [ :index, :new, :create ] do
       get "get_to_select", on: :collection
     end
   end
-  resources :iva_conditions, expect: [ :destroy ] do
+  resources :iva_conditions, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  resources :sectors, expect: [ :destroy ] do
+  resources :sectors, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  resources :company_categories, expect: [ :destroy ] do
+  resources :company_categories, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
   root "home#index"
-  resources :people, expect: [ :destroy ] do
+  resources :people, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
