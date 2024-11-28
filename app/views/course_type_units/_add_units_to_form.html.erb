@@ -32,6 +32,9 @@
         <input type="hidden" 
           value=<%= course_type_unit.shift_time %> 
           name="course[course_units_attributes][<%= index %>][shift_time]">
+        <input type="hidden" 
+          value=1 
+          name="course[course_units_attributes][<%= index %>][list]">
       </div>
       <div class="col-1">
         <label for=""> <%= course_type_unit.shift %> </label>

@@ -39,19 +39,27 @@
 # end
 
 
-people = JSON.parse(File.read(Rails.root.join('db/seeds/people.json')))
-people.each do |person|
-  Person.create(
-    id: person['id'],
-    name: person['name'],
-    last_name: person['last_name'],
-    cuil: person['cuil'],
-    celphone: person['celphone'],
-    phone: person['phone'],
-    city_id: person['city_id'],
-    birthdate: person['birthdate'],
-    email: person['email'],
-    direction: person['direction'],
-    code: person['code']
-  )
-end
+# people = JSON.parse(File.read(Rails.root.join('db/seeds/people.json')))
+# people.each do |person|
+#   Person.create(
+#     id: person['id'],
+#     name: person['name'],
+#     last_name: person['last_name'],
+#     cuil: person['cuil'],
+#     celphone: person['celphone'],
+#     phone: person['phone'],
+#     city_id: person['city_id'],
+#     birthdate: person['birthdate'],
+#     email: person['email'],
+#     direction: person['direction'],
+#     code: person['code']
+#   )
+# end
+
+FleetCategory.create(name: "Automovil")
+FleetCategory.create(name: "Camioneta 4x2")
+FleetCategory.create(name: "Camioneta 4x4")
+
+InscriptionMotive.create(name: "Nuevo ingreso")
+InscriptionMotive.create(name: "Cambio de categoría")
+InscriptionMotive.create(name: "Scoring")

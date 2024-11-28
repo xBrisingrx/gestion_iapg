@@ -6,7 +6,7 @@ class CourseUnit < ApplicationRecord
   belongs_to :instructor
   has_many :turns
 
-  validates :start_hour, :end_hour, presence: true
+  validates :list, :start_hour, :end_hour, presence: true
   validate :start_hour_less_than_end_hour
 
   before_create :set_date
@@ -25,7 +25,7 @@ class CourseUnit < ApplicationRecord
   end
 
   def lists
-    lists = Course.find(self.course_id).course_units.where(unit_id: self.unit_id).select(:n_list).distinct.count
+    lists = Course.find(self.course_id).course_units.where(unit_id: self.unit_id).select(:list).distinct.count
     lists
   end
 
@@ -46,7 +46,8 @@ class CourseUnit < ApplicationRecord
         unit_id: self.unit_id,
         date: date,
         hour: turn_hour,
-        n_list: self.n_list
+        list: self.list,
+        status: :available
       )
       turn_hour += course_type_unit.shift_time.minutes
     end

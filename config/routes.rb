@@ -40,6 +40,9 @@ Rails.application.routes.draw do
   resources :companies, expect: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
+    resources :managers, only: [ :index, :new, :create ] do
+      get "get_to_select", on: :collection
+    end
   end
   resources :iva_conditions, expect: [ :destroy ] do
     get "modal_disable", on: :member

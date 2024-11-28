@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_22_152838) do
+ActiveRecord::Schema[8.0].define(version: 2024_11_28_013013) do
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "province_id", null: false
@@ -211,6 +211,19 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_152838) do
     t.index ["name"], name: "index_iva_conditions_on_name", unique: true
   end
 
+  create_table "managers", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "company_id", null: false
+    t.bigint "person_id", null: false
+    t.string "email", null: false
+    t.string "job"
+    t.boolean "notifications", default: true
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_managers_on_company_id"
+    t.index ["person_id"], name: "index_managers_on_person_id"
+  end
+
   create_table "people", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "cuil", limit: 20, null: false
     t.string "last_name", limit: 50, null: false
@@ -281,7 +294,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_152838) do
 
   create_table "turns", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_id", null: false
-    t.bigint "person_id", null: false
+    t.bigint "person_id"
     t.bigint "unit_id", null: false
     t.bigint "course_unit_id", null: false
     t.date "date"
@@ -348,6 +361,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_22_152838) do
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"
   add_foreign_key "instructors", "people"
+  add_foreign_key "managers", "companies"
+  add_foreign_key "managers", "people"
   add_foreign_key "people", "cities"
   add_foreign_key "people", "provinces"
   add_foreign_key "rooms", "headquarters"

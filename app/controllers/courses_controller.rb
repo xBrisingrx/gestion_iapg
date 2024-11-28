@@ -28,7 +28,6 @@ class CoursesController < ApplicationController
   # POST /courses or /courses.json
   def create
     @course = Course.new(course_params)
-
     respond_to do |format|
       if @course.save
         format.html { redirect_to courses_path, notice: "Curso registrado." }
@@ -81,6 +80,9 @@ class CoursesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_params
-      params.expect(course: [ :from_date, :to_date, :year_number, :general_number, :is_company, :course_type_id, :room_id, :company_id, :code ])
+      params.expect(course: [ :from_date, :to_date, :year_number, :general_number, :is_company, :course_type_id, :room_id, :company_id, :code,
+        course_units_attributes: [
+          [ :id, :instructor_id, :unit_id, :start_hour, :end_hour, :shift, :shift_time, :day, :list ] ]
+        ])
     end
 end
