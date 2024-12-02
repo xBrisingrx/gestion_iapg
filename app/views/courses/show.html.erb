@@ -1,10 +1,10 @@
-<p style="color: green"><%= notice %></p>
-
-<%= render @course %>
-
-<div>
-  <%= link_to "Edit this course", edit_course_path(@course) %> |
-  <%= link_to "Back to courses", courses_path %>
-
-  <%= button_to "Destroy this course", @course, method: :delete %>
-</div>
+<%= render "shared/modal", title: @course.course_type.name, fade_in: true do %>
+  <section>
+    <p>Fecha: <%= date_format(@course.from_date) %></p>
+    <p>Tipo de curso: <%= @course.course_type.name %></p>
+    <p>Nro anual: <%= @course.year_number %> Nro general: <%= @course.general_number %></p>
+    <p>Sala: @course.room.name</p>
+    <p>¿Es In Company? <%= (@course.is_company) ? "Si" : "No" %> Razon social: <%= @course.company&.name %> </p>
+  </section>
+  <%= turbo_frame_tag "course_people", src:  course_course_people_path(@course) %>
+<% end %>

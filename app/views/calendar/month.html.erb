@@ -1,8 +1,12 @@
-<%= render "calendar/month", date: @date do |day|%>
+<%= turbo_frame_tag "calendar" do %>
+  <%= render "calendar/month", date: @date do |day|%>
     <p><%= day.strftime("%d") %></p>
     <% @courses[day]&.each do |course| %>
-      <div class="badge bg-info">
-        <%= course.course_type.name %>
-      </div>
+     <%= link_to course_path(course), data: { turbo_frame: "modal"}  do %>
+        <div class="badge bg-info">
+          <%= course.course_type.name %>
+        </div>
+     <% end %>
     <% end %>
+  <% end %>
 <% end %>
