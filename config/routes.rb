@@ -56,11 +56,13 @@ Rails.application.routes.draw do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
-  root "home#index"
   resources :people, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
   end
+
+  get "calendar/month", to: "calendar#month"
+  root "home#index"
   draw(:authentication)
   draw(:errors)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

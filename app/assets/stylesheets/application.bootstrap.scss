@@ -1,3 +1,14 @@
 @use './theme';
 @use 'bootstrap-icons/font/bootstrap-icons';
 @use 'tom-select/dist/css/tom-select.bootstrap5';
+
+
+.calendar-container {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr))
+}
+
+.bg-calendar-today {
+  --bs-bg-opacity: .4;
+  background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+}
