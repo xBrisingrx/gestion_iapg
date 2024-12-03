@@ -47,6 +47,7 @@ class CoursePerson < ApplicationRecord
           course_person.to_hour = course_person.from_hour + course_type_unit.shift_time.minutes
         end
         course_person.save
+        raise ActiveRecord::Rollback if course_person.id.nil?
       end # end course_units.each
     end # end transaction
   end

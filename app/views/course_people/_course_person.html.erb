@@ -1,57 +1,9 @@
-<div id="<%= dom_id course_person %>">
-  <p>
-    <strong>Course:</strong>
-    <%= course_person.course_id %>
-  </p>
-
-  <p>
-    <strong>Person:</strong>
-    <%= course_person.person_id %>
-  </p>
-
-  <p>
-    <strong>Company:</strong>
-    <%= course_person.company_id %>
-  </p>
-
-  <p>
-    <strong>Inscription motive:</strong>
-    <%= course_person.inscription_motive_id %>
-  </p>
-
-  <p>
-    <strong>Fleet category:</strong>
-    <%= course_person.fleet_category_id %>
-  </p>
-
-  <p>
-    <strong>Unit:</strong>
-    <%= course_person.unit_id %>
-  </p>
-
-  <p>
-    <strong>Course unit:</strong>
-    <%= course_person.course_unit_id %>
-  </p>
-
-  <p>
-    <strong>Date:</strong>
-    <%= course_person.date %>
-  </p>
-
-  <p>
-    <strong>From hour:</strong>
-    <%= course_person.from_hour %>
-  </p>
-
-  <p>
-    <strong>To hour:</strong>
-    <%= course_person.to_hour %>
-  </p>
-
-  <p>
-    <strong>Active:</strong>
-    <%= course_person.active %>
-  </p>
-
-</div>
+<%= tag.tr id: dom_id(course_person) do %>
+  <td><%= course_person.person.last_name %></td>
+  <td><%= course_person.person.name %></td>
+  <td><%= course_person.person.cuil %></td>
+  <td><%= course_person.company.name %></td>
+  <td>codigo</td>
+  <td>restado</td>
+  <td>declaracion</td>
+<% end %>
