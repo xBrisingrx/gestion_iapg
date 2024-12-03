@@ -21,7 +21,9 @@ export default class extends Controller {
 
   submitEnd(e) {    
     if (e.detail.success) {
-      this.close()
+      if(document.querySelector("#prevent-modal-close") == null) {
+        this.close()
+      }
     }
   }
 }
