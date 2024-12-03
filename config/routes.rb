@@ -5,6 +5,7 @@ Rails.application.routes.draw do
     get "turns_by_unit", on: :member
     get "turns", on: :member
     get "search", on: :collection
+    get "register_attendance", on: :member
     resources :course_people, only: [ :index, :new, :create ]
     resources :course_units, only: [ :new, :create ]
     resources :turns, only: [ :index, :edit, :update ]

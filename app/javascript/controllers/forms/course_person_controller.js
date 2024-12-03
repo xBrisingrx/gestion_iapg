@@ -4,7 +4,6 @@ import { Controller } from "@hotwired/stimulus"
 export default class extends Controller {
   static targets = ["company","selectManagers"]
   connect() {
-    console.log('connect')
   }
 
   get_managers() {

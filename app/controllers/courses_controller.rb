@@ -1,5 +1,5 @@
 class CoursesController < ApplicationController
-  before_action :set_course, only: %i[ show edit update modal_disable disable ]
+  before_action :set_course, only: %i[ show edit update modal_disable disable register_attendance ]
 
   # GET /courses or /courses.json
   def index
@@ -69,6 +69,10 @@ class CoursesController < ApplicationController
           locals: { message: "No se pudo dar de baja el curso.", status_class: "danger" }) ],
         status: :unprocessable_entity
     end
+  end
+
+  def register_attendance
+    @units = @course.course_units.includes(:unit)
   end
 
   private

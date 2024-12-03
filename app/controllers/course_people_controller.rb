@@ -37,10 +37,13 @@ class CoursePeopleController < ApplicationController
           render turbo_stream: [
               turbo_stream.replace("toasts",
                 partial: "shared/toasts",
-                locals: { message: "Inscripción exitosa.", status_class: "primary" })
+                locals: { message: "Inscripción exitosa.", status_class: "primary" }),
+              turbo_stream.append("tbody_course_people",
+                partial: "course_people/course_person",
+                locals: { course_person: @course_person })
           ]
         }
-        format.html { redirect_to courses_path, notice: "Curso registrado." }
+        format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
         format.json { render :show, status: :created, location: @course_person }
       else
         format.html { render :new, status: :unprocessable_entity }
@@ -53,7 +56,7 @@ class CoursePeopleController < ApplicationController
   def update
     respond_to do |format|
       if @course_person.update(course_person_params)
-        format.html { redirect_to courses_path, notice: "Courso actualizado." }
+        format.html { redirect_to courses_path, notice: "Inscripción actualizada." }
         format.json { render :show, status: :ok, location: @course_person }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -70,13 +73,13 @@ class CoursePeopleController < ApplicationController
           turbo_stream.remove(@course),
           turbo_stream.replace("toasts",
             partial: "shared/toasts",
-            locals: { message: "Curso dado de baja.", status_class: "primary" })
+            locals: { message: "Inscripción dado de baja.", status_class: "primary" })
         ], status: :ok
     else
       render turbo_stream: [
         turbo_stream.replace("toasts",
           partial: "shared/toasts",
-          locals: { message: "No se pudo dar de baja el curso.", status_class: "danger" }) ],
+          locals: { message: "No se pudo dar de baja la inscripción.", status_class: "danger" }) ],
         status: :unprocessable_entity
     end
   end

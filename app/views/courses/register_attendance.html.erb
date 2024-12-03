@@ -1,0 +1,8 @@
+<%= render "shared/modal", title: "Registro de asistencia", fade_in: true do %>
+  <section class="mb-2">
+    
+    <% @units.each do |unit| %>
+      <p><%= "#{unit.unit.name} #{unit.shift} #{unit.day}" %></p>
+    <% end %>
+  </section>
+<% end %>

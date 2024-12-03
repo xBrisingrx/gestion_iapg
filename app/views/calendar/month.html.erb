@@ -2,7 +2,7 @@
   <%= render "calendar/month", date: @date do |day|%>
     <p><%= day.strftime("%d") %></p>
     <% @courses[day]&.each do |course| %>
-     <%= link_to course_path(course), data: { turbo_frame: "modal"}  do %>
+     <%= link_to course_path(course), data: { turbo_frame: "modal2"}  do %>
         <div class="badge bg-info">
           <%= course.course_type.name %>
         </div>

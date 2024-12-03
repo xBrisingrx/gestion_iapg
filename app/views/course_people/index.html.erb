@@ -3,7 +3,14 @@
     <%= link_to new_course_course_person_path(@course), 
       class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
       title: 'Registrar cupo', 
-      data: { turbo_frame: "modal2"} do %>
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-person-add"></i>
+    <% end %>
+    
+    <%= link_to register_attendance_course_path(@course), 
+      class: "btn btn-info btn-sm btn-sm btn-icon text-white",
+      title: 'Registrar cupo', 
+      data: { turbo_frame: "modal"} do %>
       <i class="bi bi-person-add"></i>
     <% end %>
   </div>
@@ -20,7 +27,7 @@
           <th>Declaracion</th>
         </tr>
       </thead>
-      <tbody id='tbody_instructors'>
+      <tbody id='tbody_course_people'>
         <%= render @course_people %>
         <%= render(partial: "shared/not_found_data", locals: {colspan: 7}) if @course_people.empty?%>
       </tbody>
