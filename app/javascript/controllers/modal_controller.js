@@ -3,7 +3,7 @@ import { Modal } from "bootstrap"
 // Connects to data-controller="modal"
 export default class extends Controller {
   connect() {
-    let backdrop = document.querySelector(".modal-backdrop");
+    let backdrop = this.element.querySelector(".modal-backdrop");
     if (backdrop) {
       backdrop.remove();
     }
@@ -16,7 +16,7 @@ export default class extends Controller {
 
   close(){
     this.modal.hide()
-    document.querySelector(".modal-backdrop").remove()
+    this.element.querySelector(".modal-backdrop").remove()
   }
 
   submitEnd(e) {    
