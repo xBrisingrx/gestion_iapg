@@ -1,8 +1,23 @@
 <%= render "shared/modal", title: "Registro de asistencia", fade_in: true do %>
-  <section class="mb-2">
-    
-    <% @units.each do |unit| %>
-      <p><%= "#{unit.unit.name} #{unit.shift} #{unit.day}" %></p>
-    <% end %>
-  </section>
+  <div data-controller="forms--register-attendance">
+    <div id="prevent-modal-close"></div>
+    <section class="mb-2">
+      <input type="hidden" data-forms--register-attendance-target="courseId" value="<%= @course.id %>">
+      <select name=""
+        class="form-control form-control-sm"
+        data-forms--register-attendance-target="courseUnit"
+        data-action="change->forms--register-attendance#people_registered" >
+        <option value="">Selecciona tipo de asistencia</option>
+        <% @course_units.each do |courses_unit| %>
+          <option value="<%= courses_unit.id %>">
+            <%= "#{courses_unit.unit.name} #{courses_unit.shift} día #{courses_unit.day}" %>
+          </option>
+        <% end %>
+      </select>
+    </section>
+    <section>
+      <%= turbo_frame_tag "course_people_attendance", 
+        data: { forms__register_attendance_target: "tablePeopleRegistered" } %>
+    </section>
+  </div>
 <% end %>

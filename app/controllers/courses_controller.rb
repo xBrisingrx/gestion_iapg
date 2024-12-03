@@ -72,7 +72,7 @@ class CoursesController < ApplicationController
   end
 
   def register_attendance
-    @units = @course.course_units.includes(:unit)
+    @course_units = @course.course_units.includes(:unit)
   end
 
   private

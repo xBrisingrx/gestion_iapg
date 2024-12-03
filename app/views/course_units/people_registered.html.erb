@@ -1,0 +1,34 @@
+<%= turbo_frame_tag "course_people_attendance" do %>
+  <table class="table">
+    <thead>
+      <th>CUIL</th>
+      <th>Nombre</th>
+      <th>Empresa</th>
+      <th>Asistencia</th>
+    </thead>
+    <tbody>
+      <% @course_people.each do |course_person| %>
+        <%= tag.tr id: dom_id(course_person) do %>
+          <td><%= course_person.person.cuil %></td>
+          <td><%= course_person.person.fullname %></td>
+          <td><%= course_person.company.name %></td>
+          <td>
+            <%= form_with(model: [course_person.course, course_person], 
+              data: { 
+                controller: "forms--register-attendance", 
+                forms__register_attendance_target: "form" } ) do |form| %>
+              <%= form.select :attendance_status,
+                { no_registeder: "Sin registrar", presence: "Presente", absent: "Ausente", no_documents: "Falta documentación" }.map { |status| [status[1], status[0]] },
+                { include_blank: false },
+                class: "form-select form-select-sm",
+                data: {
+                  action: "forms--register-attendance#update_attendance"
+                }
+              %>
+            <% end %>
+          </td>
+        <% end %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

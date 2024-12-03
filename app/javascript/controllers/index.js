@@ -19,6 +19,9 @@ application.register("forms--course-type-unit", Forms__CourseTypeUnitController)
 import Forms__PersonController from "./forms/person_controller"
 application.register("forms--person", Forms__PersonController)
 
+import Forms__RegisterAttendanceController from "./forms/register_attendance_controller"
+application.register("forms--register-attendance", Forms__RegisterAttendanceController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

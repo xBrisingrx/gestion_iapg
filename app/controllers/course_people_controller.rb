@@ -56,9 +56,23 @@ class CoursePeopleController < ApplicationController
   def update
     respond_to do |format|
       if @course_person.update(course_person_params)
+        format.turbo_stream {
+          render turbo_stream: [
+              turbo_stream.replace("toasts",
+                partial: "shared/toasts",
+                locals: { message: "Asistencia registrada.", status_class: "primary" })
+          ]
+        }
         format.html { redirect_to courses_path, notice: "Inscripción actualizada." }
         format.json { render :show, status: :ok, location: @course_person }
       else
+        format.turbo_stream {
+          render turbo_stream: [
+              turbo_stream.replace("toasts",
+                partial: "shared/toasts",
+                locals: { message: "No se pudo registrar la asistencia.", status_class: "danger" })
+          ]
+        }
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @course_person.errors, status: :unprocessable_entity }
       end
@@ -93,6 +107,6 @@ class CoursePeopleController < ApplicationController
     # Only allow a list of trusted parameters through.
     def course_person_params
       params.expect(course_person: [ :course_id, :person_id, :company_id, :manager_id, :operator_id, :inscription_motive_id, :fleet_category_id, :unit_id,
-        :course_unit_id, :date, :from_hour, :to_hour, :active ])
+        :course_unit_id, :date, :from_hour, :to_hour, :active, :attendance_status ])
     end
 end

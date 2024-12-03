@@ -57,6 +57,10 @@ class CourseUnitsController < ApplicationController
     end
   end
 
+  def people_registered
+    @course_people = CoursePerson.where(course_unit: params[:course_unit_id])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_unit

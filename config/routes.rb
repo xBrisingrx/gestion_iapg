@@ -6,8 +6,10 @@ Rails.application.routes.draw do
     get "turns", on: :member
     get "search", on: :collection
     get "register_attendance", on: :member
-    resources :course_people, only: [ :index, :new, :create ]
-    resources :course_units, only: [ :new, :create ]
+    resources :course_people, only: [ :index, :new, :create, :update ]
+    resources :course_units, only: [ :new, :create ] do
+      get "people_registered", to: "course_units#people_registered"
+    end
     resources :turns, only: [ :index, :edit, :update ]
   end
   resources :instructors, except: [ :destroy ] do

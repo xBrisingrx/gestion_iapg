@@ -10,6 +10,8 @@ class CoursePerson < ApplicationRecord
   belongs_to :course_unit
   has_one :turn
 
+  enum :attendance_status, [ :no_registeder, :presence, :absent, :no_documents ]
+
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
   def assign_turn
