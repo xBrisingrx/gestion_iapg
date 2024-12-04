@@ -7,7 +7,9 @@ export default class extends Controller {
   }
 
   people_registered(){
-    this.tablePeopleRegisteredTarget.src = `/courses/${this.courseIdTarget.value}/course_units/${this.courseUnitTarget.value}/people_registered`
+    if(this.courseUnitTarget.value != ""){
+      this.tablePeopleRegisteredTarget.src = `/courses/${this.courseIdTarget.value}/course_units/${this.courseUnitTarget.value}/people_registered`
+    }
   }
 
   update_attendance() {
