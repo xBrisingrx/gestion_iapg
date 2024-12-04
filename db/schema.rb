@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_12_03_152602) do
+ActiveRecord::Schema[8.0].define(version: 2024_12_04_153056) do
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "province_id", null: false
@@ -86,6 +86,10 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_03_152602) do
     t.datetime "updated_at", null: false
     t.integer "attendance_status"
     t.integer "scoring"
+    t.integer "make_up_1"
+    t.date "date_make_up_1"
+    t.integer "make_up_2"
+    t.date "date_make_up_2"
     t.index ["company_id"], name: "index_course_people_on_company_id"
     t.index ["course_id"], name: "index_course_people_on_course_id"
     t.index ["course_unit_id"], name: "index_course_people_on_course_unit_id"
@@ -142,8 +146,6 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_03_152602) do
     t.date "date"
     t.integer "shift_time"
     t.integer "list"
-    t.boolean "complete", default: false
-    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_course_units_on_course_id"
