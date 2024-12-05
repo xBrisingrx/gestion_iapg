@@ -75,6 +75,14 @@ class CoursesController < ApplicationController
     @course_units = @course.course_units.includes(:unit)
   end
 
+  def scoring
+    @course_types = CourseType.select(:id, :name).actives
+  end
+
+  def by_course_type
+    @courses = Course.where(course_type_id: params[:course_type_id])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course

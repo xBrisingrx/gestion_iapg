@@ -22,6 +22,9 @@ application.register("forms--person", Forms__PersonController)
 import Forms__RegisterAttendanceController from "./forms/register_attendance_controller"
 application.register("forms--register-attendance", Forms__RegisterAttendanceController)
 
+import Forms__RegisterScoringController from "./forms/register_scoring_controller"
+application.register("forms--register-scoring", Forms__RegisterScoringController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 

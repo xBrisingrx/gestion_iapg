@@ -1,0 +1,8 @@
+<%= turbo_frame_tag "courses" do %>
+  <select name="" id="" data-controller="tselect">
+    <option value="">Seleccione curso</option>
+    <% @courses.each do |course| %>
+      <option value="<%= course.id %>"><%= "#{date_format(course.from_date)} Sale: #{course.room.name} Sede: #{course.room.headquarter.name}" %></option>
+    <% end %>
+  </select>
+<% end %>

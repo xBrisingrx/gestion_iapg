@@ -146,6 +146,8 @@ ActiveRecord::Schema[8.0].define(version: 2024_12_04_153056) do
     t.date "date"
     t.integer "shift_time"
     t.integer "list"
+    t.boolean "complete", default: false
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_id"], name: "index_course_units_on_course_id"
