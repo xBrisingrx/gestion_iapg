@@ -1,0 +1,39 @@
+<%= turbo_frame_tag "course_people" do %>
+  <table class="table">
+    <thead>
+      <tr>
+        <td>Cuil</td>
+        <td>Nombre</td>
+        <td>Empesa</td>
+        <td>Resultado teórico</td>
+        <td>Nota examen</td>
+        <td>Resultado práctica</td>
+        <td>Psicométrico</td>
+        <td></td>
+        <td>Acciones</td>
+      </tr>
+    </thead>
+    <tbody>
+      <% @course_people.each do |course_person| %>
+        <tr>
+          <td><%= course_person.person.cuil %></td>
+          <td><%= course_person.person.fullname %></td>
+          <td><%= course_person.company.name %></td>
+          <td><%= course_person.person.name %></td>
+          <td><%= course_person.person.name %></td>
+          <td><%= course_person.person.name %></td>
+          <td><%= course_person.person.name %></td>
+          <td><%= course_person.person.name %></td>
+          <td>
+            <%= link_to register_scoring_modal_course_path(id: course_person.course_id, person_id: course_person.person_id), 
+              class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
+              title: 'Registrar nota', 
+              data: { turbo_frame: "modal2"} do %>
+              <i class="bi bi-brush"></i>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

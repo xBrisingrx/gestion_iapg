@@ -92,4 +92,11 @@ class CoursePerson < ApplicationRecord
     cp_to_hour = cp.where(to_hour: end_hour)
     cp_from_hour.empty? && cp_to_hour.empty?
   end
+
+  def self.by_course(course_id)
+    CoursePerson.where(course: course_id)
+      .includes(:person, :company)
+      .group(:person_id)
+      .order(people: { last_name: :asc })
+  end
 end

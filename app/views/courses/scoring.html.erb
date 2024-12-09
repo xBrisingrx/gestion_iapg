@@ -4,7 +4,10 @@
     <div class="row mb-4">
       <div class="col-2">Tipo de curso:</div>
       <div class="col-4">
-        <select name="" id="" data-controller="tselect" data-forms--register-scoring-target="typeCourse" data-action="change->forms--register-scoring#get_courses">
+        <select name="" id="" 
+          data-controller="tselect" 
+          data-forms--register-scoring-target="typeCourse" 
+          data-action="change->forms--register-scoring#get_courses">
           <option value="">Seleccione curso</option>
           <% @course_types.each do |course_type| %>
             <option value="<%= course_type.id %>"><%= course_type.name %></option>

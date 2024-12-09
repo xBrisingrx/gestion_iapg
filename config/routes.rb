@@ -8,7 +8,10 @@ Rails.application.routes.draw do
     get "register_attendance", on: :member
     get "scoring", on: :collection
     get "by_course_type", on: :collection
-    resources :course_people, only: [ :index, :new, :create, :update ]
+    get "register_scoring_modal", on: :member
+    resources :course_people, only: [ :index, :new, :create, :update ] do
+      get "by_course", on: :collection
+    end
     resources :course_units, only: [ :new, :create ] do
       get "people_registered", to: "course_units#people_registered"
     end

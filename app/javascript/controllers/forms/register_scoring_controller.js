@@ -11,4 +11,9 @@ export default class extends Controller {
       this.selectCoursesTarget.src = `/courses/by_course_type?course_type_id=${this.typeCourseTarget.value}`
     }
   }
+
+  draw_course_people_table() {
+    const course_id = this.element.querySelector("#select_courses").value 
+    this.tableCoursePeopleTarget.src = `/courses/${course_id}/course_people/by_course`
+  }
 }

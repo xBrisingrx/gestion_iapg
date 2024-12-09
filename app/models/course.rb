@@ -10,6 +10,7 @@ class Course < ApplicationRecord
   has_many :instructors, through: :course_units
 
   accepts_nested_attributes_for :course_units, reject_if: :all_blank
+  accepts_nested_attributes_for :course_people
 
   validates :year_number, :general_number, uniqueness: { scope: :course_type_id, allow_blank: true }
   validates :from_date, presence: true

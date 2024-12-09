@@ -83,6 +83,11 @@ class CoursesController < ApplicationController
     @courses = Course.where(course_type_id: params[:course_type_id])
   end
 
+  def register_scoring_modal
+    @course = Course.find(params[:id])
+    @course_person = CoursePerson.where(course_id: params[:id], person_id: params[:person_id])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
@@ -94,7 +99,9 @@ class CoursesController < ApplicationController
     def course_params
       params.expect(course: [ :from_date, :to_date, :year_number, :general_number, :is_company, :course_type_id, :room_id, :company_id, :code,
         course_units_attributes: [
-          [ :id, :instructor_id, :unit_id, :start_hour, :end_hour, :shift, :shift_time, :day, :list ] ]
+          [ :id, :instructor_id, :unit_id, :start_hour, :end_hour, :shift, :shift_time, :day, :list ] ],
+          course_people_attributes: [
+          [ :id, :course_id, :person_id, :scoring, :make_up_1, :date_make_up_1, :make_up_2, :date_make_up_2 ] ]
         ])
     end
 end

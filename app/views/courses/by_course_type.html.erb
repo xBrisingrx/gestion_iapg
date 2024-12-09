@@ -1,5 +1,8 @@
 <%= turbo_frame_tag "courses" do %>
-  <select name="" id="" data-controller="tselect">
+  <select name="" id="select_courses" 
+    data-controller="tselect"
+    data-forms--register-scoring-target="selectCourses"
+    data-action="change->forms--register-scoring#draw_course_people_table">
     <option value="">Seleccione curso</option>
     <% @courses.each do |course| %>
       <option value="<%= course.id %>"><%= "#{date_format(course.from_date)} Sale: #{course.room.name} Sede: #{course.room.headquarter.name}" %></option>

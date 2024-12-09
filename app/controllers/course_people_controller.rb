@@ -3,7 +3,7 @@ class CoursePeopleController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @query = CoursePerson.where(course_id: params[:course_id]).includes(:person).group(:person_id).order(people: { last_name: :asc })
+    @query = CoursePerson.by_course(params[:course_id])
     @course = Course.find(params[:course_id])
     @pagy, @course_people = pagy(@query)
   end
@@ -96,6 +96,10 @@ class CoursePeopleController < ApplicationController
           locals: { message: "No se pudo dar de baja la inscripción.", status_class: "danger" }) ],
         status: :unprocessable_entity
     end
+  end
+
+  def by_course
+    @course_people = CoursePerson.by_course(params[:course_id])
   end
 
   private
