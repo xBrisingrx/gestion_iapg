@@ -8,13 +8,13 @@
           name="course[course_people_attributes][<%= index %>][id]" 
           id="course_course_people_attributes_<%= index %>_id"
           value=<%= c_p.id %> >
-      <% if c_p.unit.category == "Teórico" %>
+      <% if c_p.unit.category == "Teorico" %>
         <%= render partial: "courses/input_teorico", locals: { course_person: c_p, index: index } %>
       <% end %>
-      <% if c_p.unit.category == "Práctico" %>
+      <% if c_p.unit.category == "Practico" %>
         <%= render partial: "courses/input_practico", locals: { course_person: c_p, index: index } %>
       <% end %>
-      <% if c_p.unit.category == "Psicométrico" %>
+      <% if c_p.unit.category == "Psicometrico" %>
         <%= render partial: "courses/input_psicometrico", locals: { course_person: c_p, index: index } %>
       <% end %>
     <% end %>

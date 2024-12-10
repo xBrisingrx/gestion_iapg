@@ -111,4 +111,52 @@ class CoursePerson < ApplicationRecord
     end
     self.save
   end
+
+  def status_theoric
+    cp = CoursePerson
+      .where(person: self.person, course: self.course)
+      # .where(date: Date.today..Date.today - 30.days)
+      .joins(:unit)
+      .where(units: { category: "Teorico" })
+    if !cp.blank?
+      if cp.first.scoring
+        nota = [ cp.first.scoring, cp.first.make_up_1, cp.first.make_up_2 ].max
+        nota >= 90 ? "Aprobado" : "Desaprobado"
+      else
+        "Sin nota"
+      end
+    else
+      "Sin nota"
+    end
+  end
+
+  def scoring_theoric
+    cp = CoursePerson
+      .where(person: self.person, course: self.course)
+      .joins(:unit)
+      .where(units: { category: "Teorico" })
+    if !cp.blank?
+      cp.first.scoring
+    else
+      ""
+    end
+  end
+
+  def scoring_practica
+    cp = CoursePerson
+      .where(person: self.person, course: self.course)
+      # .where(date: Date.today..Date.today - 30.days)
+      .joins(:unit)
+      .where(units: { category: "Practico" })
+    if !cp.blank?
+      if cp.first.scoring
+        nota = [ cp.first.scoring, cp.first.make_up_1, cp.first.make_up_2 ].max
+        nota
+      else
+        "Sin nota"
+      end
+    else
+      "Sin nota"
+    end
+  end
 end

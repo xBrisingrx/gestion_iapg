@@ -28,6 +28,9 @@ application.register("forms--register-scoring", Forms__RegisterScoringController
 import Forms__RegisterToCourseController from "./forms/register_to_course_controller"
 application.register("forms--register-to-course", Forms__RegisterToCourseController)
 
+import Forms__TurnController from "./forms/turn_controller"
+application.register("forms--turn", Forms__TurnController)
+
 import HelloController from "./hello_controller"
 application.register("hello", HelloController)
 
