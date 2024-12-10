@@ -99,4 +99,16 @@ class CoursePerson < ApplicationRecord
       .group(:person_id)
       .order(people: { last_name: :asc })
   end
+
+  def register_renovation
+    self.unit = self.course_unit.unit
+    self.course = self.course_unit.course
+    course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.course_unit.unit_id)
+    if course_type_unit.is_by_turn
+      self.from_hour = set_hour(course_unit.unit_id, self.course_id, self.date, course_type_unit.shift_time)
+      # self.from_hour = set_turn(turn_id, self.date, course_type_unit.shift_time)
+      self.to_hour = self.from_hour + course_type_unit.shift_time.minutes
+    end
+    self.save
+  end
 end

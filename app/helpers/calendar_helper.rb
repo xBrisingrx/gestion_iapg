@@ -1,6 +1,10 @@
 module CalendarHelper
   def month_offset(date)
-    date.beginning_of_month.wday - 1
+    if date.beginning_of_month.wday == 0
+      6
+    else
+      date.beginning_of_month.wday - 1
+    end
   end
 
   def today?(date)

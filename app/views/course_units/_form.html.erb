@@ -1,67 +1,58 @@
-<%= form_with(model: course_unit) do |form| %>
-  <% if course_unit.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(course_unit.errors.count, "error") %> prohibited this course_unit from being saved:</h2>
-
-      <ul>
-        <% course_unit.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= form_with(model: [ course, course_unit ], builder: BootstrapBuilder) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :unit_id, "Módulo" %>
+    <div class="col-6">
+      <%= form.select :unit_id, course.units.actives.collect { |unit| [ "#{unit.name}", unit.id ] },
+        {:include_blank => "Seleccione módulo"},
+        data: {controller: 'tselect',
+          tselect_ids_value: @unit_id
+        },
+        required: true
+      %>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :course_id, style: "display: block" %>
-    <%= form.text_field :course_id %>
+    <%= inline_error_for(:unit_id, course_unit, "offset-3") %>
   </div>
 
-  <div>
-    <%= form.label :unit_id, style: "display: block" %>
-    <%= form.text_field :unit_id %>
+  <div class="form-group row mb-2">
+    <%= form.label :instructor_id, "Instructor" %>
+    <div class="col-6">
+      <%= form.select :instructor_id, Instructor.actives.collect { |instructor| [ "#{instructor.person.fullname}", instructor.id ] },
+        {:include_blank => "Seleccione instructor"},
+        data: {controller: 'tselect',
+          tselect_ids_value: @instructor_id
+        },
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:instructor_id, course_unit, "offset-3") %>
   </div>
 
-  <div>
-    <%= form.label :instructor_id, style: "display: block" %>
-    <%= form.text_field :instructor_id %>
+  <div class="form-group row mb-2">
+    <%= form.label :shift, "Turno" %>
+    <div class="col-6">
+      <%= form.select :shift, [ "Mañana", "Tarde", "Completo" ].map { |shift| [ "#{shift}", shift ] },
+        {:include_blank => "Seleccione turno"},
+        class: "form-control",
+        required: true
+      %>
+    </div>
+    <%= inline_error_for(:shift, course_unit, "offset-3") %>
   </div>
 
-  <div>
-    <%= form.label :shift, style: "display: block" %>
-    <%= form.text_field :shift %>
-  </div>
-
-  <div>
-    <%= form.label :day, style: "display: block" %>
-    <%= form.number_field :day %>
-  </div>
-
-  <div>
-    <%= form.label :start_hour, style: "display: block" %>
+  <div class="form-group row mb-2">
+    <%= form.label :start_hour, "Hora inicio" %>
     <%= form.time_field :start_hour %>
+    <%= inline_error_for(:start_hour, course_unit, "offset-3") %>
   </div>
 
-  <div>
-    <%= form.label :end_hour, style: "display: block" %>
+  <div class="form-group row mb-2">
+    <%= form.label :end_hour, "Hora fin" %>
     <%= form.time_field :end_hour %>
+    <%= inline_error_for(:end_hour, course_unit, "offset-3") %>
   </div>
 
-  <div>
-    <%= form.label :date, style: "display: block" %>
-    <%= form.date_field :date %>
-  </div>
-
-  <div>
-    <%= form.label :shift_time, style: "display: block" %>
-    <%= form.number_field :shift_time %>
-  </div>
-
-  <div>
-    <%= form.label :list, style: "display: block" %>
-    <%= form.number_field :list %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class='mt-2'>
+    <%= form.submit 'Guardar' %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
   </div>
 <% end %>

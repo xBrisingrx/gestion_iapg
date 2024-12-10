@@ -12,24 +12,33 @@ class CourseUnitsController < ApplicationController
 
   # GET /course_units/new
   def new
-    @course_unit = CourseUnit.new
+    @course = Course.find(params[:course_id])
+    @course_unit = @course.course_units.new
   end
-
   # GET /course_units/1/edit
   def edit
   end
 
   # POST /course_units or /course_units.json
   def create
-    @course_unit = CourseUnit.new(course_unit_params)
+    course = Course.find(params[:course_id])
+    course_unit = course.course_units.new(course_unit_params)
+    day = course.course_type.course_type_units.find_by(unit_id: course_unit.unit_id, shift: course_unit.shift).day
+    course_unit.day = day
+    course_unit.list = 2
 
     respond_to do |format|
-      if @course_unit.save
-        format.html { redirect_to @course_unit, notice: "Course unit was successfully created." }
-        format.json { render :show, status: :created, location: @course_unit }
+      if course_unit.save
+        format.turbo_stream {
+          render turbo_stream: [
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Módulo agregado", status_class: "primary" })
+          ]
+        }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @course_unit.errors, status: :unprocessable_entity }
+        format.json { render json: @iva_condition.errors, status: :unprocessable_entity }
       end
     end
   end

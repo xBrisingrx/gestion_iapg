@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "course_people" do %>
-  <div>
+  <div class="mb-2">
     <%= link_to new_course_course_person_path(@course), 
       class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
       title: 'Registrar cupo', 
@@ -12,6 +12,17 @@
       title: 'Asistencia', 
       data: { turbo_frame: "modal"} do %>
       <i class="bi bi-person-add"></i>
+    <% end %>
+    <%= link_to turns_course_path(@course), 
+      class: "btn btn-sm btn-icon btn-success",title: "Turnos", 
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-calendar-week"></i>
+    <% end %>
+    <%= link_to new_course_course_unit_path(@course), 
+      class: "btn btn-sm btn-icon btn-success",
+      title: 'Agregar módulo',
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-database-fill-add"></i>
     <% end %>
   </div>
   <div class="table-responsive">

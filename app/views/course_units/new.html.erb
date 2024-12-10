@@ -1,11 +1,3 @@
-<% content_for :title, "New course unit" %>
-
-<h1>New course unit</h1>
-
-<%= render "form", course_unit: @course_unit %>
-
-<br>
-
-<div>
-  <%= link_to "Back to course units", course_units_path %>
-</div>
+<%= render "shared/modal", title: "Agregar módulo", fade_in: true do %>
+  <%= render partial: "form", locals: { course: @course, course_unit: @course_unit } %>
+<% end %>

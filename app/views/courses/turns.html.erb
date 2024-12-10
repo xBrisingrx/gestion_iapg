@@ -1,0 +1,84 @@
+<%= turbo_frame_tag "modal" do %>
+  <div class="modal fade" tabindex="-1" 
+    data-controller="modal"
+    data-bs-backdrop="static" 
+    data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <div class= "modal-title">
+            <h4>Turnos</h4>
+          </div>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="remote_modal_body" >
+          <!-- Nav -->
+          <div class="text-center">
+            <ul class="nav nav-segment nav-pills mb-7" role="tablist">
+              <% @units.each do |unit| %>
+                <li class="nav-item">
+                  <a class="nav-link" 
+                      id="nav-<%= unit[0] %>-tab" 
+                      href="#nav-<%= unit[0] %>" 
+                      data-bs-toggle="pill" 
+                      data-bs-target="#nav-<%= unit[0] %>" 
+                      role="tab" aria-controls="nav-<%= unit[0] %>" 
+                      aria-selected="true"><%= unit[1] %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+          <!-- End Nav -->
+
+          <!-- Tab Content -->
+          <div class="tab-content">
+            <% @units.each do |unit| %>
+              <div class="tab-pane fade show" id="nav-<%= unit[0] %>" role="tabpanel" aria-labelledby="nav-<%= unit[0] %>-tab">
+                <div class="row justify-content-between">
+                  <% tab_course_units = @course_units.where(unit_id: unit[0]) %>
+                  <% tab_course_units.first.lists.times do |list| %>
+                      <div class="col-6">
+                          <h4>Lista <%= list+1 %></h4>
+                          <table class="table">
+                            <thead>
+                              <th> Hora </th>
+                              <th> Persona </th>
+                              <th>Estado</th>
+                            </thead>
+                            <tbody>
+                              <% @course_units.where(unit_id: unit[0], list: list+1).each do |course_unit| %>
+                                <% course_unit.turns.each do |turn| %>
+                                  <tr>
+                                    <td><%= hour_format(turn.hour) %></td>
+                                    <td><%= turn.person&.fullname %></td>
+                                    <td>
+                                      <% if !turn.busy? %>
+                                        <%= form_with(model: [course_unit.course,turn], data: {controller: "courses--turn-form", "courses--turn-form-target": "form"}) do |form| %>
+                                          <%= form.select :status, 
+                                            { available: 'Disponible', reserved: 'Reservado'  }.map { |status| [status[1], status[0]] },
+                                            { include_blank: false }, 
+                                            class: "form-select form-select-sm",
+                                            data: {
+                                              action: "courses--turn-form#update_turn",
+                                            } %>
+                                        <% end %>
+                                      <% end %>
+                                    </td>
+                                  </tr>
+                                <% end %>
+                              <% end %>
+                            </tbody>
+                          </table>
+                        </div>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <!-- End Tab Content -->
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -120,6 +120,19 @@ class CoursesController < ApplicationController
     @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
   end
 
+  def turns
+    @course = Course.find(params[:id])
+    @days = @course.cant_days
+    @turns = @course.turns
+    @units = @course.units.group(:name).pluck(:id, :name)
+    @course_units = @course.course_units
+  end
+
+  def turns_by_unit
+    @query = @course.course_people.where(course_unit_id: params[:course_unit_id]).order(:unit_id).order(:from_hour)
+    @pagy, @course_people = pagy(@query)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course
