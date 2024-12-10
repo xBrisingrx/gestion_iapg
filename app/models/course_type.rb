@@ -12,7 +12,7 @@ class CourseType < ApplicationRecord
 
   scope :actives, -> { where(active: true) }
 
-  enum :fleet, [ :light, :heavy ] # discriminamos si el tipo de curso es de flota liviana o pesada
+  enum :fleet, [ :light, :heavy, :both ] # discriminamos si el tipo de curso es de flota liviana o pesada
 
   def self.ransackable_attributes(auth_object = nil)
     [ "id", "name", "description", "min_quota", "max_quota", "min_score", "max_score", "passing_score", "number_of_repeat", "room_id", "need_code" ]

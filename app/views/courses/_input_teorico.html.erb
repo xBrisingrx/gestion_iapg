@@ -1,0 +1,45 @@
+<div class="form-group row mb-2">
+  <div class="col-3">
+    <label for="scoring">Nota exámen teórico</label>
+  </div>
+  <div class="col-3">
+    <input class="form-control " type="text" 
+      name="course[course_people_attributes][<%= index %>][scoring]" 
+      id="course_course_people_attributes_<%= index %>_scoring"
+      value=<%= course_person.scoring %> >
+  </div>
+</div>
+<div class="form-group row mb-2">
+  <div class="col-3">
+    <label for="scoring">Recuperatorio 1</label>
+  </div>
+  <div class="col-3">
+    <input class="form-control " type="text" 
+      name="course[course_people_attributes][<%= index %>][make_up_1]" 
+      id="course_course_people_attributes_<%= index %>_make_up_1" 
+      value=<%= course_person.make_up_1 %> >
+  </div>
+  <div class="col-3">
+    <input class="form-control " type="date" 
+      name="course[course_people_attributes][<%= index %>][date_make_up_1]" 
+      id="course_course_people_attributes_<%= index %>_date_make_up_1" 
+      value=<%= course_person.date_make_up_1 %> >
+  </div>
+</div>
+<div class="form-group row mb-2">
+  <div class="col-3">
+    <label for="scoring">Recuperatorio 2</label>
+  </div>
+  <div class="col-3">
+    <input class="form-control " type="text" 
+      name="course[course_people_attributes][<%= index %>][make_up_2]" 
+      id="course_course_people_attributes_<%= index %>_make_up_2" 
+      value=<%= course_person.make_up_2 %> >
+  </div>
+  <div class="col-3">
+    <input class="form-control " type="date" 
+      name="course[course_people_attributes][<%= index %>][date_make_up_2]" 
+      id="course_course_people_attributes_<%= index %>_date_make_up_2" 
+      value=<%= course_person.date_make_up_2 %> >
+  </div>
+</div>

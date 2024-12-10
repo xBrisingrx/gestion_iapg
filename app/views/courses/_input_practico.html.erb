@@ -1,0 +1,48 @@
+<div class="form-group row mb-2">
+  <div class="col-3">
+    <label for="scoring">Nota exámen práctica</label>
+  </div>
+  <div class="col-3">
+    <select name="course[course_people_attributes][<%= index %>][scoring]" 
+      id="course_course_people_attributes_<%= index %>_scoring" 
+      data-controller="tselect"
+      data-tselect-ids-value="[<%= course_person.scoring %>]" >
+      <option value="">Seleccione nota</option>
+      <option value="1" >1</option>
+      <option value="2" >2</option>
+      <option value="3" >3</option>
+    </select>
+  </div>
+</div>
+<div class="form-group row mb-2">
+  <div class="col-3">
+    <label for="scoring">Recuperatorio 1</label>
+  </div>
+  <div class="col-3">
+    <select name="course[course_people_attributes][<%= index %>][make_up_1]" 
+      id="course_course_people_attributes_<%= index %>_make_up_1" 
+      data-controller="tselect"
+      data-tselect-ids-value="[<%= course_person.make_up_1 %>]" >
+      <option value="">Seleccione nota</option>
+      <option value="1" >1</option>
+      <option value="2" >2</option>
+      <option value="3" >3</option>
+    </select>
+  </div>
+</div>
+<div class="form-group row mb-2">
+  <div class="col-3">
+    <label for="scoring">Recuperatorio 2</label>
+  </div>
+  <div class="col-3">
+    <select name="course[course_people_attributes][<%= index %>][make_up_2]" 
+      id="course_course_people_attributes_<%= index %>_make_up_2" 
+      data-controller="tselect"
+      data-tselect-ids-value="[<%= course_person.make_up_2 %>]" >
+      <option value="">Seleccione nota</option>
+      <option value="1" >1</option>
+      <option value="2" >2</option>
+      <option value="3" >3</option>
+    </select>
+  </div>
+</div>

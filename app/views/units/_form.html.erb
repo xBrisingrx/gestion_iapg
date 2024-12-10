@@ -14,7 +14,7 @@
   <div class="form-group row mb-2">
     <%= form.label :fleet, "Flota" %>
     <div class="col-6">
-      <%= form.select :fleet, [ "Liviana", "Pesada" ].map { |fleet| [ "#{fleet}", fleet ] },
+      <%= form.select :fleet, [ "Liviana", "Pesada", "Liviano/Pesado" ].map { |fleet| [ "#{fleet}", fleet ] },
         {:include_blank => "Seleccione tipo flota"},
         class: "form-control",
         required: true
@@ -40,7 +40,7 @@
   <div class="form-group row mb-2">
     <%= form.label :category, "Tipo de módulo" %>
     <div class="col-6">
-      <%= form.select :category, [ "Teórico", "Práctico", "Psicométrico" ].map { |category| [ "#{category}", category ] },
+      <%= form.select :category, [ "Teorico", "Practico", "Psicometrico" ].map { |category| [ "#{category}", category ] },
         {:include_blank => "Seleccione tipo de módulo"},
         class: "form-control",
         required: true

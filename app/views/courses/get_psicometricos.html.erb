@@ -1,0 +1,22 @@
+<%= turbo_frame_tag "curso_psicometrico", data: {forms__register_to_course_target: "selectPsicometrico"} do %>
+  <div class="form-group row">
+    <div class="col-4">
+      <label for="">Seleccione psicometrico: </label>
+    </div>
+    <div class="col-6">
+      <select name="course[psicometrico_id]" id="psicometrico_id"
+        data-controller="tselect forms--register-to-course"
+        data-forms--register-to-course-target="coursePsicometrico"
+        data-action="change->forms--register-to-course#set_date_psicometrico" >
+        <option value="">Seleccione psicometrico</option>
+        <% @courses.each do |course| %>
+          <option 
+            value="<%= course.id %>"
+            data-date="<%= course.date %>"> 
+            <%= "#{date_format(course.date)} #{course.unit.name} sala: #{course.course.room.name}"  %>
+          </option>
+        <% end %>
+      </select>
+    </div>
+  </div>
+<% end %>

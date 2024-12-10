@@ -7,7 +7,7 @@
     <div class="row mb-2">
       <div class="col-4"><b>Nro anual:</b> <%= @course.year_number %></div>
       <div class="col-4"><b>Nro general:</b> <%= @course.general_number %></div>
-      <div class="col-4"><b>Sala:</b> @course.room.name</div>
+      <div class="col-4"><b>Sala:</b> <%= @course.room.name %></div>
     </div>
     <div class="row mb-2">
       <div class="col-6"><b>¿Es In Company?</b> <%= (@course.is_company) ? "Si" : "No" %> </div>

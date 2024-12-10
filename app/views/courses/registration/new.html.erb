@@ -1,0 +1,98 @@
+<%= render "shared/modal", title: "Registrar a curso", fade_in: true do %>
+  <%= form_with( url: courses_registration_index_path,  builder: BootstrapBuilder, 
+    data: { controller: "forms--register-to-course forms--course-person", 
+      forms__register_to_course_target: "form" } ) do |form| %>
+    <div class="form-group row mb-2">
+    <%= form.label :person_id, "Persona" %>
+    <div class="col-6">
+      <%= form.select :person_id, Person.select(:id, :name, :last_name, :cuil).actives.collect { |person| [ "#{person.fullname} - #{person.cuil}", person.id ] },
+        {:include_blank => "Seleccione persona"},
+        data: {controller: 'tselect',
+        }
+      %>
+    </div>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :company_id, "Empesa" %>
+    <div class="col-6">
+      <%= form.select :company_id, Company.actives.collect { |company| [ "#{company.name} - #{company.cuit}", company.id ] },
+        {:include_blank => "Seleccione empresa"},
+        data: {
+          controller: 'tselect',
+          forms__course_person_target: "company",
+          action: "forms--course-person#get_managers",
+        }
+      %>
+    </div>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :manager_id, "Referente" %>
+    <div class="col-6">
+      <%= turbo_frame_tag :select_managers, data: { forms__course_person_target: "selectManagers" } do %> 
+        <%= form.select :manager_id, {}, {include_blank: "Seleccione referente"}, class: "form-control form-control-sm" %>
+      <% end %>
+    </div>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :operator_id, "Operadora" %>
+    <div class="col-6">
+      <%= form.select :operator_id, Company.actives.where(operator: true).collect { |company| [ "#{company.name} - #{company.cuit}", company.id ] },
+        {:include_blank => "Seleccione operadora"},
+        data: {
+          controller: 'tselect',
+        }
+      %>
+    </div>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :fleet_category_id, "Flota" %>
+    <div class="col-6">
+      <%= form.select :fleet_category_id, FleetCategory.actives.collect { |fleet_category| [ fleet_category.name, fleet_category.id ] },
+        {:include_blank => "Seleccione categoría de flota"},
+        data: {controller: 'tselect',
+        }
+      %>
+    </div>
+  </div>
+  <div class="form-group row mb-2">
+    <%= form.label :inscription_motive_id, "Motivo" %>
+    <div class="col-6">
+      <%= form.select :inscription_motive_id, InscriptionMotive.actives.collect { |motive| [ motive.name, motive.id ] },
+        {:include_blank => "Seleccione motivo"},
+        data: {
+          controller: 'tselect',
+        }
+      %>
+    </div>
+  </div>
+    <div class="form-group row mb-2">
+      <%= form.label "Selecciona flota y tipo de curso" %>
+      <div class="col-4">
+        <select name="course[type_fleet]" id="course_type_fleet"
+          data-forms--register-to-course-target="filterCourses"
+          data-action="change->forms--register-to-course#select_teoricos"
+          class="form-control form-control-sm">
+          <option value="">Seleccione ... </option>
+          <option value="1" data-category="inicio" data-fleet="light" >Inicio liviano</option>
+          <option value="2" data-category="inicio" data-fleet="heavy">Inicio pesado</option>
+          <option value="3" data-category="renovacion" data-fleet="light">Renovación liviano</option>
+          <option value="4" data-category="renovacion" data-fleet="heavy">Renovación pesado</option>
+        </select>
+      </div>
+    </div>
+    <input type="hidden" name="course[date_teorico]" id="course_date_teorico">
+    <input type="hidden" name="course[date_psicometrico]" id="course_date_psicometrico">
+    <input type="hidden" name="course[date_practico]" id="course_date_practico">
+    <section class="mb-2">
+      <%= turbo_frame_tag "courses", data: {forms__register_to_course_target: "selectTeorico"} %>
+    </section>
+    <section class="mb-2">
+      <%= turbo_frame_tag "curso_practico", data: {forms__register_to_course_target: "selectPractico"} %>
+    </section>
+    <section class="mb-2">
+      <%= turbo_frame_tag "curso_psicometrico", data: {forms__register_to_course_target: "selectPsicometrico"} %>
+    </section>
+    <%= form.submit "Guardar" %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  <% end %>
+<% end %>

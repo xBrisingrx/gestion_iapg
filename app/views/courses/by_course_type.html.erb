@@ -5,7 +5,7 @@
     data-action="change->forms--register-scoring#draw_course_people_table">
     <option value="">Seleccione curso</option>
     <% @courses.each do |course| %>
-      <option value="<%= course.id %>"><%= "#{date_format(course.from_date)} Sale: #{course.room.name} Sede: #{course.room.headquarter.name}" %></option>
+      <option value="<%= course.id %>"><%= "#{date_format(course.from_date)} Sala: #{course.room.name} Sede: #{course.room.headquarter.name}" %></option>
     <% end %>
   </select>
 <% end %>

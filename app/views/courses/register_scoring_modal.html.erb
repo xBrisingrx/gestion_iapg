@@ -1,47 +1,22 @@
 <%= render "shared/modal2", title: "Registro de notas", fade_in: true do %>
   <%= form_with(model: @course, builder: BootstrapBuilder)  do |form| %>
-  
-    <% @course_person.each do |c_p| %>
-      <div class="form-group row mb-2">
-        <div class="col-3">
-          <label for="scoring">Nota</label>
-        </div>
-        <div class="col-6">
-          <input class="form-control " type="text" 
-            name="course[course_people_attributes][0][scoring]" 
-            id="course_course_people_attributes_0_scoring">
-        </div>
-      </div>
-      <div class="form-group row mb-2">
-        <div class="col-3">
-          <label for="scoring">Recuperatorio 1</label>
-        </div>
-        <div class="col-3">
-          <input class="form-control " type="text" 
-            name="course[course_people_attributes][0][make_up_1]" 
-            id="course_course_people_attributes_0_make_up_1">
-        </div>
-        <div class="col-3">
-          <input class="form-control " type="date" 
-            name="course[course_people_attributes][0][date_make_up_1]" 
-            id="course_course_people_attributes_0_date_make_up_1">
-        </div>
-      </div>
-      <div class="form-group row mb-2">
-        <div class="col-3">
-          <label for="scoring">Recuperatorio 2</label>
-        </div>
-        <div class="col-3">
-          <input class="form-control " type="text" 
-            name="course[course_people_attributes][0][make_up_2]" 
-            id="course_course_people_attributes_0_make_up_2">
-        </div>
-        <div class="col-3">
-          <input class="form-control " type="date" 
-            name="course[course_people_attributes][0][date_make_up_2]" 
-            id="course_course_people_attributes_0_date_make_up_2">
-        </div>
-      </div>
+    <p><b>Nombre y apellido:</b> <%= @person.fullname %> </p>
+    <p><b>Empresa:</b> <%= @course_person.first.company.name %> </p>
+    <p><b>Tipo de cupo:</b> -- </p>
+    <% @course_person.each_with_index do |c_p, index| %>
+      <input type="hidden" 
+          name="course[course_people_attributes][<%= index %>][id]" 
+          id="course_course_people_attributes_<%= index %>_id"
+          value=<%= c_p.id %> >
+      <% if c_p.unit.category == "Teórico" %>
+        <%= render partial: "courses/input_teorico", locals: { course_person: c_p, index: index } %>
+      <% end %>
+      <% if c_p.unit.category == "Práctico" %>
+        <%= render partial: "courses/input_practico", locals: { course_person: c_p, index: index } %>
+      <% end %>
+      <% if c_p.unit.category == "Psicométrico" %>
+        <%= render partial: "courses/input_psicometrico", locals: { course_person: c_p, index: index } %>
+      <% end %>
     <% end %>
     <div class='mt-2'>
     <%= form.submit 'Guardar' %>

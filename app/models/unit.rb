@@ -1,7 +1,7 @@
 class Unit < ApplicationRecord
   # modelamos los modulos de los cursos
   validates :name, :fleet, :methodology, :category, presence: true
-  
+
   scope :actives, -> { where(active: true) }
 
   def self.ransackable_attributes(auth_object = nil)

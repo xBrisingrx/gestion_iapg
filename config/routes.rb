@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  namespace :courses do
+    resources :registration
+  end
+
   resources :courses, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
@@ -8,6 +12,9 @@ Rails.application.routes.draw do
     get "register_attendance", on: :member
     get "scoring", on: :collection
     get "by_course_type", on: :collection
+    get "by_course_category_and_fleet", on: :collection
+    get "get_cursos_practicos", on: :collection
+    get "get_psicometricos", on: :collection
     get "register_scoring_modal", on: :member
     resources :course_people, only: [ :index, :new, :create, :update ] do
       get "by_course", on: :collection

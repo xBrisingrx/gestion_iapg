@@ -46,6 +46,7 @@ class CoursesController < ApplicationController
         format.html { redirect_to courses_path, notice: "Courso actualizado." }
         format.json { render :show, status: :ok, location: @course }
       else
+        debugger
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @course.errors, status: :unprocessable_entity }
       end
@@ -85,7 +86,38 @@ class CoursesController < ApplicationController
 
   def register_scoring_modal
     @course = Course.find(params[:id])
+    @person = Person.find(params[:person_id])
     @course_person = CoursePerson.where(course_id: params[:id], person_id: params[:person_id])
+  end
+
+  def by_course_category_and_fleet
+    @course_category = params[:course_category]
+    @fleet = params[:fleet]
+    # obtengo las unidades teoricas
+    units = Unit.where(category: "Teorico").pluck(:id)
+    # filtro los cursos que tengan esas unidades y que inicien a partir del dia de la fecha
+    courses_ids = CourseUnit.where(unit_id: units).where("date >= ?", Date.today).pluck(:course_id)
+    @courses = CourseUnit.where(unit_id: units).where("date >= ?", Date.today).order(:date)
+    # de esta forma obtenemos los cursos que tienen unidades teoricas
+    @courses2 = Course.joins(:course_type)
+                .where(id: courses_ids)
+                .where("from_date >= ?", Date.today)
+                .where(course_types: { category: params[:course_category], fleet: params[:fleet].to_sym })
+                .or(Course.joins(:course_type)
+                      .where(course_types: { category: params[:course_category], fleet: :both }))
+  end
+
+  def get_cursos_practicos
+    @course_category = params[:course_category]
+    @fleet = params[:fleet]
+    units = Unit.where(category: "Practico").pluck(:id)
+    @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
+    # debugger
+  end
+
+  def get_psicometricos
+    units = Unit.where(category: "Psicometrico").pluck(:id)
+    @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
   end
 
   private

@@ -50,7 +50,7 @@
   <div class="form-group row mb-2">
     <%= form.label :category, "Categoría" %>
     <div class="col-6">
-      <%= form.select :category, [ "Inicio", "Renovación" ].map { |category| [ "#{category}", category ] },
+      <%= form.select :category, [ "Inicio", "Renovacion" ].map { |category| [ "#{category}", category ] },
         {:include_blank => "Seleccione categoría"},
         class: "form-control",
         required: true
@@ -76,7 +76,7 @@
   <div class="form-group row mb-2">
     <%= form.label :fleet, "Flota" %>
     <div class="col-6">
-      <%= form.select :fleet, { light: 'Liviana', heavy: 'Pesada' }.map { |fleet| [ "#{fleet[1]}", fleet[0] ] },
+      <%= form.select :fleet, { light: 'Liviana', heavy: 'Pesada', both: "Liviano/Pesado" }.map { |fleet| [ "#{fleet[1]}", fleet[0] ] },
         {:include_blank => "Seleccione tipo flota"},
         class: "form-control",
         required: true

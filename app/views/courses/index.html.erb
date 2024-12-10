@@ -39,5 +39,9 @@
   </div>
 <% end %>
 
+<%= link_to "Registrar cupo", 
+  new_courses_registration_path,
+  data: { turbo_frame: "modal"},
+  class: "btn btn-sm btn-primary" %>
 
 <%= turbo_frame_tag "calendar", src: calendar_month_path %>
