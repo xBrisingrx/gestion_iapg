@@ -6,11 +6,11 @@ class CreateInstructors < ActiveRecord::Migration[8.0]
       t.date :end_date
       t.boolean :theoretical, default: false
       t.boolean :practical, default: false
-      t.string :code, limit:3
+      t.string :code, limit: 3
       t.boolean :active, default: true
 
       t.timestamps
     end
-    add_index :instructors, :person_id, unique: true
+    # add_index :instructors, :person_id, unique: true
   end
 end

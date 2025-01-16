@@ -7,9 +7,9 @@ class CourseUnit < ApplicationRecord
   has_many :turns
 
   validates :list, :start_hour, :end_hour, presence: true
-  validate :start_hour_less_than_end_hour
+  validate :start_hour_less_than_end_hour, :instuctor_available
 
-  before_create :set_date
+  before_validation :set_date
   after_create :generate_turns
 
   def schedule
@@ -59,5 +59,19 @@ class CourseUnit < ApplicationRecord
       errors.add :start_hour, "Hora inicio debe ser menor a hora fin"
       errors.add :end_hour, "Hora fin debe ser mayor a hora inicio"
     end
+  end
+
+  def instuctor_available
+    instructor = CourseUnit
+      .where(instructor_id: self.instructor_id)
+      .where(date: self.date)
+      .where("start_hour >= ?", self.start_hour)
+      .where("start_hour <= ?", self.end_hour)
+      .or(CourseUnit.where(instructor_id: self.instructor_id)
+        .where(date: self.date)
+        .where("end_hour >= ?", self.start_hour)
+        .where("end_hour <= ?", self.end_hour))
+    debugger
+    errors.add :instructor_id, "El instructor no esta disponible en ese horario" unless instructor.empty
   end
 end

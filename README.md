@@ -1,24 +1,6 @@
-# README
-
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
-* Ruby version
-
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+[] Registro de curso con 3 o menos modulos
+[] Registro de alumno a curso
+  [] Inicio es un curso de 3 modulos
+  [] Renovacion deja seleccionar por modulo y debe completar los 3
+[] Envio de email al alumno avisando el registro
+  

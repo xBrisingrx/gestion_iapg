@@ -12,7 +12,8 @@ class Course < ApplicationRecord
   accepts_nested_attributes_for :course_units, reject_if: :all_blank
   accepts_nested_attributes_for :course_people
 
-  validates :year_number, :general_number, uniqueness: { scope: :course_type_id, allow_blank: true }
+  validates :year_number, uniqueness: { scope: [ :course_type_id, :general_number ], allow_blank: true }
+  validates :general_number, uniqueness: { scope: :course_type_id, allow_blank: true }
   validates :from_date, presence: true
   validates :company_id, presence: true, if: :course_is_company
 
