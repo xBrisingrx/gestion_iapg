@@ -87,6 +87,13 @@ class InstructorsController < ApplicationController
     end
   end
 
+  def is_available
+    instructors = CourseUnit.filter_instructors_by_date_and_hour(params[:instructor_id], params[:date], params[:start_hour], params[:end_hour])
+    puts "\n\n"
+    puts instructors
+    render json: { instructor_is_available: instructors.empty? }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_instructor

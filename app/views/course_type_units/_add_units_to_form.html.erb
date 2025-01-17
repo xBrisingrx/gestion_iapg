@@ -44,7 +44,7 @@
       </div>
       <div class="col-4 row">
         <div class='col-6'>
-          <input type="time" class="form-control" 
+          <input type="time" class="form-control start_hour" 
             value="<%= hour_format(course_type_unit.start_hour) %>"
             id="course_course_units_start_hour_<%= index %>"
             name="course[course_units_attributes][<%= index %>][start_hour]"
@@ -56,7 +56,7 @@
             <div class="text-danger course_course_units_start_hour"></div>
         </div>
         <div class='col-6'>
-          <input type="time" class="form-control" 
+          <input type="time" class="form-control end_hour" 
             value="<%= hour_format(course_type_unit.end_hour) %>"
             id="course_course_units_end_hour_<%= index %>"
             name="course[course_units_attributes][<%= index %>][end_hour]"
@@ -72,6 +72,7 @@
           <select id="course_course_units_<%= index %>" 
             name="course[course_units_attributes][<%= index %>][instructor_id]" 
             data-controller="tselect"
+            data-action="change->forms--course#validate_instructor"
             class="form-control"
             required>
             <option value="">Seleccione instructor</option>

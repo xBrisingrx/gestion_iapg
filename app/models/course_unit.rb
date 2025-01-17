@@ -7,7 +7,7 @@ class CourseUnit < ApplicationRecord
   has_many :turns
 
   validates :list, :start_hour, :end_hour, presence: true
-  validate :start_hour_less_than_end_hour, :instuctor_available
+  validate :start_hour_less_than_end_hour, :validate_instuctor_is_available
 
   before_validation :set_date
   after_create :generate_turns
@@ -61,17 +61,56 @@ class CourseUnit < ApplicationRecord
     end
   end
 
-  def instuctor_available
-    instructor = CourseUnit
-      .where(instructor_id: self.instructor_id)
-      .where(date: self.date)
-      .where("start_hour >= ?", self.start_hour)
-      .where("start_hour <= ?", self.end_hour)
-      .or(CourseUnit.where(instructor_id: self.instructor_id)
-        .where(date: self.date)
-        .where("end_hour >= ?", self.start_hour)
-        .where("end_hour <= ?", self.end_hour))
-    debugger
-    errors.add :instructor_id, "El instructor no esta disponible en ese horario" unless instructor.empty
+  # def instuctor_available
+  #   instructor = CourseUnit
+  #     .where(instructor_id: self.instructor_id)
+  #     .where(date: self.date)
+  #     .where("start_hour >= ?", self.start_time, "end_hour <= ?", self.end_time)
+  #     .or(
+  #       CourseUnit.where(instructor_id: self.instructor_id)
+  #         .where(date: self.date)
+  #         .where("start_hour <= ?", self.end_time, "end_hour >= ?", self.start_time))
+
+
+  #   available = true
+  #   if instructor
+  #     instructor.each do |inst|
+  #       if (inst.start_hour <= self.start_hour && inst.start_hour <= self.end_hour) || (inst.end_hour >= self.start_hour && inst.end_hour >= self.end_hour)
+
+  #       end
+  #     end
+  #   end
+  #     # si hay registros
+  #     # miramos la hora inicio
+  #     # luego miramos hora de fin
+  #     .where("start_hour >= ?", self.start_hour)
+  #     .where("start_hour <= ?", self.end_hour)
+  #     .or(CourseUnit.where(instructor_id: self.instructor_id)
+  #       .where(date: self.date)
+  #       .where("end_hour >= ?", self.start_hour)
+  #       .where("end_hour <= ?", self.end_hour))
+  #   debugger
+  #   errors.add :instructor_id, "El instructor no esta disponible en ese horario" unless instructor.empty
+  # end
+  def validate_instuctor_is_available
+    instructor = CourseUnit.filter_instructors_by_date_and_hour(self.instructor_id, self.date, self.start_hour, self.end_hour)
+    errors.add :instructor_id, "El instructor no esta disponible en ese horario" unless instructor.empty?
+  end
+
+  def self.filter_instructors_by_date_and_hour(instructor_id, date, start_hour, end_hour)
+    # verificamos que el instructor ese dia a esa hora este disponible
+    inicio = start_hour.to_datetime + 3.hours
+    fin = end_hour.to_datetime + 3.hours
+    instructors = CourseUnit
+      .where(instructor_id: instructor_id)
+      .where(date: date)
+    instructor = instructors
+      .where("start_hour >= ?", inicio)
+      .where("end_hour <= ?", fin)
+      .or(
+        instructors
+          .where("start_hour <= ?", fin)
+          .where("end_hour >= ?", inicio))
+    instructor
   end
 end

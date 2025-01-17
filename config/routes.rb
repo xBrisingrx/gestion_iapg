@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   resources :instructors, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
+    get "is_available", to: "instructors#is_available"
   end
   resources :units, except: [ :destroy ] do
     get "modal_disable", on: :member
