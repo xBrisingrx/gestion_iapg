@@ -21,14 +21,14 @@ class CourseUnitsController < ApplicationController
 
   # POST /course_units or /course_units.json
   def create
-    course = Course.find(params[:course_id])
-    course_unit = course.course_units.new(course_unit_params)
-    day = course.course_type.course_type_units.find_by(unit_id: course_unit.unit_id, shift: course_unit.shift).day
-    course_unit.day = day
-    course_unit.list = 2
+    @course = Course.find(params[:course_id])
+    @course_unit = @course.course_units.new(course_unit_params)
+    day = @course.course_type.course_type_units.find_by(unit_id: @course_unit.unit_id, shift: @course_unit.shift).day
+    @course_unit.day = day
+    @course_unit.list = 2
 
     respond_to do |format|
-      if course_unit.save
+      if @course_unit.save
         format.turbo_stream {
           render turbo_stream: [
             turbo_stream.replace("toasts",
