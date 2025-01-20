@@ -7,7 +7,7 @@ class CourseUnit < ApplicationRecord
   has_many :turns
 
   validates :list, :start_hour, :end_hour, presence: true
-  validate :start_hour_less_than_end_hour, :validate_instuctor_is_available
+  validate :start_hour_less_than_end_hour
 
   before_validation :set_date
   after_create :generate_turns
@@ -69,10 +69,9 @@ class CourseUnit < ApplicationRecord
   def self.filter_instructors_by_date_and_hour(instructor_id, date, start_hour, end_hour)
     # verificamos que el instructor ese dia a esa hora este disponible
     # inicio = start_hour.strftime("%H %M").gsub(" ", ":").to_datetime + 3.hours
-    inicio = Time.zone.parse(start_hour.strftime("%H %M").gsub(" ", ":")) # aca me acomoda la hora que le paso a UTC 0
+    inicio = Time.zone.parse(start_hour) # aca me acomoda la hora que le paso a UTC 0
     # fin = end_hour.strftime("%H %M").gsub(" ", ":").to_datetime + 3.hours
-    fin = Time.zone.parse(end_hour.strftime("%H %M").gsub(" ", ":"))
-    debugger
+    fin = Time.zone.parse(end_hour)
     instructors = CourseUnit
       .where(instructor_id: instructor_id)
       .where(date: date)

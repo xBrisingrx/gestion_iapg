@@ -13,7 +13,7 @@
     <%= form.label :course_type_id, "Tipo de curso" %>
     <div class="col-6">
       <%= form.select :course_type_id, 
-        CourseType.actives.all.collect { |course_type| [ "#{course_type.name}", course_type.id, data: { room: course_type.room_id } ] },
+        CourseType.actives.order(:name).collect { |course_type| [ "#{course_type.name}", course_type.id, data: { room: course_type.room_id } ] },
         {:include_blank => "Seleccione tipo de curso"},
         data: {
           controller: "tselect",

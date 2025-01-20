@@ -46,7 +46,6 @@ class CoursesController < ApplicationController
         format.html { redirect_to courses_path, notice: "Courso actualizado." }
         format.json { render :show, status: :ok, location: @course }
       else
-        debugger
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @course.errors, status: :unprocessable_entity }
       end
@@ -112,7 +111,6 @@ class CoursesController < ApplicationController
     @fleet = params[:fleet]
     units = Unit.where(category: "Practico").pluck(:id)
     @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
-    # debugger
   end
 
   def get_psicometricos

@@ -78,7 +78,7 @@ Rails.application.routes.draw do
   end
 
   get "calendar/month", to: "calendar#month"
-  root "home#index"
+  root "courses#index"
   draw(:authentication)
   draw(:errors)
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

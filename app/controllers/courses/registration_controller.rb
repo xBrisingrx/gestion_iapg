@@ -39,7 +39,6 @@ class Courses::RegistrationController < ApplicationController
       course_person_psicometrico.register_renovation
     end # transaction
   rescue ActiveRecord::StatementInvalid
-    debugger
     render json: "bugssssss", status: :unprocessable_entity
 
     if course_person_psicometrico.id && course_person_practica.id && course_person_teoria
