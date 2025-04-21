@@ -71,3 +71,4 @@ gem 'pagy', '~> 9.2', '>= 9.2.2'
 gem "ransack", "~> 4.2"
 gem "pundit", "~> 2.4"
 gem "authentication-zero", "~> 4.0"
+gem "image_processing", ">= 1.2"
