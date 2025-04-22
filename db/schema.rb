@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_21_154600) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_21_221409) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,6 +37,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_154600) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "answers", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "question_id", null: false
+    t.string "answer", null: false
+    t.boolean "correct", default: false
+    t.integer "order"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
   create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -118,6 +129,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_154600) do
     t.date "date_make_up_1"
     t.integer "make_up_2"
     t.date "date_make_up_2"
+    t.string "code", limit: 20
     t.index ["company_id"], name: "index_course_people_on_company_id"
     t.index ["course_id"], name: "index_course_people_on_course_id"
     t.index ["course_unit_id"], name: "index_course_people_on_course_unit_id"
@@ -377,6 +389,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_154600) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "answers", "questions"
   add_foreign_key "cities", "provinces"
   add_foreign_key "companies", "cities"
   add_foreign_key "companies", "company_categories"

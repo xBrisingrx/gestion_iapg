@@ -65,19 +65,19 @@ export default class extends Controller {
   }
 
   validate_instructor(event){
-    // const row = event.target.parentElement.parentElement.parentElement
-    // const start_hour = row.querySelector(`.start_hour`).value
-    // const end_hour = row.querySelector(`.end_hour`).value
-    // const date = document.querySelector("#course_from_date").value
-    // fetch(`/instructors/${event.target.value}/is_available?date=${date}&start_hour=${start_hour}&end_hour=${end_hour}`)
-    //   .then(response => response.json())
-    //   .then(response => {
-    //     if(response.instructor_is_available === true){
-    //       event.target.parentElement.querySelector('.text-danger').textContent = ""
-    //     } else {
-    //       event.target.parentElement.querySelector('.text-danger').textContent = "No disponible"
-    //     }
-    //   })
+    const row = event.target.parentElement.parentElement.parentElement
+    const start_hour = row.querySelector(`.start_hour`).value
+    const end_hour = row.querySelector(`.end_hour`).value
+    const date = document.querySelector("#course_from_date").value
+    fetch(`/instructors/${event.target.value}/is_available?date=${date}&start_hour=${start_hour}&end_hour=${end_hour}`)
+      .then(response => response.json())
+      .then(response => {
+        if(response.instructor_is_available === true){
+          event.target.parentElement.querySelector('.text-danger').textContent = ""
+        } else {
+          event.target.parentElement.querySelector('.text-danger').textContent = "No disponible"
+        }
+      })
   }
 
   submit_form(event){

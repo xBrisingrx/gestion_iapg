@@ -36,7 +36,7 @@ module GestionIapg
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
-    config.time_zone = "America/Argentina/Buenos_Aires"
+    config.time_zone = "Buenos Aires"
     config.i18n.default_locale = :es
     config.before_configuration do
       env_file = File.join(Rails.root, "config", "local_env.yml")

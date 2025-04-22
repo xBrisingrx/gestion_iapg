@@ -41,35 +41,29 @@
       </div>
     </div>
   </section>
-  <section class="ms-2">
-    <h3>Módulos</h3>
-    <% day = @course_type.course_type_units.first&.day %>
-    <% unit = '' %>
-    <% @course_type_units.each do |unit| %>
-      <% if day != unit.day || @course_type.course_type_units.first.id == unit.id %>
-        <h4>Día <%= unit.day %></h4>
-        <% day = unit.day %>
+  <table class="table table-hover table-striped mt-2">
+    <thead class="thead-dark">
+      <tr>
+        <th>Modulo</th>
+        <th>Dia</th>
+        <th>Turno</th>
+        <th>Horario</th>
+        <th>Duración del turno</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @course_type_units.each do |unit| %>
+        <tr>
+          <td><%= unit.unit.name %></td>
+          <td><%= unit.day %></td>
+          <td><%= unit.shift %></td>
+          <td><%= unit.schedule %></td>
+          <td>
+            <% if unit.is_by_turn %>
+              <%= unit.shift_time %> minutos
+            <% end %>
+          </td>
+        </tr>
       <% end %>
-      <div class="mb-3 row">
-        <div class="col-3">
-          <p class="fw-bold">Módulo</p>
-          <p><%= unit.unit.name %></p>
-        </div>
-        <div class="col-3">
-          <p class="fw-bold">Turno</p>
-          <p><%= unit.shift %></p>
-        </div>
-        <div class="col-3">
-          <p class="fw-bold">Horario</p>
-          <p><%= unit.schedule %></p>
-        </div>
-        <div class="col-3">
-          <% if unit.is_by_turn %>
-            <p class="fw-bold">Duración del turno</p>
-              <p>Turnos de <%= unit.shift_time %> minutos.</p>
-          <% end %>
-        </div>
-      </div>
-      <% unit = unit.unit.name %>
-    <% end %>
-  </section>
+    </tbody>
+  </table>
