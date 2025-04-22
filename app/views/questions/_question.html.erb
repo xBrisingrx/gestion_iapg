@@ -6,6 +6,7 @@
       <%= image_tag question.image.variant(:thumb) %>
     <% end %>
   </td>
+  <td><%= question.answers.actives.count %></td>
   <td>
     <% if policy(question).edit? %>
       <%= link_to edit_question_path(question), 

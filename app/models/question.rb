@@ -1,6 +1,7 @@
 class Question < ApplicationRecord
+  has_many :answers
   has_one_attached :image do |attachable|
-    attachable.variant :thumb, resize_to_limit: [100, 100]
+    attachable.variant :thumb, resize_to_limit: [ 100, 100 ]
   end
   validates :question,
     presence: true,
