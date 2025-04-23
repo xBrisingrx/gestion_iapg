@@ -3,7 +3,8 @@ class AnswersController < ApplicationController
 
   # GET /answers or /answers.json
   def index
-    @answers = Answer.all
+    @question = Question.find_by(id: params[:question_id])
+    @answers = @question.answers.actives
   end
 
   # GET /answers/1 or /answers/1.json
@@ -21,15 +22,28 @@ class AnswersController < ApplicationController
 
   # POST /answers or /answers.json
   def create
-    @answer = Answer.new(answer_params)
-
+    @question = Question.find(params[:question_id])
+    @answer = @question.answers.new(answer_params)
     respond_to do |format|
       if @answer.save
-        format.html { redirect_to @answer, notice: "Answer was successfully created." }
-        format.json { render :show, status: :created, location: @answer }
+        format.turbo_stream {
+          render turbo_stream: [
+            turbo_stream.append("tbody_answers",
+              partial: "answers/answer",
+              locals: { answer: @answer }),
+            turbo_stream.replace("form_new_answer",
+              partial: "answers/form",
+              locals: { question: @answer.question, answer: Answer.new }),
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Respuesta registrada", status_class: "primary" })
+          ]
+        }
+        format.html { redirect_to @iva_condition, notice: "Iva condition was successfully created." }
+        format.json { render :show, status: :created, location: @iva_condition }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @answer.errors, status: :unprocessable_entity }
+        format.json { render json: @iva_condition.errors, status: :unprocessable_entity }
       end
     end
   end

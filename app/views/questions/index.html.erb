@@ -24,7 +24,7 @@
       </thead>
       <tbody id='tbody_questions'>
         <%= render @questions %>
-        <%= render(partial: "shared/not_found_data", locals: {colspan: 3}) if @questions.empty?%>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 5}) if @questions.empty?%>
       </tbody>
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>

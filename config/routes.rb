@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
-  resources :answers
   resources :questions, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
+    resources :answers
   end
   namespace :courses do
     resources :registration

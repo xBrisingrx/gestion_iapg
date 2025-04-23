@@ -1,27 +1,5 @@
-<div id="<%= dom_id answer %>">
-  <p>
-    <strong>Answer:</strong>
-    <%= answer.answer %>
-  </p>
-
-  <p>
-    <strong>Correct:</strong>
-    <%= answer.correct %>
-  </p>
-
-  <p>
-    <strong>Order:</strong>
-    <%= answer.order %>
-  </p>
-
-  <p>
-    <strong>Active:</strong>
-    <%= answer.active %>
-  </p>
-
-  <p>
-    <strong>Question:</strong>
-    <%= answer.question_id %>
-  </p>
-
-</div>
+<%= tag.tr id: dom_id(answer) do %>
+  <td><%= answer.answer %></td>
+  <td><%= answer.correct %></td>
+  <td>--</td>
+<% end %>
