@@ -1,5 +1,10 @@
 <%= tag.tr id: dom_id(answer) do %>
   <td><%= answer.answer %></td>
-  <td><%= answer.correct %></td>
-  <td>--</td>
+  <td><%= answer.correct ? "Si" : "No" %></td>
+  <td>
+    <%= link_to edit_question_answer_path(answer.question, answer), 
+      class: "btn btn-warning btn-sm btn-sm btn-icon text-white", title: "Editar" do %>
+      <i class="bi bi-pencil-square"></i>
+    <% end %>
+  </td>
 <% end %>

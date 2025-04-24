@@ -1,0 +1,4 @@
+<tbody id='tbody_answers'>
+  <%= render answers %>
+  <%= render(partial: "shared/not_found_data", locals: {colspan: 3}) if answers.empty?%>
+</tbody>

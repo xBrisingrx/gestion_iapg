@@ -1,15 +1,22 @@
-<%= form_with(model: [question, answer], id: "form_new_answer") do |form| %>
+<%= form_with(model: [question, answer], id: "form_new_answer", class: "mb-2") do |form| %>
   <div id="prevent-modal-close"></div>
   <div class="row">
-    <div class="col-8">
+    <div class="col-7">
       <%= form.text_field :answer, class: "form-control form-control-sm", placeholder: "Respuesta" %>
     </div>
     <div class="col-2">
       <%= form.label :correct, "Es correcta"%>
       <%= form.checkbox :correct %>
     </div>
-    <div class="col-2">
-    <%= form.submit "Agregar", class: "btn btn-primary btn-sm" %>
+    <div class="col-3">
+    <%= form.submit submit_label, class: "btn btn-primary", style: "--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" %>
+    <% if answer.id %>
+      <%= link_to cancel_edit_question_answer_path(question, answer),
+        class: "btn btn-danger", 
+        style: "--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;" %>
+          <i class="bi bi-x-circle"></i>
+      <% end %>
+    <% end %>
     </div>
   </div>
 <% end %>

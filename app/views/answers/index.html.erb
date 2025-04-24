@@ -1,6 +1,10 @@
 <%= render "shared/modal", title: "Respuestas", fade_in: true do %>
- <%= turbo_frame_tag 'form',class: "mb-2" do %>
-    <%= render(partial: "answers/form", locals: {question: @question,answer: Answer.new}) %>
+ <%= turbo_frame_tag 'form' do %>
+    <%= render(partial: "answers/form", 
+               locals: { 
+                question: @question, 
+                answer: Answer.new,
+                submit_label: "Agregar" }) %>
   <% end %>
   <%= turbo_frame_tag 'table', id: 'answers_table' do %>
     <div class="table-responsive">
