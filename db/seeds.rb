@@ -63,3 +63,50 @@
 # InscriptionMotive.create(name: "Nuevo ingreso")
 # InscriptionMotive.create(name: "Cambio de categoría")
 # InscriptionMotive.create(name: "Scoring")
+
+# questions = JSON.parse(File.read(Rails.root.join('db/seeds/ed_preguntas_editado.json')))
+# questions.each do |question|
+#   new_question = Question.new(id: question['id'],
+#     question: question['question'],
+#     eliminating: question['eliminating']
+#   )
+#   if new_question.valid?
+#     new_question.save
+#   else
+#     debugger
+#   end
+# end
+
+# answers = JSON.parse(File.read(Rails.root.join('db/seeds/answers.json')))
+# answers.each do |answer|
+#   Answer.create(id: answer['id'],
+#     answer: answer['respuesta'],
+#     correct: answer['correcta'].to_i,
+#     question_id: answer['pregunta_id'],
+#     order: answer['orden'].to_i
+#   )
+# end
+
+
+# videos = JSON.parse(File.read(Rails.root.join('db/seeds/videos.json')))
+# videos.each do |video|
+#   Video.create(
+#     id: video['id'],
+#     vimeo: video['vimeo'],
+#     title: video['title'],
+#     file: video['file'],
+#     code: video['code'],
+#     active: !video['vimeo'].blank?
+#   )
+# end
+
+exams = JSON.parse(File.read(Rails.root.join('db/seeds/exams.json')))
+exams.each do |exam|
+  Exam.create(
+    id: exam['id'],
+    title: exam['examen'],
+    video: exam['video'].to_i,
+    retake: exam['recu'],
+    elearning: exam['elearning'].to_i,
+  )
+end
