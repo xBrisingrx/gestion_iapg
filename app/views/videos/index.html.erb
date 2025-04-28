@@ -1,0 +1,55 @@
+<h1>Videos</h1>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="#">E-learning</a></li>
+    <li class="breadcrumb-item"><%= link_to "Exámenes", exams_path %></li>
+    <li class="breadcrumb-item " aria-current="page"><%= link_to "Preguntas", questions_path %></li>
+    <li class="breadcrumb-item"><a href="#">Encuestas</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Videos</li>
+  </ol>
+</nav>
+<div class="row justify-content-between mb-2">
+  <div class="col-4">
+    <% if policy(@videos).new? %>
+      <%= link_to "Registrar video", 
+        new_video_path,
+        data: { turbo_frame: "modal"},
+        class: "btn btn-sm btn-primary" %>
+    <% end %>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <%= search_form_for @query, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
+      <div class="input-group input-group-sm">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <%= form.search_field :title_cont,
+          placeholder: "Filtrar...",
+          class: "form-control form-control-sm",
+          autocomplete: "off",
+          data: { action: "input->filter#search" }
+        %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= turbo_frame_tag 'table', id: 'videos_table' do %>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>ID</th>
+          <th>Título</th>
+          <th>Video</th>
+          <th>Ver</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id='tbody_videos'>
+        <%= render @videos %>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 5}) if @videos.empty?%>
+      </tbody>
+    </table>
+    <%== pagy_bootstrap_nav(@pagy) %>
+  </div>
+<% end %>

@@ -1,0 +1,8 @@
+<%= render "shared/modal", title: "Desasignar la pregunta", fade_in: true do %>
+  <p>Se va a desasignar la pregunta <b><%= @exam_question.question.question %></b></p>
+  <%= form_with(url: disable_exam_exam_question_path(@exam_question), method: 'PUT') do |form| %>
+      <%= form.submit 'Dar de baja', class: 'btn btn-danger' %>
+      <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+  <% end %>
+<% end %>

@@ -1,0 +1,4 @@
+<tbody id='tbody_exam_questions'>
+  <%= render exam_questions %>
+  <%= render(partial: "shared/not_found_data", locals: {colspan: 3}) if exam_questions.empty?%>
+</tbody>

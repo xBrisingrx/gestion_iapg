@@ -1,0 +1,8 @@
+<%= render "shared/modal", title: "Dar de baja video", fade_in: true do %>
+  <p>Se va a dar de baja al video <b><%= @video.title %></b></p>
+  <%= form_with(url: disable_video_path(@video), method: 'PUT') do |form| %>
+      <%= form.submit 'Dar de baja', class: 'btn btn-danger' %>
+      <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+  <% end %>
+<% end %>

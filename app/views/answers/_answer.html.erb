@@ -1,6 +1,14 @@
 <%= tag.tr id: dom_id(answer) do %>
   <td><%= answer.answer %></td>
-  <td><%= answer.correct ? "Si" : "No" %></td>
+  <td>
+    <%= form_with(model: [answer.question, answer], data: { controller: "forms--answer", forms__answer_target: "form" }) do |form| %>
+      <%= form.check_box :correct, 
+        class: "form-check-input",
+        data: {
+          action: "click->forms--answer#update_answer",
+        } %>
+    <% end %>
+  </td>
   <td>
     <%= link_to edit_question_answer_path(answer.question, answer), 
       class: "btn btn-warning btn-sm btn-sm btn-icon text-white", title: "Editar" do %>

@@ -1,0 +1,28 @@
+<%= tag.tr id: dom_id(exam) do %>
+  <td><%= exam.id %></td>
+  <td><%= exam.title %></td>
+  <td><%= exam.video ? "Si" : "No" %></td>
+  <td><%= exam.retake %></td>
+  <td>
+    <%= link_to exam_exam_questions_path(exam),
+        title: "Preguntas asignadas", data: { turbo_frame: "modal2"} do %>
+        <span class="badge bg-secondary">
+          Preguntas asignadas <%= exam.exam_questions.actives.count %>
+        </span>
+      <% end %>
+  </td>
+  <td>
+    <% if policy(exam).edit? %>
+      <%= link_to edit_exam_path(exam), 
+        class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: "Editar", data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-pencil-square"></i>
+      <% end %>
+    <% end %>
+    <% if policy(exam).disable? %>
+      <%= link_to modal_disable_exam_path(exam), 
+        class: "btn btn-danger btn-sm btn-icon",title: "Eliminar", data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-trash"></i>
+      <% end %>
+    <% end %>
+  </td>
+<% end %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_21_221409) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_28_051552) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -213,6 +213,27 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_221409) do
     t.index ["room_id"], name: "index_courses_on_room_id"
   end
 
+  create_table "exam_questions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "exam_id", null: false
+    t.bigint "question_id", null: false
+    t.integer "question_order"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exam_id"], name: "index_exam_questions_on_exam_id"
+    t.index ["question_id"], name: "index_exam_questions_on_question_id"
+  end
+
+  create_table "exams", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "title", null: false
+    t.boolean "video"
+    t.string "retake", limit: 5
+    t.boolean "elearning"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "fleet_categories", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
@@ -387,6 +408,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_221409) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  create_table "videos", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "title", limit: 500, null: false
+    t.string "file", limit: 100
+    t.string "vimeo", limit: 100
+    t.string "code", limit: 10
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
@@ -416,6 +447,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_21_221409) do
   add_foreign_key "courses", "companies"
   add_foreign_key "courses", "course_types"
   add_foreign_key "courses", "rooms"
+  add_foreign_key "exam_questions", "exams"
+  add_foreign_key "exam_questions", "questions"
   add_foreign_key "headquarters", "cities"
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"

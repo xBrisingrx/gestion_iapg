@@ -3,7 +3,7 @@ class Answer < ApplicationRecord
 
   scope :actives, -> { where(active: true) }
 
-  before_create :check_correct,
+  before_save :check_correct,
     if: ->(answer) { answer.correct }
 
   private

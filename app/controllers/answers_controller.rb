@@ -71,7 +71,7 @@ class AnswersController < ApplicationController
               locals: { answers: answers }),
             turbo_stream.replace("form_new_answer",
               partial: "answers/form",
-              locals: { question: @answer.question, answer: Answer.new, submit_label: "Actualizar" }),
+              locals: { question: @answer.question, answer: Answer.new, submit_label: "Agregar" }),
             turbo_stream.replace("toasts",
               partial: "shared/toasts",
               locals: { message: "Respuesta actualizada", status_class: "primary" })

@@ -1,0 +1,19 @@
+<%= form_with(model: [exam, exam_question], id: "form_new_exam_question", builder: BootstrapBuilder) do |form| %>
+  <div id="prevent-modal-close"></div>
+  <div class="form-group row mb-2">
+    <div class="col-8">
+      <%= form.select :question_id, questions.collect { |question| [ question.question, question.id ] },
+        {:include_blank => "Seleccione pregunta"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [exam_question.question_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:question_id, exam_question, "offset-3") %>
+    <div class="col-2">
+      <%= form.submit "Asignar" %>
+    </div>
+  </div>
+
+  
+<% end %>

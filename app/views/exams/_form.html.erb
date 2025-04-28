@@ -1,0 +1,29 @@
+<%= form_with(model: exam, builder: BootstrapBuilder) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :title, "Título"%>
+    <%= form.text_field :title, class: "form-control-sm" %>
+    <%= inline_error_for(:title, exam, "offset-3") %>
+  </div>
+
+  <div class="form-check mb-2">
+    <%= form.check_box :video, class: "form-check-input" %>
+    <%= form.label :video, "Video" %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :retake, "Recuperatorio" %>
+    <div class="col-6">
+      <%= form.select :retake, options_for_select([["No", 0], ["1", "1"], ["2", "2"]]),
+        {:include_blank => "Seleccione recuperatorio"},
+        required: true,
+        class: "form-control form-control-sm"
+      %>
+    </div>
+    <%= inline_error_for(:retake, exam, "offset-3") %>
+  </div>
+
+  <div class="mt-2">
+    <%= form.submit "Guardar" %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+<% end %>

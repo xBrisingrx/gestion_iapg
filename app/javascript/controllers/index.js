@@ -7,6 +7,9 @@ import { application } from "./application"
 import FilterController from "./filter_controller"
 application.register("filter", FilterController)
 
+import Forms__AnswerController from "./forms/answer_controller"
+application.register("forms--answer", Forms__AnswerController)
+
 import Forms__CourseController from "./forms/course_controller"
 application.register("forms--course", Forms__CourseController)
 

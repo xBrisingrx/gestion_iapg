@@ -1,6 +1,6 @@
 <%= tag.tr id: dom_id(question) do %>
   <td><%= question.question %></td>
-  <td><%= question.eliminating %></td>
+  <td><%= question.eliminating ? "Si" : "No" %></td>
   <td> 
     <% if question.image.attached? %>
       <%= image_tag question.image.variant(:thumb) %>

@@ -1,0 +1,12 @@
+<% content_for :title, "Editing exam question" %>
+
+<h1>Editing exam question</h1>
+
+<%= render "form", exam_question: @exam_question %>
+
+<br>
+
+<div>
+  <%= link_to "Show this exam question", @exam_question %> |
+  <%= link_to "Back to exam questions", exam_questions_path %>
+</div>

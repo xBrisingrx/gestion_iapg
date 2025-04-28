@@ -1,0 +1,10 @@
+<%= tag.tr id: dom_id(exam_question) do %>
+  <td><%= exam_question.question_order %></td>
+  <td><%= exam_question.question.question %></td>
+  <td>
+    <%= link_to modal_disable_exam_exam_question_path(exam_question.exam, exam_question), 
+      class: "btn btn-danger btn-sm btn-icon", title: "Eliminar", data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-trash"></i>
+    <% end %>
+  </td>
+<% end %>

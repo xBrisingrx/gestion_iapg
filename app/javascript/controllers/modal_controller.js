@@ -19,9 +19,9 @@ export default class extends Controller {
     this.element.querySelector(".modal-backdrop").remove()
   }
 
-  submitEnd(e) {    
+  submitEnd(e) {
     if (e.detail.success) {
-      if(document.querySelector("#prevent-modal-close") == null) {
+      if(e.target.querySelector("#prevent-modal-close") == null) {
         this.close()
       }
     }
