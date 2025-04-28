@@ -1,0 +1,37 @@
+<%= form_with(model: exam_module) do |form| %>
+  <% if exam_module.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(exam_module.errors.count, "error") %> prohibited this exam_module from being saved:</h2>
+
+      <ul>
+        <% exam_module.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :exam_id, style: "display: block" %>
+    <%= form.text_field :exam_id %>
+  </div>
+
+  <div>
+    <%= form.label :name, style: "display: block" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <div>
+    <%= form.label :quote_type, style: "display: block" %>
+    <%= form.text_field :quote_type %>
+  </div>
+
+  <div>
+    <%= form.label :module_order, style: "display: block" %>
+    <%= form.number_field :module_order %>
+  </div>
+
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

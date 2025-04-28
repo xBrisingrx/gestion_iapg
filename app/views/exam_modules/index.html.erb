@@ -1,0 +1,30 @@
+<%= render "shared/modal2", title: "Módulos asignados", fade_in: true do %>
+  <%= turbo_frame_tag 'form' do %>
+    <%= render(partial: "exam_modules/form", 
+               locals: { 
+                exam: @exam, 
+                exam_module: ExamModule.new,
+                modules: @modules
+              }) %>
+  <% end %>
+  <%= turbo_frame_tag 'table', id: 'exam_modules_table' do %>
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead class="thead-light">
+          <tr>
+            <th>#</th>
+            <th>Pregunta asignada</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id='tbody_exam_modules'>
+          <%= render @exam_modules %>
+          <%= render(partial: "shared/not_found_data", locals: {colspan: 3}) if @exam_modules.empty?%>
+        </tbody>
+      </table>
+      <%== pagy_bootstrap_nav(@pagy) %>
+    </div>
+  <% end %> 
+<% end %>
+
+

@@ -1,0 +1,12 @@
+<% content_for :title, "Editing exam module" %>
+
+<h1>Editing exam module</h1>
+
+<%= render "form", exam_module: @exam_module %>
+
+<br>
+
+<div>
+  <%= link_to "Show this exam module", @exam_module %> |
+  <%= link_to "Back to exam modules", exam_modules_path %>
+</div>

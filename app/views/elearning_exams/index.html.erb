@@ -1,18 +1,18 @@
-<h1>Videos</h1>
+<h1>E-learning</h1>
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
-    <li class="breadcrumb-item"><%= link_to "E-learning", elearning_exams_path %></li>
-    <li class="breadcrumb-item"><%= link_to "Exámenes", exams_path %></li>
-    <li class="breadcrumb-item"><%= link_to "Preguntas", questions_path %></li>
+    <li class="breadcrumb-item active" aria-current="page">E-learning</li>
+    <li class="breadcrumb-item "><%= link_to "Exámenes", exams_path %></li>
+    <li class="breadcrumb-item "><%= link_to "Preguntas", questions_path %></li>
     <li class="breadcrumb-item"><a href="#">Encuestas</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Videos</li>
+    <li class="breadcrumb-item "><%= link_to "Videos", videos_path %></li>
   </ol>
 </nav>
 <div class="row justify-content-between mb-2">
   <div class="col-4">
-    <% if policy(@videos).new? %>
-      <%= link_to "Registrar video", 
-        new_video_path,
+    <% if policy(@exams).new? %>
+      <%= link_to "Registrar exámen", 
+        new_elearning_exam_path,
         data: { turbo_frame: "modal"},
         class: "btn btn-sm btn-primary" %>
     <% end %>
@@ -33,21 +33,20 @@
     <% end %>
   </div>
 </div>
-<%= turbo_frame_tag 'table', id: 'videos_table' do %>
+<%= turbo_frame_tag 'table', id: 'exams_table' do %>
   <div class="table-responsive">
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
           <th>ID</th>
-          <th>Título</th>
-          <th>Video</th>
-          <th>Ver</th>
+          <th>Exámenes</th>
+          <th>Módulos</th>
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id='tbody_videos'>
-        <%= render @videos %>
-        <%= render(partial: "shared/not_found_data", locals: {colspan: 5}) if @videos.empty?%>
+      <tbody id='tbody_exams'>
+        <%= render partial: "elearning_exams/exams", locals: { exams: @exams } %>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 4}) if @exams.empty?%>
       </tbody>
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>

@@ -1,0 +1,10 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @exam_module %>
+
+<div>
+  <%= link_to "Edit this exam module", edit_exam_module_path(@exam_module) %> |
+  <%= link_to "Back to exam modules", exam_modules_path %>
+
+  <%= button_to "Destroy this exam module", @exam_module, method: :delete %>
+</div>

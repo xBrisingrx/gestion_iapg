@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_28_051552) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_28_074947) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -211,6 +211,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_051552) do
     t.index ["company_id"], name: "index_courses_on_company_id"
     t.index ["course_type_id"], name: "index_courses_on_course_type_id"
     t.index ["room_id"], name: "index_courses_on_room_id"
+  end
+
+  create_table "exam_modules", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "exam_id", null: false
+    t.string "name", null: false
+    t.string "quote_type", null: false
+    t.integer "module_order", null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exam_id"], name: "index_exam_modules_on_exam_id"
   end
 
   create_table "exam_questions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -447,6 +458,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_051552) do
   add_foreign_key "courses", "companies"
   add_foreign_key "courses", "course_types"
   add_foreign_key "courses", "rooms"
+  add_foreign_key "exam_modules", "exams"
   add_foreign_key "exam_questions", "exams"
   add_foreign_key "exam_questions", "questions"
   add_foreign_key "headquarters", "cities"

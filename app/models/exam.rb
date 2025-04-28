@@ -1,5 +1,6 @@
 class Exam < ApplicationRecord
   has_many :exam_questions
+  has_many :exam_modules
   has_many :questions, through: :exam_questions
   scope :actives, -> { where(active: true) }
 
