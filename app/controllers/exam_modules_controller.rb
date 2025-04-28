@@ -1,6 +1,6 @@
 class ExamModulesController < ApplicationController
-  before_action :set_exam_module, only: %i[ show edit update destroy ]
-
+  before_action :set_exam_module, only: %i[ show edit ]
+  # estos modulos son para los examenes elearning
   # GET /exam_modules or /exam_modules.json
   def index
     @exam = Exam.find(params[:exam_id])
@@ -23,39 +23,29 @@ class ExamModulesController < ApplicationController
 
   # POST /exam_modules or /exam_modules.json
   def create
-    @exam_module = ExamModule.new(exam_module_params)
-
+    @exam = Exam.find(params[:exam_id])
+    @exam_module = @exam.exam_modules.new(exam_module_params)
     respond_to do |format|
       if @exam_module.save
-        format.html { redirect_to @exam_module, notice: "Exam module was successfully created." }
-        format.json { render :show, status: :created, location: @exam_module }
+        exam_modules = @exam.exam_modules.actives
+        format.turbo_stream {
+          render turbo_stream: [
+            turbo_stream.replace("tbody_exam_modules",
+              partial: "exam_modules/tbody",
+              locals: { exam_modules: exam_modules }),
+            turbo_stream.replace("form_new_exam_module",
+              partial: "exam_modules/form",
+              locals: { exam: @exam_module.exam, exam_module: ExamModule.new }),
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Módulo registrado", status_class: "primary" })
+          ]
+        }
+        format.json { render :show, status: :created, location: @iva_condition }
       else
         format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @exam_module.errors, status: :unprocessable_entity }
+        format.json { render json: @iva_condition.errors, status: :unprocessable_entity }
       end
-    end
-  end
-
-  # PATCH/PUT /exam_modules/1 or /exam_modules/1.json
-  def update
-    respond_to do |format|
-      if @exam_module.update(exam_module_params)
-        format.html { redirect_to @exam_module, notice: "Exam module was successfully updated." }
-        format.json { render :show, status: :ok, location: @exam_module }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @exam_module.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /exam_modules/1 or /exam_modules/1.json
-  def destroy
-    @exam_module.destroy!
-
-    respond_to do |format|
-      format.html { redirect_to exam_modules_path, status: :see_other, notice: "Exam module was successfully destroyed." }
-      format.json { head :no_content }
     end
   end
 

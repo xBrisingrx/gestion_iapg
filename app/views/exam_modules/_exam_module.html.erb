@@ -1,22 +1,15 @@
-<div id="<%= dom_id exam_module %>">
-  <p>
-    <strong>Exam:</strong>
-    <%= exam_module.exam_id %>
-  </p>
-
-  <p>
-    <strong>Name:</strong>
-    <%= exam_module.name %>
-  </p>
-
-  <p>
-    <strong>Quote type:</strong>
-    <%= exam_module.quote_type %>
-  </p>
-
-  <p>
-    <strong>Module order:</strong>
-    <%= exam_module.module_order %>
-  </p>
-
-</div>
+<%= tag.tr id: dom_id(exam_module) do %>
+  <td><%= exam_module.id %></td>
+  <td><%= exam_module.name %></td>
+  <td><%= exam_module.quote_type %></td>
+  <td>Videos</td>
+  <td>
+    preguntas
+  </td>
+  <td>
+    <%= link_to modal_disable_exam_exam_module_path(exam_module.exam, exam_module), 
+      class: "btn btn-danger btn-sm btn-icon",title: "Eliminar", data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-trash"></i>
+    <% end %>
+  </td>
+<% end %>

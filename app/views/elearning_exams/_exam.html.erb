@@ -2,7 +2,7 @@
   <td><%= exam.id %></td>
   <td><%= exam.title %></td>
   <td>
-    <%= link_to exam_exam_questions_path(exam),
+    <%= link_to exam_exam_modules_path(exam),
         title: "Módulos asignados", data: { turbo_frame: "modal2"} do %>
         <span class="badge bg-secondary">
           Módulos <%= exam.exam_modules.actives.count %>

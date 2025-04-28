@@ -13,13 +13,16 @@
         <thead class="thead-light">
           <tr>
             <th>#</th>
-            <th>Pregunta asignada</th>
+            <th>Módulo</th>
+            <th>Tipo</th>
+            <th>Videos asignados</th>
+            <th>Preguntas asignadas</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody id='tbody_exam_modules'>
           <%= render @exam_modules %>
-          <%= render(partial: "shared/not_found_data", locals: {colspan: 3}) if @exam_modules.empty?%>
+          <%= render(partial: "shared/not_found_data", locals: {colspan: 6}) if @exam_modules.empty?%>
         </tbody>
       </table>
       <%== pagy_bootstrap_nav(@pagy) %>
