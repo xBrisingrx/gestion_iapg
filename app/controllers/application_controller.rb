@@ -1,6 +1,7 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
   include Pagy::Backend
+  include JsonWebToken
   # Only allow modern browsers supporting webp images, web push, badges, import maps, CSS nesting, and CSS :has.
   allow_browser versions: :modern
 
@@ -35,5 +36,12 @@ class ApplicationController < ActionController::Base
 
     def user_not_authorized
       redirect_to unauthorized_path
+    end
+
+    def authentication_request
+      # rescato de la cabecera el autorization
+      header = request.headers["Authorization"]
+      header = header.split(" ").last if header
+      decoded = jwt_decode(header)
     end
 end
