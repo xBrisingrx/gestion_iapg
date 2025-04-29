@@ -74,3 +74,5 @@ gem "authentication-zero", "~> 4.0"
 gem "image_processing", ">= 1.2"
 
 gem "jwt", "~> 2.10"
+
+gem "rack-cors", "~> 2.0"
