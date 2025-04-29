@@ -1,0 +1,19 @@
+<%= form_with(model: module_question, id: "form_new_module_question", builder: BootstrapBuilder) do |form| %>
+  <div id="prevent-modal-close"></div>
+  <%= form.hidden_field :exam_module_id, value: exam_module_id %>
+  <div class="form-group row mb-2">
+    <div class="col-8">
+      <%= form.select :question_id, questions.collect { |question| [ question.question, question.id ] },
+        {:include_blank => "Seleccione question"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [module_question.question_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:question_id, module_question, "offset-3") %>
+    <div class="col-2">
+      <%= form.submit "Asignar" %>
+    </div>
+  </div>  
+<% end %>
+

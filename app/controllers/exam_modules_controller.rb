@@ -38,7 +38,10 @@ class ExamModulesController < ApplicationController
               locals: { exam: @exam_module.exam, exam_module: ExamModule.new }),
             turbo_stream.replace("toasts",
               partial: "shared/toasts",
-              locals: { message: "Módulo registrado", status_class: "primary" })
+              locals: { message: "Módulo registrado", status_class: "primary" }),
+            turbo_stream.replace("exam_#{@exam.id}",
+              partial: "elearning_exams/exam",
+              locals: { exam: @exam })
           ]
         }
         format.json { render :show, status: :created, location: @iva_condition }

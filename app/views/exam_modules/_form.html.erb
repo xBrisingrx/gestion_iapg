@@ -1,4 +1,5 @@
 <%= form_with(model: [exam, exam_module], class: "mb-2", id: "form_new_exam_module") do |form| %>
+  <div id="prevent-modal-close"></div>
   <div class="form-group row">
     <div class="col-8">
       <%= form.text_field :name, placeholder: "Módulo", class: "form-control form-control-sm" %>

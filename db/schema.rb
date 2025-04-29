@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_28_074947) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_29_042821) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -302,6 +302,28 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_074947) do
     t.index ["name"], name: "index_iva_conditions_on_name", unique: true
   end
 
+  create_table "module_questions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "exam_module_id", null: false
+    t.bigint "question_id", null: false
+    t.integer "question_order", null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exam_module_id"], name: "index_module_questions_on_exam_module_id"
+    t.index ["question_id"], name: "index_module_questions_on_question_id"
+  end
+
+  create_table "module_videos", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "exam_module_id", null: false
+    t.bigint "video_id", null: false
+    t.integer "video_order", null: false
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exam_module_id"], name: "index_module_videos_on_exam_module_id"
+    t.index ["video_id"], name: "index_module_videos_on_video_id"
+  end
+
   create_table "people", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "cuil", limit: 20, null: false
     t.string "last_name", limit: 50, null: false
@@ -465,6 +487,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_074947) do
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"
   add_foreign_key "instructors", "people"
+  add_foreign_key "module_questions", "exam_modules"
+  add_foreign_key "module_questions", "questions"
+  add_foreign_key "module_videos", "exam_modules"
+  add_foreign_key "module_videos", "videos"
   add_foreign_key "people", "cities"
   add_foreign_key "people", "provinces"
   add_foreign_key "rooms", "headquarters"

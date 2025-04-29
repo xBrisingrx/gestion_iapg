@@ -1,0 +1,19 @@
+<%= form_with(model: module_video, id: "form_new_module_video", builder: BootstrapBuilder) do |form| %>
+  <div id="prevent-modal-close"></div>
+  <%= form.hidden_field :exam_module_id, value: exam_module_id %>
+  <div class="form-group row mb-2">
+    <div class="col-8">
+      <%= form.select :video_id, videos.collect { |video| [ video.title, video.id ] },
+        {:include_blank => "Seleccione video"},
+        data: {controller: 'tselect',
+          tselect_ids_value: [module_video.video_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:video_id, module_video, "offset-3") %>
+    <div class="col-2">
+      <%= form.submit "Asignar" %>
+    </div>
+  </div>  
+<% end %>
+

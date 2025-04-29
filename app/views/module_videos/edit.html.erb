@@ -1,0 +1,12 @@
+<% content_for :title, "Editing module video" %>
+
+<h1>Editing module video</h1>
+
+<%= render "form", module_video: @module_video %>
+
+<br>
+
+<div>
+  <%= link_to "Show this module video", @module_video %> |
+  <%= link_to "Back to module videos", module_videos_path %>
+</div>

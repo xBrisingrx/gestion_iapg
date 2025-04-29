@@ -1,0 +1,11 @@
+<% content_for :title, "New module question" %>
+
+<h1>New module question</h1>
+
+<%= render "form", module_question: @module_question %>
+
+<br>
+
+<div>
+  <%= link_to "Back to module questions", module_questions_path %>
+</div>

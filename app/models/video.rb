@@ -1,4 +1,5 @@
 class Video < ApplicationRecord
+  has_many :module_videos
   scope :actives, -> { where(active: true) }
 
   def disable

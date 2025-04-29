@@ -2,9 +2,21 @@
   <td><%= exam_module.id %></td>
   <td><%= exam_module.name %></td>
   <td><%= exam_module.quote_type %></td>
-  <td>Videos</td>
   <td>
-    preguntas
+    <%= link_to module_videos_path(exam_module_id: exam_module.id), 
+      title: "Videos asignados", data: { turbo_frame: "modal"} do %>
+      <span class="badge bg-secondary">
+          Videos <%= exam_module.module_videos.actives.count %>
+        </span>
+    <% end %>
+  </td>
+  <td>
+    <%= link_to module_questions_path(exam_module_id: exam_module.id), 
+      title: "Preguntas asignadas", data: { turbo_frame: "modal"} do %>
+      <span class="badge bg-secondary">
+          Preguntas <%= exam_module.module_questions.actives.count %>
+        </span>
+    <% end %>
   </td>
   <td>
     <%= link_to modal_disable_exam_exam_module_path(exam_module.exam, exam_module), 
