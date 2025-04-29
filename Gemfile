@@ -72,3 +72,5 @@ gem "ransack", "~> 4.2"
 gem "pundit", "~> 2.4"
 gem "authentication-zero", "~> 4.0"
 gem "image_processing", ">= 1.2"
+
+gem "jwt", "~> 2.10"
