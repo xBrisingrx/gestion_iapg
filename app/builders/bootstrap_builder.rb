@@ -24,7 +24,7 @@ class BootstrapBuilder < ActionView::Helpers::FormBuilder
     define_method method do |attribute, options = {}|
       style_options, custom_options = partition_custom_opts(options)
       content_tag :div, class: "col-6" do
-        super(attribute, options.merge(class: "form-control #{style_options[:class]}"))
+        super(attribute, options.merge(class: "form-control form-control-sm #{style_options[:class]}"))
       end
     end
   end
