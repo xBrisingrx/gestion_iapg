@@ -18,6 +18,8 @@ class CoursesController < ApplicationController
   def new
     @course = Course.new
     @course.course_units.build
+    @course.course_exams.build
+    @exams = Exam.actives.order(:title)
     authorize @course
   end
 
@@ -144,7 +146,8 @@ class CoursesController < ApplicationController
         course_units_attributes: [
           [ :id, :instructor_id, :unit_id, :start_hour, :end_hour, :shift, :shift_time, :day, :list ] ],
           course_people_attributes: [
-          [ :id, :course_id, :person_id, :scoring, :make_up_1, :date_make_up_1, :make_up_2, :date_make_up_2 ] ]
+          [ :id, :course_id, :person_id, :scoring, :make_up_1, :date_make_up_1, :make_up_2, :date_make_up_2 ] ],
+          course_exams_attributes: [ [ :fleet, :exam_id, :retake, :num_retake ] ]
         ])
     end
 end

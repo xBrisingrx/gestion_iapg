@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_29_042821) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_29_203726) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -105,6 +105,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_042821) do
     t.datetime "updated_at", null: false
     t.index ["company_id"], name: "index_company_managers_on_company_id"
     t.index ["person_id"], name: "index_company_managers_on_person_id"
+  end
+
+  create_table "course_exams", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "exam_id", null: false
+    t.boolean "retake"
+    t.integer "num_retake"
+    t.integer "fleet"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_course_exams_on_course_id"
+    t.index ["exam_id"], name: "index_course_exams_on_exam_id"
   end
 
   create_table "course_people", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -462,6 +475,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_042821) do
   add_foreign_key "companies", "sectors"
   add_foreign_key "company_managers", "companies"
   add_foreign_key "company_managers", "people"
+  add_foreign_key "course_exams", "courses"
+  add_foreign_key "course_exams", "exams"
   add_foreign_key "course_people", "companies"
   add_foreign_key "course_people", "companies", column: "operator_id"
   add_foreign_key "course_people", "course_units"

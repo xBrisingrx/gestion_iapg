@@ -8,8 +8,12 @@ class Course < ApplicationRecord
   has_many :course_units, dependent: :destroy
   has_many :units, through: :course_units
   has_many :instructors, through: :course_units
+  has_many :course_exams, dependent: :destroy
+  has_many :exams, through: :course_exams
+
 
   accepts_nested_attributes_for :course_units, reject_if: :all_blank
+  accepts_nested_attributes_for :course_exams, reject_if: :exam_id_is_blank
   accepts_nested_attributes_for :course_people
 
   validates :year_number, uniqueness: { scope: [ :course_type_id, :general_number ], allow_blank: true }
@@ -37,6 +41,10 @@ class Course < ApplicationRecord
 
   def cant_days
     self.course_type.course_type_units.select(:day).distinct.count
+  end
+
+  def exam_id_is_blank(attributes)
+    attributes["exam_id"].blank?
   end
 
   private

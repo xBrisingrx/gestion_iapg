@@ -1,0 +1,29 @@
+<div class="form-group row mb-2">
+    <div class="col-3">
+      <label for="course[course_exams_attributes][<%= n %>][exam_id]"><%= label_text %></label>
+    </div>
+    <div class="col-6">
+      <select name="course[course_exams_attributes][<%= n %>][exam_id]" 
+        id="course_course_exams_attributes_<%= n %>_exam_id" 
+        class="form-control form-control-sm"
+        data-controller="tselect">
+        <option value="">Seleccione examen</option>
+        <% exams.each do |exam| %>
+          <option value="<%= exam.id %>"><%= exam.title %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="offset-3 text-danger"></div>
+    <input type="hidden" 
+      name="course[course_exams_attributes][<%= n %>][retake]" 
+      id="course_course_exams_attributes_<%= n %>_retake"
+      value="<%= retake %>">
+    <input type="hidden" 
+      name="course[course_exams_attributes][<%= n %>][num_retake]" 
+      id="course_course_exams_attributes_<%= n %>_num_retake"
+      value="<%= num_retake %>">
+    <input type="hidden" 
+      name="course[course_exams_attributes][<%= n %>][fleet]" 
+      id="course_course_exams_attributes_<%= n %>_fleet"
+      value="<%= fleet_type %>">
+  </div>

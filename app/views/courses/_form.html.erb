@@ -72,6 +72,18 @@
         <div class="offset-3 text-danger course_company_id"></div>
       </div>
   </div>
+  <div class="form-group row mb-2">
+    <%= form.label :code, "Código examen" %>
+    <%= form.text_field :code %>
+    <div class="offset-3 text-danger course_code"></div>
+  </div>
+
+  <%= render(partial: "courses/course_exam_input", locals: { exams: @exams, n: 0, fleet_type: :both, retake: false, num_retake: 0, label_text: "Examen" }) %>
+  <%= render(partial: "courses/course_exam_input", locals: { exams: @exams, n: 1, fleet_type: :light, retake: true, num_retake: 1, label_text: "1.° recuperatorio liviano " }) %>
+  <%= render(partial: "courses/course_exam_input", locals: { exams: @exams, n: 2, fleet_type: :light, retake: true, num_retake: 2, label_text: "2.° recuperatorio liviano" }) %>
+  <%= render(partial: "courses/course_exam_input", locals: { exams: @exams, n: 3, fleet_type: :heavy, retake: true, num_retake: 1, label_text: "1.° recuperatorio pesado" }) %>
+  <%= render(partial: "courses/course_exam_input", locals: { exams: @exams, n: 4, fleet_type: :heavy, retake: true, num_retake: 2, label_text: "2.° recuperatorio pesado" }) %>
+
   <div class="col-12">
     <%= turbo_frame_tag :units, data: { forms__course_target: "courseUnits" } %> 
   </div> 

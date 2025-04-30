@@ -1,7 +1,9 @@
 class ExamModule < ApplicationRecord
   belongs_to :exam
   has_many :module_videos
+  has_many :videos, through: :module_videos
   has_many :module_questions
+  has_many :questions, through: :module_questions
   scope :actives, -> { where(active: true) }
 
   # before_create :set_module_order
