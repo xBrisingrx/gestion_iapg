@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   namespace :api do
     post "elearning", to: "elearning#index"
+    get "get_course_module", to: "elearning#get_course_module"
   end
   resources :module_questions
   resources :module_videos
