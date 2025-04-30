@@ -32,7 +32,7 @@ class Api::ElearningController < ApplicationController
     decode = jwt_decode(jwt)
     data = decode["data"]
     # buscamos los modulos del examen que debemos mostrar
-    exam_modules = ExamModule.where(exam_id: data["examen"], quote_type: data["tipocupo"])
+    exam_modules = ExamModule.where(exam_id: data["examen"], quote_type: data["tipocupo"], id: 14)
     exam = []
     exam_modules.each do |exam_module|
       questions = exam_module.questions.order("RAND()")
@@ -57,5 +57,52 @@ class Api::ElearningController < ApplicationController
       exam.push(exam_module_data)
     end
     render json: { curso: exam, error: false }
+  end
+
+  def get_resultados
+    jwt = request.headers["Authorization"].split(" ").last
+    decode = jwt_decode(jwt)
+    data = decode["data"]
+    # obtenemos el total de preguntas que tienen los modulos
+    cant_questions = ExamModule.where(exam_id: data["examen"], quote_type: data["tipocupo"])
+                    .joins(:module_questions)
+                    .count("exam_modules.id")
+    questions_corrects = 0
+    person_deleted = false
+
+    data.each do |d|
+      data_answers = Answer.select("answers.id, answers.correct, questions.eliminating")
+                      .where(question_id: d["pregunta_id"])
+                      .joins(:question)
+      correct = false
+      data_answers.each do |answer|
+        if answer.id == d["respuesta"]
+          if answer.correct
+            correct = true
+          elsif answer.eliminating
+            person_deleted = true
+            break
+          end
+        elsif answer.correct && answer.eliminating
+          person_deleted = true
+          break
+        end # answer.id == d["respuesta"]
+        break if person_deleted
+        if correct
+          questions_corrects = questions_corrects + 1
+        end
+      end # data_answers.each
+
+      if person_deleted
+        render json: { message: "Desaprobado por errarle a una eliminatoria", correcto: 1, resultado: 0, estado: false, id: 1  }
+      else
+        porcent = questions_corrects*100/cant_questions
+        if porcent > 80
+          render json: { message: "Crack", correcto: porcent, resultado: 1, estado: true  }
+        else
+          render json: { message: "Fallido", correcto: porcent, resultado: 0, estado: false  }
+        end
+      end
+    end
   end
 end
