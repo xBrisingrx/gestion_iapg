@@ -14,11 +14,14 @@ class CoursePerson < ApplicationRecord
 
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
+  before_create :set_code
+
   def assign_turn
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
     # return if self.course.course_type.days == 1 || CoursePerson.where(course_id: self.course_id, person_id: self.person_id).count > 1
     course_units = CourseUnit.where(course_id: self.course_id).group(:unit_id)
     course_date = self.course.from_date
+    # debugger
     ActiveRecord::Base.transaction do
       course_units.each do |course_unit|
         next if CoursePerson.find_by(course_id: self.course_id, person_id: self.person_id, unit_id: course_unit.unit_id)
@@ -157,6 +160,12 @@ class CoursePerson < ApplicationRecord
       end
     else
       "Sin nota"
+    end
+  end
+
+  def set_code
+    if self.unit.category == "Teorico" && self.course.code
+      self.code = self.course.code
     end
   end
 end
