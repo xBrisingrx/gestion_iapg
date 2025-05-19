@@ -6,7 +6,7 @@ class ModuleQuestion < ApplicationRecord
 
   validates :question_order, presence: true
 
-  # before_validation :set_question_order
+  before_validation :set_question_order
 
   def disable
     self.update(active: false)

@@ -5,7 +5,7 @@ class ModuleVideo < ApplicationRecord
 
   validates :video_order, presence: true
 
-  # before_validation :set_video_order
+  before_validation :set_video_order
 
   def disable
     self.update(active: false)
