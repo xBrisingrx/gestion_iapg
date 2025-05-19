@@ -6,7 +6,7 @@ class ExamModule < ApplicationRecord
   has_many :questions, through: :module_questions
   scope :actives, -> { where(active: true) }
 
-  # before_create :set_module_order
+  before_validation :set_module_order
 
   private
   def set_module_order
