@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_29_203726) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_26_094948) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -137,10 +137,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_203726) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "attendance_status"
-    t.integer "scoring"
-    t.integer "make_up_1"
+    t.integer "scoring", default: 0
+    t.integer "make_up_1", default: 0
     t.date "date_make_up_1"
-    t.integer "make_up_2"
+    t.integer "make_up_2", default: 0
     t.date "date_make_up_2"
     t.string "code", limit: 20
     t.index ["company_id"], name: "index_course_people_on_company_id"
@@ -360,6 +360,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_29_203726) do
   create_table "provinces", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 20, null: false
     t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "questionnaires", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "question"
+    t.string "q_type"
+    t.integer "q_order"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
