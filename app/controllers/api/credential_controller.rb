@@ -1,15 +1,11 @@
-class Api::ElearningController < ApplicationController
+class Api::CredentialController < ApplicationController
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate
 
-  def index
-    puts params
-    person = Person.find_by(cuil: params[:cuil]) # buscamos a la persona que va a hacer el curso
-    # si el codigo no es unico, vamos atener q sumar filtrar por fecha de vigencia
-    course_person = CoursePerson.where(person: person, code: params[:code]).last
+  def login
+    person = Person.find_by(cuil: params[:id]) # buscamos a la persona que solicita la credencial
     iat = Time.new.to_i
     exp = iat * (60 * 60)
-    fleet =  { light: "L", heavy: "P", both: "A" }
     token = jwt_encode({
       iat: iat,
       exp: exp,
@@ -18,14 +14,34 @@ class Api::ElearningController < ApplicationController
         cuil: person.cuil,
         apellido: person.last_name,
         nombre: person.name,
-        curso: course_person.course_id,
-        examen: course_person.course.course_exams.first.exam_id,
-        cupo: "353847",
-        tipo: "empresa",
-        tipocupo: fleet[course_person.course.course_type.fleet.to_sym]
+        credencial: 1
       }
     })
-    render json: { message: "Successful login.", jwt: token }
+    render json: { message: "Successful login.", jwt: token, code: "1234" }
+  end
+
+  def credential_person_data
+    jwt = request.headers["Authorization"].split(" ").last
+    decode = jwt_decode(jwt)
+    data = decode["data"]
+    person = Person.find_by(id: data["id"])
+    persona = {
+        nombre: person.name,
+        apellido: person.last_name,
+        cuil: person.cuil,
+        code: person.code,
+        fechanacimiento: person.birthdate,
+        telefono: person.phone,
+        nrocelular: person.phone,
+        mail: person.email,
+        domicilio: person.direction,
+        localidad: person.city.name,
+        provincia: person.province.name,
+        idlocalidad: "1548",
+        dueno: "117"
+    }
+
+    render json: { persona: persona, error: false }
   end
 
   def get_course_module
@@ -96,7 +112,7 @@ class Api::ElearningController < ApplicationController
     end # end questions_answers each
 
     if person_deleted
-      message = ">.< desaprobado por errarle a una eliminatoria, tenga mas cuidado"
+      message = "Desaprobado por errarle a una eliminatoria"
       porcent = 1
       status = false
       # render json: { message: "Desaprobado por errarle a una eliminatoria", correcto: 1, resultado: 0, estado: false, id: 1  }
@@ -107,7 +123,7 @@ class Api::ElearningController < ApplicationController
         status = true
         # render json: { message: "Crack", correcto: porcent, resultado: 1, estado: true  }
       else
-        message = ":( tenes que prestar mas atencion"
+        message = "Fallido"
         # render json: { message: "Fallido", correcto: porcent, resultado: 0, estado: false  }
       end
     end # end if person_deleted

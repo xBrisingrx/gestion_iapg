@@ -3,6 +3,9 @@ Rails.application.routes.draw do
     post "elearning", to: "elearning#index"
     get "get_course_module", to: "elearning#get_course_module"
     post "get_resultados", to: "elearning#get_resultados"
+    # credenciales
+    post "credential_login", to: "credential#login"
+    get "credential_person_data", to: "credential#credential_person_data"
   end
   resources :module_questions
   resources :module_videos
