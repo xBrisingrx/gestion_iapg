@@ -7,7 +7,8 @@
       <select name="course[psicometrico_id]" id="psicometrico_id"
         data-controller="tselect forms--register-to-course"
         data-forms--register-to-course-target="coursePsicometrico"
-        data-action="change->forms--register-to-course#set_date_psicometrico" >
+        data-action="change->forms--register-to-course#set_date_psicometrico"
+        data-tselect-ids-value="[<%= @course_unit_id %>]">
         <option value="">Seleccione psicometrico</option>
         <% @courses.each do |course| %>
           <option 

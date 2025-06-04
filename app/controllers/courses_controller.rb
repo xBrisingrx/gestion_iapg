@@ -92,6 +92,7 @@ class CoursesController < ApplicationController
   end
 
   def by_course_category_and_fleet
+    # obtenemos los cursos teoricos filtrando por categoria [inicio/renovacion] y flota [liviano/pesado]
     @course_category = params[:course_category]
     @fleet = params[:fleet]
     # obtengo las unidades teoricas
@@ -108,16 +109,65 @@ class CoursesController < ApplicationController
                       .where(course_types: { category: params[:course_category], fleet: :both }))
   end
 
+  def get_teoricos_by_category
+    # obtenemos cursos teoricos filtrando por categoria [inicio/renovacion]
+    units = Unit.where(category: "Teorico").pluck(:id)
+    courses_ids = CourseUnit.where(unit_id: units).pluck(:course_id)
+    # @courses = CourseUnit.where(unit_id: units).where("date >= ?", Date.today).order(:date)
+    @courses = Course.joins(:course_type)
+                .joins(:course_units)
+                .joins(:room)
+                .joins(course_units: :unit)
+                .where(id: courses_ids)
+                # .where("from_date >= ?", Date.today)
+                .where(course_types: { category: params[:course_category] })
+                .where(course_units: { unit_id: units })
+                .select("courses.id, courses.room_id, courses.from_date, course_units.id as course_unit_id, rooms.name as room_name, units.name as unit_name")
+                .order(:date)
+  end
+
   def get_cursos_practicos
-    @course_category = params[:course_category]
-    @fleet = params[:fleet]
-    units = Unit.where(category: "Practico").pluck(:id)
-    @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
+    # si la modulo de teoria seleccionada pertenece a un curso que tiene modulo de practica de tipo de flota seleccionado
+    # se llama solo a ese curso, caso contrario a todos a partir del dia
+    # siguiente del modulo de teoria
+    course = Course.find(params[:course_id])
+    curso_tiene_practica = !course.units.where(units: { category: "Practico", fleet: params[:fleet] }).blank?
+    if curso_tiene_practica
+       @courses = CourseUnit.joins(:unit).where(course_id: course.id).where(units: { category: "Practico" }).group(:course_id)
+       @course_unit_id = @courses.first.id
+    else
+      @courses = CourseUnit
+                  .joins(:unit)
+                  .where("date >= ?", course.from_date)
+                  .where(units: { category: "Practico", fleet: params[:fleet] })
+                  .order(:date)
+                  .group(:course_id)
+    end
+    # @course_category = params[:course_category]
+    # @fleet = params[:fleet]
+    # units = Unit.where(category: "Practico").pluck(:id)
+    # @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
   end
 
   def get_psicometricos
-    units = Unit.where(category: "Psicometrico").pluck(:id)
-    @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
+    # si la modulo de teoria seleccionada pertenece a un curso que tiene modulo de psicometrico
+    # se llama solo a ese curso, caso contrario a todos a partir del dia
+    # siguiente del modulo de teoria
+    course = Course.find(params[:course_id])
+    curso_tiene_psicometrico = !course.units.where(units: { category: "Psicometrico" }).blank?
+    if curso_tiene_psicometrico
+       @courses = CourseUnit.joins(:unit).where(course_id: course.id).where(units: { category: "Psicometrico" }).group(:course_id)
+       @course_unit_id = @courses.first.id
+    else
+      @courses = CourseUnit
+                  .joins(:unit)
+                  .where("date >= ?", course.from_date)
+                  .where(units: { category: "Psicometrico" })
+                  .order(:date)
+                  .group(:course_id)
+    end
+    # units = Unit.where(category: "Psicometrico").pluck(:id)
+    # @courses = CourseUnit.where(unit_id: units).where("date >= ?", params[:date]).order(:date).group(:course_id)
   end
 
   def turns

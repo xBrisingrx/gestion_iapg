@@ -9,23 +9,23 @@ export default class extends Controller {
   select_teoricos() {
     const option_selected = this.filterCoursesTarget.selectedOptions[0]
     const course_category = option_selected.dataset.category
-    const fleet = option_selected.dataset.fleet
+    // const fleet = option_selected.dataset.fleet
     if(this.filterCoursesTarget.value != ""){
-      this.selectTeoricoTarget.src = `/courses/by_course_category_and_fleet?course_category=${course_category}&fleet=${fleet}`
+      this.selectTeoricoTarget.src = `/courses/get_teoricos_by_category?course_category=${course_category}`
     }
   }
 
   select_practicos() {
-    const option_teorico_selected = this.filterCoursesTarget.selectedOptions[0]
-    const course_category = option_teorico_selected.dataset.category
-    const fleet = option_teorico_selected.dataset.fleet
-
+    const option_course_selected = this.filterCoursesTarget.selectedOptions[0]
+    const course_category = option_course_selected.dataset.category // categoria seleccionada [inicio/renovacion]
+    const fleet = option_course_selected.dataset.fleet // flota seleccionada [liviano/pesado]
     const option_selected = this.courseTeoricoTarget.selectedOptions[0]
     const date = option_selected.dataset.date
-    if(this.courseTeoricoTarget.value != ""){
-      this.selectPracticoTarget.src = `/courses/get_cursos_practicos?course_category=${course_category}&fleet=${fleet}&date=${date}`
-      this.selectPsicometricoTarget.src = `/courses/get_psicometricos?&date=${date}`
-      document.querySelector("#course_date_teorico").value = option_selected.dataset.date
+    const course_id = option_selected.dataset.course
+    if(course_id != ""){
+      this.selectPracticoTarget.src = `/courses/get_cursos_practicos?&course_category=${course_category}&fleet=${fleet}&date=${date}&course_id=${course_id}`
+      this.selectPsicometricoTarget.src = `/courses/get_psicometricos?&date=${date}&course_id=${course_id}`
+      document.querySelector("#course_date_teorico").value = date
     }
   }
 

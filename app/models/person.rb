@@ -1,6 +1,7 @@
 class Person < ApplicationRecord
   belongs_to :province, optional: true
   belongs_to :city, optional: true
+  has_many :course_people
 
   normalizes :email, with: ->(email) {  email.strip.downcase }
 

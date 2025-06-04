@@ -47,6 +47,7 @@ Rails.application.routes.draw do
     get "scoring", on: :collection
     get "by_course_type", on: :collection
     get "by_course_category_and_fleet", on: :collection
+    get "get_teoricos_by_category", on: :collection
     get "get_cursos_practicos", on: :collection
     get "get_psicometricos", on: :collection
     get "register_scoring_modal", on: :member
