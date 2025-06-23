@@ -1,9 +1,9 @@
 <%= turbo_frame_tag "courses", data: {forms__register_to_course_target: "selectTeorico"} do %>
   <div class="form-group row">
-    <div class="col-4">
-      <label for="">Seleccione curso teorico: </label>
+    <div class="col-3">
+      <label for="">Curso teorico: </label>
     </div>
-    <div class="col-4">
+    <div class="col-8">
       <select name="course[teorico_id]" id="course_teorico_id"
         data-controller="tselect"
         data-forms--register-to-course-target="courseTeorico"

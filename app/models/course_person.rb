@@ -169,4 +169,26 @@ class CoursePerson < ApplicationRecord
       self.code = self.course.code
     end
   end
+
+  def self.personas_con_teoria_desaprobada_o_ausente
+    CoursePerson
+      .joins(:person)
+      .joins(:unit)
+      .where(approved: false)
+      .or(CoursePerson.where(attendance_status: :absent))
+      .where(units: { category: "Teorico" })
+      .select("people.name, people.last_name, people.cuil, people.id")
+      .order("people.last_name")
+  end
+
+  def self.personas_con_psicometrico_desaprobada_o_ausente
+    CoursePerson
+      .joins(:person)
+      .joins(:unit)
+      .where(approved: false)
+      .or(CoursePerson.where(attendance_status: :absent))
+      .where(units: { category: "Psicometrico" })
+      .select("people.name, people.last_name, people.cuil, people.id")
+      .order("people.last_name")
+  end
 end

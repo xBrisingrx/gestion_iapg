@@ -1,0 +1,41 @@
+<%= render "shared/modal", title: "Registrar a curso", fade_in: true do %>
+  <%= form_with( url: courses_psicometric_index_path,  builder: BootstrapBuilder, 
+    data: { controller: "forms--register-to-course forms--course-person", 
+      forms__register_to_course_target: "form" } ) do |form| %>
+    <div class="form-group row mb-2">
+    <%= form.label :person_id, "Persona" %>
+    <div class="col-6">
+      <%= form.select :person_id, @people.collect { |person| [ "#{person.last_name} #{person.name} - #{person.cuil}", person.id ] },
+        {:include_blank => "Seleccione persona"},
+        data: {controller: 'tselect',
+        }
+      %>
+    </div>
+  </div>
+    <input type="hidden" name="course[date_psicometrico]" id="course_date_psicometrico">
+    <section class="mb-2">
+      <div class="form-group row">
+        <div class="col-3">
+          <label for="">Psicometrico: </label>
+        </div>
+        <div class="col-8">
+          <select name="course[psicometrico_id]" id="psicometrico_id"
+            data-controller="tselect forms--register-to-course"
+            data-forms--register-to-course-target="coursePsicometrico"
+            data-action="change->forms--register-to-course#set_date_psicometrico">
+            <option value="">Seleccione psicometrico</option>
+            <% @courses.each do |course| %>
+              <option 
+                value="<%= course.id %>"
+                data-date="<%= course.date %>"> 
+                <%= "#{date_format(course.date)} #{course.unit.name} sala: #{course.course.room.name}"  %>
+              </option>
+            <% end %>
+          </select>
+        </div>
+      </div>
+    </section>
+    <%= form.submit "Guardar" %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  <% end %>
+<% end %>

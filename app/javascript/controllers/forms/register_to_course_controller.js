@@ -15,6 +15,16 @@ export default class extends Controller {
     }
   }
 
+  select_teoricos_in_company() {
+    const option_selected = this.filterCoursesTarget.selectedOptions[0]
+    const course_category = option_selected.dataset.category
+    const company_id = document.querySelector("#company_id").value 
+    // const fleet = option_selected.dataset.fleet
+    if(this.filterCoursesTarget.value != ""){
+      this.selectTeoricoTarget.src = `/courses/get_teoricos_in_company?course_category=${course_category}&company_id=${company_id}`
+    }
+  }
+
   select_practicos() {
     const option_course_selected = this.filterCoursesTarget.selectedOptions[0]
     const course_category = option_course_selected.dataset.category // categoria seleccionada [inicio/renovacion]

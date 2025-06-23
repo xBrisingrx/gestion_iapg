@@ -35,6 +35,9 @@ Rails.application.routes.draw do
   end
   namespace :courses do
     resources :registration
+    resources :in_company, only: [ :new, :create ]
+    resources :theoric, only: [ :new, :create ]
+    resources :psicometric, only: [ :new, :create ]
   end
 
   resources :courses, except: [ :destroy ] do
@@ -48,6 +51,7 @@ Rails.application.routes.draw do
     get "by_course_type", on: :collection
     get "by_course_category_and_fleet", on: :collection
     get "get_teoricos_by_category", on: :collection
+    get "get_teoricos_in_company", on: :collection
     get "get_cursos_practicos", on: :collection
     get "get_psicometricos", on: :collection
     get "register_scoring_modal", on: :member

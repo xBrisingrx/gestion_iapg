@@ -1,9 +1,9 @@
 <%= turbo_frame_tag "curso_psicometrico", data: {forms__register_to_course_target: "selectPsicometrico"} do %>
   <div class="form-group row">
-    <div class="col-4">
-      <label for="">Seleccione psicometrico: </label>
+    <div class="col-3">
+      <label for="">Psicometrico: </label>
     </div>
-    <div class="col-6">
+    <div class="col-8">
       <select name="course[psicometrico_id]" id="psicometrico_id"
         data-controller="tselect forms--register-to-course"
         data-forms--register-to-course-target="coursePsicometrico"

@@ -122,8 +122,27 @@ class CoursesController < ApplicationController
                 # .where("from_date >= ?", Date.today)
                 .where(course_types: { category: params[:course_category] })
                 .where(course_units: { unit_id: units })
+                .where(is_company: false)
                 .select("courses.id, courses.room_id, courses.from_date, course_units.id as course_unit_id, rooms.name as room_name, units.name as unit_name")
                 .order(:date)
+  end
+
+  def get_teoricos_in_company
+    # obtenemos cursos teoricos filtrando por categoria [inicio/renovacion] que son incompany
+    units = Unit.where(category: "Teorico").pluck(:id)
+    courses_ids = CourseUnit.where(unit_id: units).pluck(:course_id)
+    @courses = Course.joins(:course_type)
+                .joins(:course_units)
+                .joins(:room)
+                .joins(course_units: :unit)
+                .where(id: courses_ids)
+                # .where("from_date >= ?", Date.today)
+                .where(course_types: { category: params[:course_category] })
+                .where(course_units: { unit_id: units })
+                .where(is_company: true, company_id: params[:company_id])
+                .select("courses.id, courses.room_id, courses.from_date, course_units.id as course_unit_id, rooms.name as room_name, units.name as unit_name")
+                .order(:date)
+    render :get_teoricos_by_category
   end
 
   def get_cursos_practicos
@@ -138,8 +157,10 @@ class CoursesController < ApplicationController
     else
       @courses = CourseUnit
                   .joins(:unit)
+                  .joins(:course)
                   .where("date >= ?", course.from_date)
                   .where(units: { category: "Practico", fleet: params[:fleet] })
+                  .where(courses: { is_company: false })
                   .order(:date)
                   .group(:course_id)
     end
@@ -161,8 +182,10 @@ class CoursesController < ApplicationController
     else
       @courses = CourseUnit
                   .joins(:unit)
+                  .joins(:course)
                   .where("date >= ?", course.from_date)
                   .where(units: { category: "Psicometrico" })
+                  .where(courses: { is_company: false })
                   .order(:date)
                   .group(:course_id)
     end
