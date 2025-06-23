@@ -153,6 +153,8 @@ class CoursePerson < ApplicationRecord
       .joins(:unit)
       .where(units: { category: "Practico" })
     if !cp.blank?
+      cp.first.update(make_up_1: 0, make_up_2: 0)
+
       if cp.first.scoring?
         nota = [ cp.first.scoring, cp.first.make_up_1, cp.first.make_up_2 ].max
         nota

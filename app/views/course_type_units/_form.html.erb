@@ -2,10 +2,11 @@
   <div class="form-group row mb-2">
     <%= form.label :unit_id, "Módulo" %>
     <div class="col-6">
-      <%= form.select :unit_id, Unit.actives.all.collect { |unit| [ "#{unit.name}", unit.id ] },
+      <%= form.select :unit_id, Unit.actives.all.collect { |unit| [ "#{unit.name}", unit.id, data: { category: unit.category } ] },
         {:include_blank => "Seleccione módulo"},
         data: {controller: 'tselect',
-          tselect_ids_value: [course_type_unit.unit_id]
+          tselect_ids_value: [course_type_unit.unit_id],
+        action: "change->forms--course-type-unit#need_set_duration"
         },
         required: true
       %>

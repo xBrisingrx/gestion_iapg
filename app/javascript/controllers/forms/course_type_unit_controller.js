@@ -11,4 +11,11 @@ export default class extends Controller {
     this.shiftTimeTarget.required = this.isByTurnTarget.checked
   }
 
+  need_set_duration(event) {
+    const unit_category = console.info(event.target.selectedOptions[0].dataset.category)
+    if(unit_category) {
+      
+    }
+  }
+
 }
