@@ -25,7 +25,17 @@ class Api::ElearningController < ApplicationController
         tipocupo: fleet[course_person.course.course_type.fleet.to_sym]
       }
     })
-    render json: { message: "Successful login.", jwt: token }
+
+    dias_disponible = CourseTypeUnit.unit_of_theory(course_person.course.course_type.id).days_of_duration
+    from_date = course_person.course.from_date
+    to_date = from_date + (dias_disponible.days - 1)
+    today = Date.today
+    range = from_date..to_date
+    if range.include? today
+      render json: { message: "Successful login.", jwt: token }
+    else
+      render json: { message: "Este curso se puede hacer desde #{from_date.strftime("%d-%m-%y")} hastas #{to_date.strftime("%d-%m-%y")}" }
+    end
   end
 
   def get_course_module

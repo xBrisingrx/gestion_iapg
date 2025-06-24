@@ -17,15 +17,19 @@ class Courses::InCompanyController < ApplicationController
       course_person_teoria.course_unit_id = params[:course][:teorico_id]
       course_person_teoria.register_renovation
 
-      course_person_practica = CoursePerson.new(data)
+      if !params[:course][:practico_id].blank?
+        course_person_practica = CoursePerson.new(data)
       course_person_practica.date = params[:course][:date_practico],
       course_person_practica.course_unit_id = params[:course][:practico_id]
       course_person_practica.register_renovation
+      end
 
-      course_person_psicometrico = CoursePerson.new(data)
-      course_person_psicometrico.date = params[:course][:date_psicometrico],
-      course_person_psicometrico.course_unit_id = params[:course][:psicometrico_id]
-      course_person_psicometrico.register_renovation
+      if !params[:course][:psicometrico_id].blank?
+        course_person_psicometrico = CoursePerson.new(data)
+        course_person_psicometrico.date = params[:course][:date_psicometrico],
+        course_person_psicometrico.course_unit_id = params[:course][:psicometrico_id]
+        course_person_psicometrico.register_renovation
+      end
     end # transaction
   rescue ActiveRecord::StatementInvalid
     render json: "bugssssss", status: :unprocessable_entity

@@ -55,4 +55,8 @@ class CourseType < ApplicationRecord
   def days
     self.course_type_units.select(:day).distinct.count
   end
+
+  def self.unit_of_theory
+    self.joins(:course_type_unit).where(units: { category: "Teorico" }).first
+  end
 end

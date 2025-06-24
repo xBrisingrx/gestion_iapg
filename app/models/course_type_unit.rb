@@ -5,7 +5,7 @@ class CourseTypeUnit < ApplicationRecord
   validates :shift_time,
     presence: { message: "Debe aclarar el tiempo de cada turno" },
     if: :unit_is_by_turn?
-  validates :start_hour, :end_hour, presence: true
+  validates :start_hour, :end_hour, :days_of_duration, presence: true
   validate :start_hour_less_than_end_hour
   validates :unit, uniqueness: { scope: [ :shift, :course_type_id, :day ] }
   # validate :hour_available, on: :create
@@ -45,5 +45,9 @@ class CourseTypeUnit < ApplicationRecord
         return
       end
     end
+  end
+
+  def self.unit_of_theory(course_type_id)
+    CourseTypeUnit.joins(:unit).where(course_type_id: course_type_id).where(units: { category: "Teorico" }).first
   end
 end

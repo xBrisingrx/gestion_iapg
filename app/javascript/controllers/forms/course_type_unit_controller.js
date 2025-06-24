@@ -2,7 +2,7 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="forms--course-type-unit"
 export default class extends Controller {
-  static targets = ["isByTurn","shiftTime"]
+  static targets = ["isByTurn","shiftTime", "daysOfDuration"]
   connect() {
     this.is_by_turn()
   }
@@ -12,10 +12,8 @@ export default class extends Controller {
   }
 
   need_set_duration(event) {
-    const unit_category = console.info(event.target.selectedOptions[0].dataset.category)
-    if(unit_category) {
-      
-    }
+    const no_teoric = event.target.selectedOptions[0].dataset.category !== "Teorico"
+    this.daysOfDurationTarget.classList.toggle("d-none", no_teoric)
   }
 
 }

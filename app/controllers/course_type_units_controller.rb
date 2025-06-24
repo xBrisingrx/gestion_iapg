@@ -81,6 +81,6 @@ class CourseTypeUnitsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def course_type_unit_params
-      params.expect(course_type_unit: [ :course_type_id, :unit_id, :day, :start_hour, :end_hour, :is_by_turn, :shift, :shift_time ])
+      params.expect(course_type_unit: [ :course_type_id, :unit_id, :day, :start_hour, :end_hour, :is_by_turn, :shift, :shift_time, :days_of_duration ])
     end
 end
