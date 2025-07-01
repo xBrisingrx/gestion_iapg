@@ -15,6 +15,7 @@ class CoursePerson < ApplicationRecord
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
   before_create :set_code
+  # after_update :check_approved
 
   def assign_turn
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
@@ -192,5 +193,36 @@ class CoursePerson < ApplicationRecord
       .where(units: { category: "Psicometrico" })
       .select("people.name, people.last_name, people.cuil, people.id")
       .order("people.last_name")
+  end
+
+  def get_aprobado_text
+    approved_units = CoursePerson.where(course_id: self.course_id, person_id: self.person_id).where(approved: true)
+    if approved_units.count == 0
+      text = "No ha aprobado ningun modulo"
+    else
+      text = "Aprobó "
+      approved_units.each do |approved|
+        preppend = (text.split.count > 1) ? "y " : ""
+        if approved.unit.category == "Teorico"
+          unit_text = "#{preppend} el curso #{approved.unit.name} "
+        else
+          unit_text = "#{preppend} la evaluación #{approved.unit.name} "
+        end
+        text += unit_text
+      end
+    end
+    "#{text} en la Escuela de Conducción \n Defensiva del IAPG."
+  end
+
+  def self.check_approved(id)
+    course_person = CoursePerson.find_by(id: id)
+    unit_category = course_person.unit.category
+    if unit_category == "Teorico"
+      number_approved = 80
+    else
+      number_approved = 2
+    end
+    approved = (course_person.scoring >= number_approved || course_person.make_up_1 >= number_approved || course_person.make_up_2 >= number_approved)
+    course_person.update(approved: approved)
   end
 end

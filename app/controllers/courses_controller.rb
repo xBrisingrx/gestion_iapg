@@ -45,6 +45,7 @@ class CoursesController < ApplicationController
   def update
     respond_to do |format|
       if @course.update(course_params)
+        CoursePerson.check_approved(params[:course][:course_people_attributes]["0"][:id])
         format.html { redirect_to courses_path, notice: "Courso actualizado." }
         format.json { render :show, status: :ok, location: @course }
       else

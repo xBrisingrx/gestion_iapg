@@ -76,3 +76,7 @@ gem "image_processing", ">= 1.2"
 gem "jwt", "~> 2.10"
 
 gem "rack-cors", "~> 2.0"
+
+gem "prawn", "~> 2.5"
+
+gem "hexapdf", "~> 1.3"
