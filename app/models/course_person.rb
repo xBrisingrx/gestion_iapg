@@ -225,4 +225,15 @@ class CoursePerson < ApplicationRecord
     approved = (course_person.scoring >= number_approved || course_person.make_up_1 >= number_approved || course_person.make_up_2 >= number_approved)
     course_person.update(approved: approved)
   end
+
+  def get_credential_status
+    limit_date = Date.today - 2.years
+    courses_of_person = CoursePerson
+                          .joins(:course)
+                          .joins(:course_unit)
+                          .joins(course_unit: :unit)
+                          .where(person_id: self.person_id, approved: true)
+                          .where("courses.from_date >= #{limit_date}")
+                          .select("course_people.id, course_people.person_id, units.category")pluck
+  end
 end

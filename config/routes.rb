@@ -1,4 +1,8 @@
 Rails.application.routes.draw do
+  get "certificates/index"
+  get "certificates/courses_by_type", to: "certificates#courses_by_type"
+  get "certificates/get_people_in_course", to: "certificates#get_people_in_course"
+  get "certificates/generate_certificate", to: "certificates#generate_certificate"
   namespace :api do
     post "elearning", to: "elearning#index"
     get "get_course_module", to: "elearning#get_course_module"

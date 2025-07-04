@@ -11,6 +11,6 @@ export default class extends Controller {
   }
 
   get_people_in_course() {
-    this.peopleInCourseTarget.src = `/certificates/get_people_in_course?course_id=${this.courseTarget.value}&company_id=${this.companyTarget.value}`;
+    this.peopleInCourseTarget.src = `/certificates/get_people_in_course?course_id=${this.courseTarget.value}&operator_id=${this.companyTarget.value}`;
   }
 }

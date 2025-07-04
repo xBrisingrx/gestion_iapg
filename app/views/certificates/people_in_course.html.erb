@@ -18,7 +18,7 @@
             <td><%= course_person.person.cuil %></td>
             <td> $$$ </td>
             <td> ## </td>
-            <td> [estados] </td>
+            <td> <%= course_person.get_credential_status %> </td>
             <td>
               <%= link_to certificates_generate_certificate_path(course_person_id: course_person.id), 
                 class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
