@@ -234,6 +234,16 @@ class CoursePerson < ApplicationRecord
                           .joins(course_unit: :unit)
                           .where(person_id: self.person_id, approved: true)
                           .where("courses.from_date >= #{limit_date}")
-                          .select("course_people.id, course_people.person_id, units.category")pluck
+                          .select("course_people.id, course_people.person_id, units.category")
+                          .pluck(:category)
+    if courses_of_person.empty? || !courses_of_person.include?("Teorico")
+      "Falta teorico"
+    elsif !courses_of_person.include?("Practico")
+      "Falta practica"
+    elsif !courses_of_person.include?("Psicometrico")
+      "Falta psicometrico"
+    else
+      "Aprobado"
+    end
   end
 end

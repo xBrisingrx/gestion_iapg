@@ -16,7 +16,7 @@ class CertificatesController < ApplicationController
   def generate_certificate
     course_person = CoursePerson.find_by(id: params[:course_person_id])
     course_units = course_person.course.course_units
-    instructor = course_units.joins(:unit).where(units: { category: "Teorico" }).first.instructor.person.fullname
+    instructor = course_units.joins(:unit).where(units: { category: "Practico" })&.first&.instructor&.person&.fullname
     from_date = course_person.course.from_date
     to_date = from_date + 2.years
     aprobado = course_person.get_aprobado_text
