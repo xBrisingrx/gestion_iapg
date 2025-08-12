@@ -3,7 +3,7 @@ class CourseUnit < ApplicationRecord
   # registramos quien lo dicta, en que turno y que horario
   belongs_to :course
   belongs_to :unit
-  belongs_to :instructor
+  belongs_to :instructor, optional: true
   has_many :turns
 
   validates :list, :start_hour, :end_hour, presence: true

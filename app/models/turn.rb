@@ -7,4 +7,10 @@ class Turn < ApplicationRecord
   # validates :name, presence: true
 
   enum :status, [ :available, :busy, :reserved ]
+
+  def change_to(change_to_turn_id)
+    turn = Turn.find_by(id: change_to_turn_id)
+    turn.update(person: self.person, status: :busy)
+    self.update(person: nil, status: :available)
+  end
 end

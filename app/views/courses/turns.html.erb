@@ -46,29 +46,47 @@
                               <th> Persona </th>
                               <th>Estado</th>
                             </thead>
-                            <tbody>
-                              <% @course_units.where(unit_id: unit[0], list: list+1).each do |course_unit| %>
-                                <% course_unit.turns.each do |turn| %>
-                                  <tr>
-                                    <td><%= hour_format(turn.hour) %></td>
-                                    <td><%= turn.person&.fullname %></td>
-                                    <td>
-                                      <% if !turn.busy? %>
-                                        <%= form_with(model: [course_unit.course,turn], data: {controller: "forms--turn", "forms--turn-target": "form"}) do |form| %>
-                                          <%= form.select :status, 
-                                            { available: 'Disponible', reserved: 'Reservado'  }.map { |status| [status[1], status[0]] },
-                                            { include_blank: false }, 
-                                            class: "form-select form-select-sm",
-                                            data: {
-                                              action: "forms--turn#update_turn",
-                                            } %>
+                            
+                              <%= turbo_frame_tag "turns_body" do %>
+                              <tbody>
+                                <% @course_units.where(unit_id: unit[0], list: list+1).each do |course_unit| %>
+                                  <% course_unit.turns.each do |turn| %>
+                                    <tr>
+                                      <td><%= hour_format(turn.hour) %></td>
+                                      <td><%= turn.person&.fullname %></td>
+                                      <td>
+                                        <% if !turn.busy? %>
+                                          <%= form_with(model: [course_unit.course,turn], data: {controller: "forms--turn", "forms--turn-target": "form"}) do |form| %>
+                                            <%= form.select :status, 
+                                              { available: 'Disponible', reserved: 'Reservado'  }.map { |status| [status[1], status[0]] },
+                                              { include_blank: false }, 
+                                              class: "form-select form-select-sm",
+                                              data: {
+                                                action: "forms--turn#update_turn",
+                                              } %>
+                                          <% end %>
+                                            <% else %>
+                                            <%= form_with(url: course_change_turn_path(course_id: course_unit.course.id, 
+                                                  turn_id: turn.id, 
+                                                  course_unit_id: course_unit.id,
+                                                  list: list), data: {controller: "forms--turn", "forms--turn-target": "changeTurn"}) do |form| %>
+                                              <%= form.select :change_turn_id, 
+                                                @available_turns.map { |turn| [hour_format(turn.hour), turn.id] },
+                                                { include_blank: true, placeholder: "cambiar hora" },
+                                                class: "form-select form-select-sm",
+                                                data: {
+                                                  controller: "tselect",
+                                                  action: "forms--turn#change_turn",
+                                                } %>
+                                            <% end %>
                                         <% end %>
-                                      <% end %>
-                                    </td>
-                                  </tr>
+                                      </td>
+                                    </tr>
+                                  <% end %>
                                 <% end %>
-                              <% end %>
                             </tbody>
+
+                              <% end %>
                           </table>
                         </div>
                   <% end %>

@@ -200,11 +200,24 @@ class CoursesController < ApplicationController
     @turns = @course.turns
     @units = @course.units.group(:name).pluck(:id, :name)
     @course_units = @course.course_units
+    @available_turns = @course.turns.where(status: :available).select(:id, :hour)
   end
 
   def turns_by_unit
     @query = @course.course_people.where(course_unit_id: params[:course_unit_id]).order(:unit_id).order(:from_hour)
     @pagy, @course_people = pagy(@query)
+  end
+
+  def change_turn
+    turn = Turn.find_by(id: params[:turn_id])
+    turn.change_to(params[:change_turn_id])
+    course = Course.find(params[:course_id])
+    course_units = course.course_units
+    available_turns = course.turns.where(status: :available).select(:id, :hour)
+    unit_id = CourseUnit.find_by(id: params[:course_unit_id]).unit.id
+    render turbo_stream: turbo_stream.replace("turns_body",
+      partial: "courses/turns_body",
+      locals: { course_units: course_units, available_turns: available_turns, unit_id: unit_id, list: params[:list].to_i })
   end
 
   private

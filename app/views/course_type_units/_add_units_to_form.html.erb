@@ -73,8 +73,7 @@
             name="course[course_units_attributes][<%= index %>][instructor_id]" 
             data-controller="tselect"
             data-action="change->forms--course#validate_instructor"
-            class="form-control"
-            required>
+            class="form-control">
             <option value="">Seleccione instructor</option>
             <% instructors.each do |instructor| %>
               <option value="<%= instructor.id %>"><%= instructor.person.fullname %></option>
