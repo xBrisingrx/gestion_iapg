@@ -24,6 +24,12 @@
       data: { turbo_frame: "modal"} do %>
       <i class="bi bi-database-fill-add"></i>
     <% end %>
+    <%= link_to course_add_instructor_path(course_id: @course.id), 
+      class: "btn btn-sm btn-icon btn-success",
+      title: 'Instructores',
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-person-add"></i>
+    <% end %>
   </div>
   <div class="table-responsive">
     <table class="table table-hover">

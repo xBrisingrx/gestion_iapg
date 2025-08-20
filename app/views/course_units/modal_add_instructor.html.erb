@@ -1,0 +1,34 @@
+<%= render "shared/modal", title: "Instructores", fade_in: true do %>
+  <div id="prevent-modal-close"></div>
+  <% @course_units.each do |course_unit|%>
+    <%= form_with(url: course_add_instructor_path, method: :post) do |form| %>
+      <%= form.hidden_field :course_unit_id, value: course_unit.id %>
+      <div class="form-group row mb-3">
+        <div class="col-3">
+          <%= form.label "Modulo: "%>
+          <p><%= course_unit.unit.name %></p>
+        </div>
+        <div class="col-3">
+          <label>Turno</label>
+          <p><%= course_unit.shift %></p>
+        </div>
+        <div class="col-4">
+          <label>Instructor</label>
+          <select id="course_units_instructor_id" 
+            name="course_units[instructor_id]" 
+            data-controller="tselect"
+            data-tselect-ids-value="[<%= course_unit.instructor_id %>]"
+            class="form-control">
+            <option value="">Seleccione instructor</option>
+            <% @instructors.each do |instructor| %>
+              <option value="<%= instructor.id %>"><%= instructor.person.fullname %></option>
+            <% end %>
+          </select>
+        </div>
+        <div class="col-2">
+         <%= form.submit "Guardar", class: "btn btn-sm btn-primary" %>
+        </div>
+      </div>
+    <% end %>
+  <%end %>
+<% end %>

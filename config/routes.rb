@@ -59,6 +59,8 @@ Rails.application.routes.draw do
     get "get_cursos_practicos", on: :collection
     get "get_psicometricos", on: :collection
     get "register_scoring_modal", on: :member
+    get "add_instructor", to: "course_units#modal_add_instructor"
+    post "add_instructor", to: "course_units#add_instructor"
     post "change_turn", to: "courses#change_turn"
     resources :course_people, only: [ :index, :new, :create, :update ] do
       get "by_course", on: :collection

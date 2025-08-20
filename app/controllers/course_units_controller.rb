@@ -70,6 +70,26 @@ class CourseUnitsController < ApplicationController
     @course_people = CoursePerson.where(course_unit: params[:course_unit_id])
   end
 
+  def modal_add_instructor
+    course = Course.find(params[:course_id])
+    @course_units = course.course_units
+    @instructors = Instructor.actives.includes(:person)
+  end
+
+  def add_instructor
+    if !params[:course_units][:instructor_id].blank?
+      course_unit = CourseUnit.find(params[:course_unit_id])
+      course_unit.update(instructor_id: params[:course_units][:instructor_id])
+      render turbo_stream: [
+        turbo_stream.replace("toasts",
+                partial: "shared/toasts",
+                locals: { message: "Datos actualizados", status_class: "primary" })
+      ]
+    else
+      render json: "No se pudo procesar la infomacion", status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_unit
