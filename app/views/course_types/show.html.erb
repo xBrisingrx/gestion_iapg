@@ -49,6 +49,7 @@
         <th>Turno</th>
         <th>Horario</th>
         <th>Duración del turno</th>
+        <th>Horarios de turnos</th>
       </tr>
     </thead>
     <tbody>
@@ -61,6 +62,14 @@
           <td>
             <% if unit.is_by_turn %>
               <%= unit.shift_time %> minutos
+            <% end %>
+          </td>
+          <td>
+            <% if unit.is_by_turn %>
+              <%= link_to course_hours_turns_path(course_type_unit: unit.id), 
+                class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
+                <i class="bi bi-pencil-square"></i>
+              <% end %>
             <% end %>
           </td>
         </tr>

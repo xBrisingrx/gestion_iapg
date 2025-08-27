@@ -16,6 +16,9 @@ application.register("forms--certificates", Forms__CertificatesController)
 import Forms__CourseController from "./forms/course_controller"
 application.register("forms--course", Forms__CourseController)
 
+import Forms__CourseHoursTurnController from "./forms/course_hours_turn_controller"
+application.register("forms--course-hours-turn", Forms__CourseHoursTurnController)
+
 import Forms__CoursePersonController from "./forms/course_person_controller"
 application.register("forms--course-person", Forms__CoursePersonController)
 

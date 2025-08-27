@@ -16,4 +16,8 @@ export default class extends Controller {
     this.daysOfDurationTarget.classList.toggle("d-none", no_teoric)
   }
 
+  add_instructor(){
+    console.info('click')
+  }
+
 }

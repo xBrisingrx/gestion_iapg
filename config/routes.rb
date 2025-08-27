@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :course_hours_turns
   get "certificates/index"
   get "certificates/courses_by_type", to: "certificates#courses_by_type"
   get "certificates/get_people_in_course", to: "certificates#get_people_in_course"

@@ -1,0 +1,15 @@
+  <%= form_with(model: course_hours_turn, data: { controller: "forms--course-hours-turn" }) do |form| %>
+    <td>
+      <%= form.time_field :hour, 
+          value: hour_format(course_hours_turn.hour) 
+      %>
+    </td>
+    <td>
+      <button 
+        class="btn btn-sm btn-info"
+        data-action="forms--course-hours-turn#update_hour"
+      >
+        Guardar
+      </button>
+    </td>
+  <% end %>

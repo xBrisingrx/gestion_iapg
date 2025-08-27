@@ -1,6 +1,7 @@
 class CourseTypeUnit < ApplicationRecord
   belongs_to :course_type
   belongs_to :unit
+  has_many :course_hours_turns
 
   validates :shift_time,
     presence: { message: "Debe aclarar el tiempo de cada turno" },
@@ -9,6 +10,8 @@ class CourseTypeUnit < ApplicationRecord
   validate :start_hour_less_than_end_hour
   validates :unit, uniqueness: { scope: [ :shift, :course_type_id, :day ] }
   # validate :hour_available, on: :create
+
+  after_create :generate_hours_turns
 
   def schedule
     "De #{self.start_hour&.strftime("%k:%M")} a #{self.end_hour&.strftime("%k:%M")}"
@@ -49,5 +52,17 @@ class CourseTypeUnit < ApplicationRecord
 
   def self.unit_of_theory(course_type_id)
     CourseTypeUnit.joins(:unit).where(course_type_id: course_type_id).where(units: { category: "Teorico" }).first
+  end
+
+  def generate_hours_turns
+    if self.is_by_turn
+      turn_hour = self.start_hour
+      while turn_hour < self.end_hour
+        self.course_hours_turns.create(
+          hour: turn_hour
+        )
+       turn_hour += self.shift_time.minutes
+      end
+    end
   end
 end
