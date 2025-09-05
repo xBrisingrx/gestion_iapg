@@ -36,11 +36,12 @@ class CourseUnit < ApplicationRecord
   end
 
   def generate_turns
-    course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.unit_id)
+    course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.unit_id, shift: self.shift)
     return if !course_type_unit.is_by_turn
     # turn_hour = self.start_hour
     date = self.date
     turn_hours = CourseHoursTurn.where(course_type_unit: course_type_unit)
+
     turn_hours.each do |turn_hour|
       self.turns.create(
         course_id: self.course_id,
