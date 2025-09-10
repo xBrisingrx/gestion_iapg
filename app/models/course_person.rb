@@ -18,6 +18,7 @@ class CoursePerson < ApplicationRecord
   # after_update :check_approved
 
   def assign_turn
+    debugger
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
     # return if self.course.course_type.days == 1 || CoursePerson.where(course_id: self.course_id, person_id: self.person_id).count > 1
     course_units = CourseUnit.where(course_id: self.course_id).group(:unit_id)
@@ -40,16 +41,16 @@ class CoursePerson < ApplicationRecord
         )
         course_person.date = course_date + (course_unit.day - 1).day
         if course_type_unit.is_by_turn
-          # if course_type_unit.unit.category == "Psicométrico"
-          #   turn_id = self.psicometrico_turn_id
-          # end
+          if course_type_unit.unit.category == "Psicométrico"
+            turn_id = self.psicometrico_turn_id
+          end
 
-          # if course_type_unit.unit.category == "Práctico"
-          #   turn_id = self.practical_turn_id
-          # end
+          if course_type_unit.unit.category == "Práctico"
+            turn_id = self.practical_turn_id
+          end
 
-          course_person.from_hour = set_hour(course_unit.unit_id, self.course_id, course_person.date, course_type_unit.shift_time)
-          # course_person.from_hour = set_turn(turn_id, course_person.date, course_type_unit.shift_time)
+          # course_person.from_hour = set_hour(course_unit.unit_id, self.course_id, course_person.date, course_type_unit.shift_time)
+          course_person.from_hour = set_turn(turn_id, course_person.date, course_type_unit.shift_time)
           course_person.to_hour = course_person.from_hour + course_type_unit.shift_time.minutes
         end
         course_person.save
@@ -60,14 +61,28 @@ class CoursePerson < ApplicationRecord
 
   def set_turn(turn_id, date, shift_time)
     turn = Turn.find(turn_id)
-    if self.person_is_available(shift_time, date, turn.hour)
-      turn.update(available: false, person_id: self.person_id, status: :busy)
-      turn.hour
+    if !turn.person_id.blank?
+      Turn.create(
+        course_id: turn.course_id,
+        unit_id: turn.unit_id,
+        date: turn.date,
+        hour: turn.hour,
+        list: turn.list,
+        status: :busy,
+        available: false,
+        person_id: self.person_id
+      )
     else
-      errors.add(:psicometrico_turn_id, "Los horarios se superponen.")
-      errors.add(:practical_turn_id, "Los horarios se superponen.")
-      raise ActiveRecord::Rollback
+      turn.update(available: false, person_id: self.person_id, status: :busy)
     end
+    # if self.person_is_available(shift_time, date, turn.hour)
+    #   turn.update(available: false, person_id: self.person_id, status: :busy)
+    #   turn.hour
+    # else
+    #   errors.add(:psicometrico_turn_id, "Los horarios se superponen.")
+    #   errors.add(:practical_turn_id, "Los horarios se superponen.")
+    #   raise ActiveRecord::Rollback
+    # end
   end
 
   def set_hour(unit_id, course_id, date, shift_time)

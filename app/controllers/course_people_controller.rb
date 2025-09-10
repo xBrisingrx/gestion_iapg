@@ -16,6 +16,7 @@ class CoursePeopleController < ApplicationController
   def new
     @course = Course.find(params[:course_id])
     @course_person = CoursePerson.new
+    @units = @course.course_units
   end
 
   # GET /courses/1/edit
