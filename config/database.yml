@@ -52,7 +52,7 @@ production:
   primary: &primary_production
     <<: *default
     database: gestion_iapg_production
-    username: gestion_iapg
+    username: <%= ENV["GESTION_IAPG_DATABASE_USER"] %>
     password: <%= ENV["GESTION_IAPG_DATABASE_PASSWORD"] %>
   cache:
     <<: *primary_production
