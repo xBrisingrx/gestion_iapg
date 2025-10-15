@@ -1,6 +1,9 @@
 class CourseHoursTurnsController < ApplicationController
   def index
     @hours_turns = CourseHoursTurn.where(course_type_unit: params[:course_type_unit])
+    if @hours_turns.blank?
+      CourseHoursTurn.generate_hours_turn(params[:course_type_unit])
+    end
   end
 
   def update
