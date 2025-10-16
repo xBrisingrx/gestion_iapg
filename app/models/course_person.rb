@@ -22,6 +22,7 @@ class CoursePerson < ApplicationRecord
     # return if self.course.course_type.days == 1 || CoursePerson.where(course_id: self.course_id, person_id: self.person_id).count > 1
     course_units = CourseUnit.where(course_id: self.course_id).group(:unit_id)
     course_date = self.course.from_date
+    debugger
     ActiveRecord::Base.transaction do
       course_units.each do |course_unit|
         next if CoursePerson.find_by(course_id: self.course_id, person_id: self.person_id, unit_id: course_unit.unit_id)
