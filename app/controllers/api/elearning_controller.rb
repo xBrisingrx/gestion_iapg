@@ -47,7 +47,6 @@ class Api::ElearningController < ApplicationController
     exam = []
     exam_modules.each do |exam_module|
       questions = exam_module.questions.order("RAND()")
-
       module_questions = []
 
       questions.each do |question|
@@ -67,7 +66,7 @@ class Api::ElearningController < ApplicationController
       }
       exam.push(exam_module_data)
     end
-    render json: { curso: exam, error: false }
+    render json: { curso: exam, examen: exam, error: false }
   end
 
   def get_resultados
