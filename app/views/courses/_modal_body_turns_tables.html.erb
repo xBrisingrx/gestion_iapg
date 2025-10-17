@@ -1,0 +1,27 @@
+<!-- Nav -->
+<div class="text-center">
+  <ul class="nav nav-segment nav-pills mb-7" role="tablist" data-controller="forms--turn">
+    <% @units_collection.each do |unit| %>
+      <li class="nav-item">
+        <%= link_to unit.name, 
+            "#nav-#{unit.id}",
+            id: "nav-#{unit.id}-tab",
+            class: "nav-link",
+            data: {
+              "bs-toggle": "pill",
+              "bs-target": "#nav-#{unit.id}",
+              action: "forms--turn#abc"
+            },
+            role: "tab",
+            aria: {
+              controls: "nav-#{unit.id}",
+              selected: "true"
+            }
+        %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+<!-- End Nav -->
+<%= turbo_frame_tag "table_turns" do %>
+<% end %>

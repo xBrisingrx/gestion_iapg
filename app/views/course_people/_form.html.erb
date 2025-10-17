@@ -75,14 +75,14 @@
   </div>
 
   <% @units.each do |unit| %>
-    <% turns = Turn.where(course_id: course.id, unit_id: unit.unit_id, status: :available) %>
+    <% turns = Turn.where(course_id: course.id, unit_id: unit.unit_id, status: :available).order(:hour, :list) %>
     <% next if turns.blank?%>
     <div class="form-group row mb-2">
       <% input_id = ( unit.unit.category == "Practico" ? :practical_turn_id : :psicometrico_turn_id ) %>
       <%= form.label unit.unit.name %>
       <div class="col-6">
         <%= form.select input_id.to_sym, 
-          turns.collect { |turn| [ "#{hour_format(turn.hour)}", turn.id ] },
+          turns.collect { |turn| [ "#{hour_format(turn.hour)} lista #{turn.list}", turn.id ] },
           {},
           data: {
             controller: 'tselect',
