@@ -32,7 +32,6 @@ class CoursePeopleController < ApplicationController
     @course_person.unit_id = course_type_unit.unit_id
     # @course_person.course_unit = course_unit
     @course_person.date = @course.from_date
-    debugger
     respond_to do |format|
       if @course_person.assign_turn
         format.turbo_stream {
