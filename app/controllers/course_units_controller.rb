@@ -67,7 +67,8 @@ class CourseUnitsController < ApplicationController
   end
 
   def people_registered
-    @course_people = CoursePerson.where(course_unit: params[:course_unit_id])
+    course_unit = CourseUnit.find_by(id: params[:course_unit_id])
+    @course_people = CoursePerson.where(course: course_unit.course, unit: course_unit.unit)
   end
 
   def modal_add_instructor

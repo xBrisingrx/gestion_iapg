@@ -75,7 +75,7 @@ class CoursesController < ApplicationController
   end
 
   def register_attendance
-    @course_units = @course.course_units.includes(:unit)
+    @course_units = @course.course_units.group(:unit_id).includes(:unit)
   end
 
   def scoring
