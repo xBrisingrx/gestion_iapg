@@ -46,8 +46,13 @@ class CoursesController < ApplicationController
     respond_to do |format|
       if @course.update(course_params)
         CoursePerson.check_approved(params[:course][:course_people_attributes]["0"][:id])
-        format.html { redirect_to courses_path, notice: "Courso actualizado." }
-        format.json { render :show, status: :ok, location: @course }
+        format.turbo_stream {
+          render turbo_stream: [
+              turbo_stream.replace("toasts",
+                partial: "shared/toasts",
+                locals: { message: "Nota registrada con éxito.", status_class: "primary" })
+          ]
+        }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @course.errors, status: :unprocessable_entity }
@@ -199,6 +204,7 @@ class CoursesController < ApplicationController
     @days = @course.cant_days
     @turns = @course.turns
     @units = @course.units.group(:name).pluck(:id, :name)
+    @units_collection = @course.units.group(:name).select(:id, :name)
     @course_units = @course.course_units
     @available_turns = @course.turns.where(status: :available).select(:id, :hour)
   end
