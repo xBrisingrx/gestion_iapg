@@ -22,7 +22,6 @@ class CoursePerson < ApplicationRecord
     # return if self.course.course_type.days == 1 || CoursePerson.where(course_id: self.course_id, person_id: self.person_id).count > 1
     course_units = CourseUnit.where(course_id: self.course_id).group(:unit_id)
     course_date = self.course.from_date
-    debugger
     ActiveRecord::Base.transaction do
       course_units.each do |course_unit|
         next if CoursePerson.find_by(course_id: self.course_id, person_id: self.person_id, unit_id: course_unit.unit_id)
@@ -40,11 +39,11 @@ class CoursePerson < ApplicationRecord
         )
         course_person.date = course_date + (course_unit.day - 1).day
         if course_type_unit.is_by_turn
-          if course_type_unit.unit.category == "Psicométrico"
+          if course_type_unit.unit.category == "Psicometrico"
             turn_id = self.psicometrico_turn_id
           end
 
-          if course_type_unit.unit.category == "Práctico"
+          if course_type_unit.unit.category == "Practico"
             turn_id = self.practical_turn_id
           end
 
@@ -74,6 +73,7 @@ class CoursePerson < ApplicationRecord
     else
       turn.update(available: false, person_id: self.person_id, status: :busy)
     end
+    turn.hour
     # if self.person_is_available(shift_time, date, turn.hour)
     #   turn.update(available: false, person_id: self.person_id, status: :busy)
     #   turn.hour
