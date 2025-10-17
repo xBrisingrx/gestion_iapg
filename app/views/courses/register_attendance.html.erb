@@ -10,7 +10,7 @@
         <option value="">Selecciona tipo de asistencia</option>
         <% @course_units.each do |courses_unit| %>
           <option value="<%= courses_unit.id %>">
-            <%= "#{courses_unit.unit.name} #{courses_unit.shift} día #{courses_unit.day}" %>
+            <%= "Día #{courses_unit.day}: #{courses_unit.unit.name}" %>
           </option>
         <% end %>
       </select>
