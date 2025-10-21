@@ -8,9 +8,14 @@ Rails.application.routes.draw do
     post "elearning", to: "elearning#index"
     get "get_course_module", to: "elearning#get_course_module"
     post "get_resultados", to: "elearning#get_resultados"
+    post "encuesta", to: "elearning#encuesta"
     # credenciales
     post "credential_login", to: "credential#login"
     get "credential_person_data", to: "credential#credential_person_data"
+    get "provcincias", to: "credential#provcincias"
+    get "localidades", to: "credential#localidades"
+    get "empresas", to: "credential#empresas"
+    get "savedatos", to: "credential#savedatos"
   end
   resources :module_questions
   resources :module_videos

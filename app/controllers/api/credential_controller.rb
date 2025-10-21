@@ -131,4 +131,23 @@ class Api::CredentialController < ApplicationController
     course_person.first.update(scoring: porcent, attendance_status: :presence)
     render json: { message: message, correcto: porcent, resultado: status, encuesta: questionnaires }
   end # end get_resultsdos
+
+  def provincias
+    provinces = Province.all.select("id AS idprovincia, name AS nombre")
+    render json: { provincias: provinces, erorr: false }
+  end
+
+  def localidades
+    localidades = City.all.select("id AS idlocalidad, name AS nombre")
+    render json: { localidades: localidades, erorr: false }
+  end
+
+  def empresas
+    empresas = Company.all.select("id AS idempresa, name AS razonsocial")
+    render json: { empresas: empresas, erorr: false }
+  end
+
+  def savedatos
+    render json: { save: true, error: false }
+  end
 end
