@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     # credenciales
     post "credential_login", to: "credential#login"
     get "credential_person_data", to: "credential#credential_person_data"
-    get "provcincias", to: "credential#provcincias"
+    get "provincias", to: "credential#provincias"
     get "localidades", to: "credential#localidades"
     get "empresas", to: "credential#empresas"
     get "savedatos", to: "credential#savedatos"
