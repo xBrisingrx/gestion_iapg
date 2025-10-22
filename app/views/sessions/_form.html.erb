@@ -1,0 +1,30 @@
+<%= form_with(url: sign_in_path, class: "js-validate needs-validation") do |form| %>
+  <div class="text-center">
+    <div class="mb-5">
+      <h3 class="card-title">Ingresar al sistema</h3>
+    </div>
+  </div>
+  <div class="mb-4">
+    <%= form.label :email, class: "form-label" %>
+    <%= form.email_field :email, 
+        value: params[:email_hint], 
+        required: true, 
+        autofocus: true, 
+        autocomplete: "email",
+        class: "form-control form-control-lg",
+        placeholder: "email@iapg.com" %>
+  </div>
+
+  <div class="mb-4">
+    <%= form.label :password, "Contraseña", class: "form-label" %>
+    <%= form.password_field :password, 
+        required: true, 
+        autocomplete: "current-password", 
+        class: "js-toggle-password form-control form-control-lg",
+        placeholder: "Contraseña" %>
+  </div>
+
+  <div class="d-grid gap-4">
+    <%= form.submit "Ingresar", class: "btn btn-primary btn-lg" %>
+  </div>
+<% end %>
