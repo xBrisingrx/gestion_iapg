@@ -1,33 +1,66 @@
-<p style="color: green"><%= notice %></p>
-<p style="color: red"><%= alert %></p>
-<div class="d-flex justify-content-center">
-  <h1>Ingresar al sistema</h1>
-</div>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Gestion IAPG" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= favicon_link_tag asset_path('favicon.ico') %>
 
-<div class="row col-6 justify-content-center">
-  <%= form_with(url: sign_in_path, builder: BootstrapBuilder) do |form| %>
-    <div>
-      <%= form.label :email%>
-      <%= form.email_field :email, value: params[:email_hint], required: true, autofocus: true, autocomplete: "email" %>
+    <%= yield :head %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", type: "module" %>
+    <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  </head>
+
+  <body class="d-flex align-items-center min-h-100 bg-dark">
+  <!-- ========== MAIN CONTENT ========== -->
+  <main id="content" role="main" class="flex-grow-1 overflow-hidden">
+    <!-- Content -->
+    <div class="container content-space-t-1 content-space-b-2">
+      <div class="mx-lg-auto" style="max-width: 55rem;">
+        <div class="d-flex justify-content-center align-items-center flex-column min-vh-lg-100">
+          <!-- ========== HEADER ========== -->
+          <header id="header" class="navbar navbar-height navbar-light mb-3">
+            <div class="container">
+              <a class="navbar-brand mx-auto" href="./index.html" aria-label="Unify">
+                <%= image_tag('logo.png', class: "navbar-brand-logo", alt: "IAPG logo") %>
+              </a>
+            </div>
+          </header>
+          <!-- ========== END HEADER ========== -->
+
+          <div class="position-relative">
+            <!-- Card -->
+            <div class="card card-shadow card-login">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card-body">
+                    <%= render("sessions/form") %>
+                  </div>
+                </div>
+                <!-- End Col -->
+                  
+                
+                <!-- End Col -->
+              </div>
+              <!-- End Row -->
+            </div>
+            <!-- End Card -->
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div>
-      <%= form.label :password, "Contraseña" %>
-      <%= form.password_field :password, required: true, autocomplete: "current-password" %>
-    </div>
-
-    <div class="mt-4">
-      <%= form.submit "Ingresar" %>
-    </div>
-  <% end %>
-</div> 
-
-<br>
-
-
-<br>
-
-<div>
-  <%# link_to "Sign up", sign_up_path %>
-  <%# link_to "Forgot your password?", new_identity_password_reset_path %>
-</div>
+    <!-- End Content -->
+  </main>
+  <!-- ========== END MAIN CONTENT ========== -->
+  </body>
+</html>
