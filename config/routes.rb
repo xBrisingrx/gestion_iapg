@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get "localidades", to: "credential#localidades"
     get "empresas", to: "credential#empresas"
     get "savedatos", to: "credential#savedatos"
+    get "validar", to: "credential#validar"
   end
   resources :module_questions
   resources :module_videos
