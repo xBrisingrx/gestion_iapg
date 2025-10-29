@@ -150,4 +150,8 @@ class Api::CredentialController < ApplicationController
   def savedatos
     render json: { save: true, error: false }
   end
+
+  def validar
+    render json: { message: "curso aprobado", error: false }
+  end
 end
