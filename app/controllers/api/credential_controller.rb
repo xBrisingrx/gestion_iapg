@@ -1,3 +1,5 @@
+require "mini_magick"
+
 class Api::CredentialController < ApplicationController
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate
@@ -153,5 +155,117 @@ class Api::CredentialController < ApplicationController
 
   def validar
     render json: { message: "curso aprobado", error: false }
+  end
+
+  # def mostrar_credencial
+  #   render json: { message: "curso aprobado", error: false }
+  # end
+
+  def mostrar_credencial
+    w = 1024
+    h = 768
+    col1 = round(42 * w / 100)
+    col2 = w - col1
+    prop = w / h
+    dia = "hoy"
+    anio = "anio"
+    mes = "mes"
+    # face = MiniMagick::Image.open("xc:none")
+    face = MiniMagick::Image.open("images/credencial/faces/example.jpg")
+    # Escala la imagen manteniendo proporciones (similar a bestFit)
+    target_width  = col2
+    target_height = col2 * prop
+    face.resize "#{target_width.to_i}x#{target_height.to_i}"
+
+    # firma
+    firma = MiniMagick::Image.open("images/credencial/firma.png")
+    firma.resize "#{(w / 4.5).to_i}x#{(h / 4.5).to_i}"
+
+    # logo
+    logoecd = MiniMagick::Image.open("images/credencial/ecd.png")
+    logoecd.resize "#{(w / 7.5).to_i}x#{(h / 7.5).to_i}"
+
+    # vence
+    vence = MiniMagick::Image.open("xc:#00568f")
+    vence.combine_options do |c|
+      c.resize "#{col2}x#{(col2 / 1.45).round}!"
+    end
+    font1_path = File.join(Rails.root.join, "images/fonts/Lato-Regular.ttf")
+    font1_size = (w * 3 / 100.0).round
+
+    vence.combine_options do |c|
+      c.font font1_path
+      c.fill "white"
+      c.pointsize font1_size
+      c.gravity "NorthWest" # top left
+      c.draw "text 20,10 'Valido hasta'"
+    end
+
+    font2_path = File.join(Rails.root.join, "iapg/fonts/Impact.ttf")
+    font2_size = (w * 8 / 100.0).round
+
+    vence.combine_options do |c|
+      c.font font2_path
+      c.fill "white"
+      c.pointsize font2_size
+      c.gravity "NorthEast" # top right
+      c.draw "text -10,5 '#{dia} de'"
+    end
+
+    vence.combine_options do |c|
+      c.font font2_path
+      c.fill "white"
+      c.pointsize font2_size
+      c.gravity "NorthEast" # top right
+      c.draw "text -10,5 '#{mes} de'"
+    end
+
+    vence.combine_options do |c|
+      c.font font2_path
+      c.fill "white"
+      c.pointsize (w * 22 / 100.0).round
+      c.gravity "SouthEast" # bottom right
+      c.draw "text -10,0 '#{anio}'"
+    end
+
+    # Crear lienzo base (equivalente a fromNew)
+    image = MiniMagick::Image.open("xc:none") # fondo transparente
+    image.combine_options do |c|
+      c.resize "#{w}x#{h}!"
+    end
+    # ==== 1️⃣ Overlay: FACE (top right) ====
+    image = image.composite(face) do |c|
+      c.gravity "NorthEast"    # 'top right'
+      c.geometry "-10+10"      # xOffset = -10, yOffset = +10
+      c.compose "Over"         # modo de superposición
+    end
+
+    # ==== 2️⃣ Overlay: LOGO IAPG SUR (top left) ====
+    offset_y = ((face.height - logoiapgsur.height) / 2.0).round
+    image = image.composite(logoiapgsur) do |c|
+      c.gravity "NorthWest"    # 'top left'
+      c.geometry "+10+#{offset_y}"
+      c.compose "Over"
+    end
+
+    # ==== 3️⃣ Overlay: LABEL (top, debajo de FACE) ====
+    offset_y = face.height + 20
+    image = image.composite(label) do |c|
+      c.gravity "North"        # 'top'
+      c.geometry "+0+#{offset_y}"
+      c.compose "Over"
+    end
+
+    # ==== 4 Overlay: VENCE (top, debajo de FACE) ====
+    offset_y = face.height + 20
+    image = image.composite(vence) do |c|
+      c.gravity "North"        # 'top'
+      c.geometry "+0+#{offset_y}"
+      c.compose "Over"
+    end
+
+    # ==== Mostrar o guardar ====
+    # Mostrar (solo si tenés entorno gráfico local)
+    image.display
   end
 end
