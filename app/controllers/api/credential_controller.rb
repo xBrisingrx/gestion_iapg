@@ -164,7 +164,7 @@ class Api::CredentialController < ApplicationController
   def mostrar_credencial
     w = 1024
     h = 768
-    col1 = round(42 * w / 100)
+    col1 = (42 * w / 100).round
     col2 = w - col1
     prop = w / h
     dia = "hoy"
