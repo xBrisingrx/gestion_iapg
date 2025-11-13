@@ -29,13 +29,13 @@ class Api::ElearningController < ApplicationController
     dias_disponible = CourseTypeUnit.unit_of_theory(course_person.course.course_type.id).days_of_duration
     from_date = course_person.course.from_date
     to_date = from_date + (dias_disponible.days - 1)
-    today = Date.today
-    range = from_date..to_date
-    if range.include? today
+      # today = Date.today
+      # range = from_date..to_date
+      # if range.include? today
       render json: { message: "Successful login.", jwt: token }
-    else
-      render json: { message: "Este curso se puede hacer desde #{from_date.strftime("%d-%m-%y")} hastas #{to_date.strftime("%d-%m-%y")}" }
-    end
+    # else
+    # render json: { message: "Este curso se puede hacer desde #{from_date.strftime("%d-%m-%y")} hastas #{to_date.strftime("%d-%m-%y")}" }
+    # end
   end
 
   def get_course_module
@@ -45,9 +45,11 @@ class Api::ElearningController < ApplicationController
     # buscamos los modulos del examen que debemos mostrar
     exam_modules = ExamModule.where(exam_id: data["examen"], quote_type: data["tipocupo"])
     exam = []
+    cant_preguntas = 0
     exam_modules.each do |exam_module|
       questions = exam_module.questions.order("RAND()")
       module_questions = []
+      cant_preguntas = cant_preguntas + questions.count
 
       questions.each do |question|
         answers = question.answers.select(:id, :answer).actives
@@ -66,7 +68,7 @@ class Api::ElearningController < ApplicationController
       }
       exam.push(exam_module_data)
     end
-    render json: { curso: exam, examen: exam, error: false }
+    render json: { curso: exam, examen: exam, cant_preguntas: cant_preguntas, error: false }
   end
 
   def get_resultados
@@ -124,4 +126,8 @@ class Api::ElearningController < ApplicationController
     course_person.first.update(scoring: porcent, attendance_status: :presence)
     render json: { message: message, correcto: porcent, resultado: status, encuesta: questionnaires }
   end # end get_resultsdos
+
+  def encuesta
+    render json: { message: "Gracias por participar de la encuesta", resultado: true }
+  end
 end
