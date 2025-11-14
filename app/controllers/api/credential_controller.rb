@@ -210,11 +210,11 @@ class Api::CredentialController < ApplicationController
       m.font impact_font.to_s
       m.pointsize (w * 8 / 100.0).round
       m.gravity "northeast"
-      m.draw "text -10,5 '#{dia} de'"
-      m.draw "text -10,#{(w * 10 / 100.0).round} '#{mes} de'"
+      m.draw "text 1,5 '#{dia} de'"
+      m.draw "text 1,#{(w * 10 / 100.0).round} '#{mes} de'"
       m.gravity "southeast"
       m.pointsize (w * 22 / 100.0).round
-      m.draw "text -10,-10 '#{anio}'"
+      m.draw "text 1,-10 '#{anio}'"
       m << Rails.root.join("tmp/vence.png")
     end
     vence = MiniMagick::Image.open(Rails.root.join("tmp/vence.png"))
