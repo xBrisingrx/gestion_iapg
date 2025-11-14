@@ -1,6 +1,5 @@
 class Api::CredentialController < ApplicationController
   require "mini_magick"
-  require "open3"
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate
 
@@ -162,7 +161,14 @@ class Api::CredentialController < ApplicationController
   # end
 
   def mostrar_credencial
-    # Obtener parámetros de imagen
+    # jwt = request.headers["HTTP_JWT"].split(" ").last
+    person = Person.find_by(cuil: params[:c].to_i)
+    course_people = person.course_people.where(approved: true)
+    teorico = course_people.joins(:unit).where(units: { category: "Teorico" }).last
+    practicos = course_people.joins(:unit).where(units: { category: " 	Practico" })
+    psicometrico = course_people.joins(:unit).where(units: { category: "Psicometrico" })
+    meses = [ nil, "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
+    credential_date = teorico.date + 2.years
     w = (params[:w] || 1024).to_i - 10
     h = (params[:h] || 768).to_i
 
@@ -174,13 +180,13 @@ class Api::CredentialController < ApplicationController
     # Lógica de tamaño de fuente del nombre
     fsname = 9.0
     prop = w.to_f / h
-    dia = "13"
-    anio = "2025"
-    mes = "noviembre"
+    dia = credential_date.day
+    anio = credential_date.year
+    mes = meses[credential_date.month]
 
-    nombre = "Mauro"
-    cuil = "20353846303"
-    categoria = "Developer"
+    nombre = person.fullname
+    cuil = person.cuil
+    categoria = teorico.fleet_category.name
 
     face = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/example.jpg"))
     firma = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/firma.png"))
@@ -249,17 +255,25 @@ class Api::CredentialController < ApplicationController
     detalle = MiniMagick::Image.open(Rails.root.join("tmp/detalle.png"))
 
     detalle.combine_options do |canvas|
-      # canvas.background "#021d49"
       canvas.font lato_font
       canvas.fill "white"
 
       canvas.pointsize (w * 2.8 / 100.0).round
       canvas.gravity "NorthWest"
       canvas.draw "text 5,#{(w * 10 / 100.0).round} 'APROBÓ LA EVALUACIÓN'"
-      canvas.draw "text 5,#{(w * 15 / 100.0).round} 'PRÁCTICA DEL CURSO DE'"
-      canvas.draw "text 5,#{(w * 20 / 100.0).round} 'CONDUCCIÓN DEFENSIVA'"
-      canvas.draw "text 5,#{(w * 25 / 100.0).round} 'Y REALIZÓ EL'"
-      canvas.draw "text 5,#{(w * 30 / 100.0).round} 'EXAMEN PSICOMÉTRICO'"
+
+      if !teorico.empty
+        canvas.draw "text 5,#{(w * 15 / 100.0).round} 'TEORICA'"
+      end
+
+      if !practicos.empty
+        canvas.draw "text 5,#{(w * 15 / 100.0).round} 'PRÁCTICA DEL CURSO DE'"
+        canvas.draw "text 5,#{(w * 20 / 100.0).round} 'CONDUCCIÓN DEFENSIVA'"
+      end
+      if !psicometrico.empty
+        canvas.draw "text 5,#{(w * 25 / 100.0).round} 'Y REALIZÓ EL'"
+        canvas.draw "text 5,#{(w * 30 / 100.0).round} 'EXAMEN PSICOMÉTRICO'"
+      end
     end
 
     image = MiniMagick::Image.open(Rails.root.join("tmp/base-1.png"))
