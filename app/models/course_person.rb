@@ -229,15 +229,21 @@ class CoursePerson < ApplicationRecord
   end
 
   def self.check_approved(id)
-    course_person = CoursePerson.find_by(id: id)
-    unit_category = course_person.unit.category
-    if unit_category == "Teorico"
-      number_approved = 80
-    else
-      number_approved = 2
+    course_person = CoursePerson.find_by(id: id) # id del primer modulo
+    # obtenemos todos los modulos en los q se registro esta persona en ese curso
+    course_people = CoursePerson.where(person: course_person.person, course: course_person.course)
+    # recorro los modulos para chequear todas las notas y si esta aprobado
+    # tengo que buscarle la vuelta para no hacer todo este trabajo siempre
+    course_people.each do |cp|
+      unit_category = cp.unit.category
+      if unit_category == "Teorico"
+        number_approved = 80
+      else
+        number_approved = 2
+      end
+      approved = (cp.scoring >= number_approved || cp.make_up_1 >= number_approved || cp.make_up_2 >= number_approved)
+      cp.update(approved: approved)
     end
-    approved = (course_person.scoring >= number_approved || course_person.make_up_1 >= number_approved || course_person.make_up_2 >= number_approved)
-    course_person.update(approved: approved)
   end
 
   def get_credential_status

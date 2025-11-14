@@ -1,6 +1,5 @@
-require "mini_magick"
-
 class Api::CredentialController < ApplicationController
+  require "mini_magick"
   skip_before_action :verify_authenticity_token
   skip_before_action :authenticate
 
@@ -162,110 +161,154 @@ class Api::CredentialController < ApplicationController
   # end
 
   def mostrar_credencial
-    w = 1024
-    h = 768
-    col1 = round(42 * w / 100)
+    # jwt = request.headers["HTTP_JWT"].split(" ").last
+    person = Person.find_by(cuil: params[:c].to_i)
+    course_people = person.course_people.where(approved: true)
+    teorico = course_people.joins(:unit).where(units: { category: "Teorico" }).last
+    practicos = course_people.joins(:unit).where(units: { category: " 	Practico" })
+    psicometrico = course_people.joins(:unit).where(units: { category: "Psicometrico" })
+    meses = [ nil, "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
+    credential_date = teorico.date + 2.years
+    w = (params[:w] || 1024).to_i - 10
+    h = (params[:h] || 768).to_i
+
+    hnew = (w * 1.4).round
+    h = hnew if hnew < h
+
+    col1 = (42 * w / 100.0).round
     col2 = w - col1
-    prop = w / h
-    dia = "hoy"
-    anio = "anio"
-    mes = "mes"
-    # face = MiniMagick::Image.open("xc:none")
-    face = MiniMagick::Image.open("images/credencial/faces/example.jpg")
-    # Escala la imagen manteniendo proporciones (similar a bestFit)
-    target_width  = col2
-    target_height = col2 * prop
-    face.resize "#{target_width.to_i}x#{target_height.to_i}"
+    # Lógica de tamaño de fuente del nombre
+    fsname = 9.0
+    prop = w.to_f / h
+    dia = credential_date.day
+    anio = credential_date.year
+    mes = meses[credential_date.month]
 
-    # firma
-    firma = MiniMagick::Image.open("images/credencial/firma.png")
-    firma.resize "#{(w / 4.5).to_i}x#{(h / 4.5).to_i}"
+    nombre = person.fullname
+    cuil = person.cuil
+    categoria = teorico.fleet_category.name
 
-    # logo
-    logoecd = MiniMagick::Image.open("images/credencial/ecd.png")
-    logoecd.resize "#{(w / 7.5).to_i}x#{(h / 7.5).to_i}"
+    face = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/example.jpg"))
+    firma = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/firma.png"))
+    logoecd = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/ecd.png"))
+    logoiapgsur = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/logo-sur.png"))
 
-    # vence
-    vence = MiniMagick::Image.open("xc:#00568f")
-    vence.combine_options do |c|
-      c.resize "#{col2}x#{(col2 / 1.45).round}!"
+    lato_font = Rails.root.join("app/assets/images/fonts/Lato-Regular.ttf")
+    impact_font = Rails.root.join("app/assets/images/fonts/Impact.ttf")
+    gotham_font = Rails.root.join("app/assets/images/fonts/GothamBlack.ttf")
+    sharetech_font = Rails.root.join("app/assets/images/fonts/ShareTechMono-Regular.ttf")
+
+    face.resize "#{col2}x#{(col2 * prop).round}>"
+    logoiapgsur.resize "#{(w / 3.0).round}x"
+    logoecd.resize "#{(w / 7.5).round}x"
+    firma.resize "#{(w / 4.5).round}x"
+
+    # === Crear panel de validez (vence) ===
+    vence = MiniMagick::Image.new(Rails.root.join("tmp/vence.png"), "png")
+    MiniMagick::Tool::Magick.new do |m|
+      m.size "#{col2}x#{(col2 / 1.45).round}"
+      m.canvas "#00568f"
+      m.gravity "northwest"
+      m.fill "white"
+      m.font lato_font.to_s
+      m.pointsize (w * 3 / 100.0).round
+      m.draw "text 20,10 'Válido hasta'"
+      m.font impact_font.to_s
+      m.pointsize (w * 8 / 100.0).round
+      m.gravity "northeast"
+      m.draw "text 1,5 '#{dia} de'"
+      m.draw "text 1,#{(w * 10 / 100.0).round} '#{mes} de'"
+      m.gravity "southeast"
+      m.pointsize (w * 22 / 100.0).round
+      m.draw "text 1,-10 '#{anio}'"
+      m << Rails.root.join("tmp/vence.png")
     end
-    font1_path = File.join(Rails.root.join, "images/fonts/Lato-Regular.ttf")
-    font1_size = (w * 3 / 100.0).round
+    vence = MiniMagick::Image.open(Rails.root.join("tmp/vence.png"))
 
-    vence.combine_options do |c|
-      c.font font1_path
-      c.fill "white"
-      c.pointsize font1_size
-      c.gravity "NorthWest" # top left
-      c.draw "text 20,10 'Valido hasta'"
+    # === Crear label con nombre, cuil y categoría ===
+    label = MiniMagick::Image.new(Rails.root.join("tmp/label.png"), "png")
+    MiniMagick::Tool::Magick.new do |m|
+      m.size "#{w}x#{(h / 5.9).round}"
+      m.canvas "white"
+      m.gravity "north"
+      m.font gotham_font.to_s
+      m.pointsize (w * 7 / 100.0).round
+      m.draw "text 0,0 '#{nombre}'"
+      m.font sharetech_font.to_s
+      m.pointsize (w * 9 / 100.0).round
+      m.draw "text 0,#{(w * 8 / 100.0).round} '#{cuil}'"
+      m.font lato_font.to_s
+      m.pointsize (w * 4.5 / 100.0).round
+      m.draw "text 0,#{(w * 18 / 100.0).round} '#{categoria}'"
+      m << Rails.root.join("tmp/label.png")
+    end
+    label = MiniMagick::Image.open(Rails.root.join("tmp/label.png"))
+
+    detalle = MiniMagick::Image.new(Rails.root.join("tmp/detalle.png"), "png")
+    MiniMagick::Tool::Magick.new do |m|
+      m.size "#{col1}x#{(col2 / 1.45).round}!"
+      m.canvas "#021d49"
+      m.fill "white"
+      m.gravity "north"
+      m << Rails.root.join("tmp/detalle.png")
+    end
+    detalle = MiniMagick::Image.open(Rails.root.join("tmp/detalle.png"))
+
+    detalle.combine_options do |canvas|
+      canvas.font lato_font
+      canvas.fill "white"
+
+      canvas.pointsize (w * 2.8 / 100.0).round
+      canvas.gravity "NorthWest"
+      canvas.draw "text 5,#{(w * 10 / 100.0).round} 'APROBÓ LA EVALUACIÓN'"
+
+      if !teorico.blank?
+        canvas.draw "text 5,#{(w * 15 / 100.0).round} 'TEORICA'"
+      end
+
+      if !practicos.blank?
+        canvas.draw "text 5,#{(w * 15 / 100.0).round} 'PRÁCTICA DEL CURSO DE'"
+      end
+      if !psicometrico.blank?
+        canvas.draw "text 5,#{(w * 25 / 100.0).round} 'Y REALIZÓ EL'"
+        canvas.draw "text 5,#{(w * 30 / 100.0).round} 'EXAMEN PSICOMÉTRICO'"
+      end
+      canvas.draw "text 5,#{(w * 20 / 100.0).round} 'CONDUCCIÓN DEFENSIVA'"
     end
 
-    font2_path = File.join(Rails.root.join, "iapg/fonts/Impact.ttf")
-    font2_size = (w * 8 / 100.0).round
-
-    vence.combine_options do |c|
-      c.font font2_path
-      c.fill "white"
-      c.pointsize font2_size
-      c.gravity "NorthEast" # top right
-      c.draw "text -10,5 '#{dia} de'"
-    end
-
-    vence.combine_options do |c|
-      c.font font2_path
-      c.fill "white"
-      c.pointsize font2_size
-      c.gravity "NorthEast" # top right
-      c.draw "text -10,5 '#{mes} de'"
-    end
-
-    vence.combine_options do |c|
-      c.font font2_path
-      c.fill "white"
-      c.pointsize (w * 22 / 100.0).round
-      c.gravity "SouthEast" # bottom right
-      c.draw "text -10,0 '#{anio}'"
-    end
-
-    # Crear lienzo base (equivalente a fromNew)
-    image = MiniMagick::Image.open("xc:none") # fondo transparente
-    image.combine_options do |c|
-      c.resize "#{w}x#{h}!"
-    end
-    # ==== 1️⃣ Overlay: FACE (top right) ====
-    image = image.composite(face) do |c|
-      c.gravity "NorthEast"    # 'top right'
-      c.geometry "-10+10"      # xOffset = -10, yOffset = +10
-      c.compose "Over"         # modo de superposición
-    end
-
-    # ==== 2️⃣ Overlay: LOGO IAPG SUR (top left) ====
-    offset_y = ((face.height - logoiapgsur.height) / 2.0).round
-    image = image.composite(logoiapgsur) do |c|
-      c.gravity "NorthWest"    # 'top left'
-      c.geometry "+10+#{offset_y}"
-      c.compose "Over"
-    end
-
-    # ==== 3️⃣ Overlay: LABEL (top, debajo de FACE) ====
-    offset_y = face.height + 20
-    image = image.composite(label) do |c|
-      c.gravity "North"        # 'top'
-      c.geometry "+0+#{offset_y}"
-      c.compose "Over"
-    end
-
-    # ==== 4 Overlay: VENCE (top, debajo de FACE) ====
-    offset_y = face.height + 20
-    image = image.composite(vence) do |c|
-      c.gravity "North"        # 'top'
-      c.geometry "+0+#{offset_y}"
-      c.compose "Over"
-    end
-
+    image = MiniMagick::Image.open(Rails.root.join("app/assets/images/base-1.png"))
+    # Superponer imágenes en posiciones similares al PHP original
+    image = overlay(image, face,        "NorthEast", -10, 10)
+    image = overlay(image, logoiapgsur, "NorthWest", 10, ((face.height - logoiapgsur.height) / 2.0))
+    image = overlay(image, label,       "North",     0,  face.height + 20)
+    image = overlay(image, vence,       "NorthEast", 0,  face.height + 20 + label.height + 10)
+    image = overlay(image, detalle,     "NorthWest", 0,  face.height + 20 + label.height + 10)
+    image = overlay(image, logoecd,     "SouthWest", 35, 0)
+    image = overlay(image, firma,       "SouthEast", 5, 0)
     # ==== Mostrar o guardar ====
-    # Mostrar (solo si tenés entorno gráfico local)
-    image.display
+    image.write Rails.root.join("tmp/tarjeta.png")
+    send_data image.to_blob, type: "image/png", disposition: "inline"
+  end
+
+
+  # Función helper para agregar texto (simulando ->text)
+  def draw_text(image, text, opts = {})
+    image.combine_options do |c|
+      c.font opts[:font]
+      c.fill opts[:color] || "black"
+      c.gravity opts[:gravity] || "north"
+      c.pointsize opts[:size]
+      c.draw "text #{opts[:x_offset] || 0},#{opts[:y_offset] || 0} '#{text}'"
+    end
+  end
+
+  # Helper para aplicar overlays
+  def overlay(base, overlay, gravity, x_offset = 0, y_offset = 0)
+    base.composite(overlay) do |c|
+      c.colorspace "sRGB"
+      c.gravity gravity
+      c.geometry "+#{x_offset}+#{y_offset}"
+      c.compose "over"
+    end
   end
 end
