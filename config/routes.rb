@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     get "empresas", to: "credential#empresas"
     get "savedatos", to: "credential#savedatos"
     get "validar", to: "credential#validar"
+    get "mostrar_credencial", to: "credential#mostrar_credencial"
   end
   resources :module_questions
   resources :module_videos
