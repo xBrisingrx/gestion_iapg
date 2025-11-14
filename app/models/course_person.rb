@@ -244,7 +244,6 @@ class CoursePerson < ApplicationRecord
       approved = (cp.scoring >= number_approved || cp.make_up_1 >= number_approved || cp.make_up_2 >= number_approved)
       cp.update(approved: approved)
     end
-    debugger
   end
 
   def get_credential_status
