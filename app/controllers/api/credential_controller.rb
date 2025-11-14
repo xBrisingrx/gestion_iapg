@@ -262,21 +262,21 @@ class Api::CredentialController < ApplicationController
       canvas.gravity "NorthWest"
       canvas.draw "text 5,#{(w * 10 / 100.0).round} 'APROBÓ LA EVALUACIÓN'"
 
-      if !teorico.empty
+      if !teorico.blank?
         canvas.draw "text 5,#{(w * 15 / 100.0).round} 'TEORICA'"
       end
 
-      if !practicos.empty
+      if !practicos.blank?
         canvas.draw "text 5,#{(w * 15 / 100.0).round} 'PRÁCTICA DEL CURSO DE'"
-        canvas.draw "text 5,#{(w * 20 / 100.0).round} 'CONDUCCIÓN DEFENSIVA'"
       end
-      if !psicometrico.empty
+      if !psicometrico.blank?
         canvas.draw "text 5,#{(w * 25 / 100.0).round} 'Y REALIZÓ EL'"
         canvas.draw "text 5,#{(w * 30 / 100.0).round} 'EXAMEN PSICOMÉTRICO'"
       end
+      canvas.draw "text 5,#{(w * 20 / 100.0).round} 'CONDUCCIÓN DEFENSIVA'"
     end
 
-    image = MiniMagick::Image.open(Rails.root.join("tmp/base-1.png"))
+    image = MiniMagick::Image.open(Rails.root.join("app/assets/images/base-1.png"))
     # Superponer imágenes en posiciones similares al PHP original
     image = overlay(image, face,        "NorthEast", -10, 10)
     image = overlay(image, logoiapgsur, "NorthWest", 10, ((face.height - logoiapgsur.height) / 2.0))
