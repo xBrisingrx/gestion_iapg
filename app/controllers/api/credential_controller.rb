@@ -244,29 +244,9 @@ class Api::CredentialController < ApplicationController
       m.canvas "#021d49"
       m.fill "white"
       m.gravity "north"
-      # m.font lato_font.to_s
-      # m.pointsize (w * 7 / 100.0).round
-      # m.draw "text 0,0 '#{nombre}'"
-      # m.font sharetech_font.to_s
-      # m.pointsize (w * 9 / 100.0).round
-      # m.draw "text 0,#{(w * 8 / 100.0).round} '#{cuil}'"
-      # m.font lato_font.to_s
-      # m.pointsize (w * 4.5 / 100.0).round
-      # m.draw "text 0,#{(w * 18 / 100.0).round} '#{categoria}'"
       m << Rails.root.join("tmp/detalle.png")
     end
     detalle = MiniMagick::Image.open(Rails.root.join("tmp/detalle.png"))
-    # cmd = [
-    #   "magick",             # ImageMagick 7 CLI
-    #   "convert",            # subcomando convert (se pasa como argumento)
-    #   "-size", "#{col1}x#{(col2 / 1.45).round}!",
-    #   "fill:white",
-    #   "xc:#021d49",
-    #   "png:-"               # salida a stdout en formato PNG
-    # ]
-
-    # stdout, stderr, status = Open3.capture3(*cmd)
-    # detalle = MiniMagick::Image.read(stdout)
 
     detalle.combine_options do |canvas|
       # canvas.background "#021d49"
@@ -282,18 +262,7 @@ class Api::CredentialController < ApplicationController
       canvas.draw "text 5,#{(w * 30 / 100.0).round} 'EXAMEN PSICOMÉTRICO'"
     end
 
-    # Crear lienzo base (equivalente a fromNew)
-    cmd = [
-      "magick",             # ImageMagick 7 CLI
-      "convert",            # subcomando convert (se pasa como argumento)
-      "-size", "#{w}x#{h}!",
-      "xc:none",
-      "png:-"               # salida a stdout en formato PNG
-    ]
-
-    stdout, stderr, status = Open3.capture3(*cmd)
-    image = MiniMagick::Image.read(stdout)
-
+    image = MiniMagick::Image.open(Rails.root.join("tmp/base-1.png"))
     # Superponer imágenes en posiciones similares al PHP original
     image = overlay(image, face,        "NorthEast", -10, 10)
     image = overlay(image, logoiapgsur, "NorthWest", 10, ((face.height - logoiapgsur.height) / 2.0))
@@ -303,8 +272,7 @@ class Api::CredentialController < ApplicationController
     image = overlay(image, logoecd,     "SouthWest", 35, 0)
     image = overlay(image, firma,       "SouthEast", 5, 0)
     # ==== Mostrar o guardar ====
-    # Mostrar (solo si tenés entorno gráfico local)
-    # render image.display
+    image.write Rails.root.join("tmp/tarjeta.png")
     send_data image.to_blob, type: "image/png", disposition: "inline"
   end
 
@@ -323,6 +291,7 @@ class Api::CredentialController < ApplicationController
   # Helper para aplicar overlays
   def overlay(base, overlay, gravity, x_offset = 0, y_offset = 0)
     base.composite(overlay) do |c|
+      c.colorspace "sRGB"
       c.gravity gravity
       c.geometry "+#{x_offset}+#{y_offset}"
       c.compose "over"
