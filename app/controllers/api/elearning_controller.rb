@@ -3,7 +3,6 @@ class Api::ElearningController < ApplicationController
   skip_before_action :authenticate
 
   def index
-    puts params
     person = Person.find_by(cuil: params[:cuil]) # buscamos a la persona que va a hacer el curso
     # si el codigo no es unico, vamos atener q sumar filtrar por fecha de vigencia
     course_person = CoursePerson.where(person: person, code: params[:code]).last
