@@ -229,6 +229,7 @@ class CoursePerson < ApplicationRecord
   end
 
   def self.check_approved(id)
+    # tengo que disparar esto para el desaprobado
     course_person = CoursePerson.find_by(id: id) # id del primer modulo
     # obtenemos todos los modulos en los q se registro esta persona en ese curso
     course_people = CoursePerson.where(person: course_person.person, course: course_person.course)
