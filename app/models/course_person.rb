@@ -242,6 +242,8 @@ class CoursePerson < ApplicationRecord
       else
         number_approved = 2
       end
+      cp.make_up_1 = 0 if cp.make_up_1.nil?
+      cp.make_up_2 = 0 if cp.make_up_2.nil?
       approved = (cp.scoring >= number_approved || cp.make_up_1 >= number_approved || cp.make_up_2 >= number_approved)
       cp.update(approved: approved)
     end
