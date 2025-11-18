@@ -4,6 +4,7 @@ class Api::CredentialController < ApplicationController
   skip_before_action :authenticate
 
   def login
+    # tengo que atajar cuando la persona no existe
     person = Person.find_by(cuil: params[:id]) # buscamos a la persona que solicita la credencial
     iat = Time.new.to_i
     exp = iat * (60 * 60)
@@ -42,6 +43,10 @@ class Api::CredentialController < ApplicationController
         dueno: "117"
     }
 
+    # if 
+      
+    # else
+    # end
     render json: { persona: persona, error: false }
   end
 
@@ -153,7 +158,18 @@ class Api::CredentialController < ApplicationController
   end
 
   def validar
-    render json: { message: "curso aprobado", error: false }
+    # debugger
+    jwt = request.headers["Authorization"].split(" ").last
+    decode = jwt_decode(jwt)
+    data = decode["data"]
+    person = Person.find_by(id: data["id"])
+    course_people = person.course_people.where(approved: true)
+    teorico = course_people.joins(:unit).where(units: { category: "Teorico" }).last
+    if teorico.blank?
+      render json: { message: "no tiene cursos aprobados", error: true }
+    else
+      render json: { message: "curso aprobado", error: false }
+    end
   end
 
   # def mostrar_credencial
