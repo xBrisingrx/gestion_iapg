@@ -123,6 +123,7 @@ class Api::ElearningController < ApplicationController
     end # end if person_deleted
     questionnaires = Questionnaire.select("id, question AS pregunta, q_type AS tipo, q_order AS orden").all.order(q_order: :asc)
     course_person.first.update(scoring: porcent, attendance_status: :presence)
+    CoursePerson.check_approved(course_person)
     render json: { message: message, correcto: porcent, resultado: status, encuesta: questionnaires }
   end # end get_resultsdos
 
