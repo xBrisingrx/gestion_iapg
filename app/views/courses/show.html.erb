@@ -1,8 +1,9 @@
 <%= render "shared/modal2", title: @course.course_type.name, fade_in: true do %>
   <section class="mb-2">
     <div class="row mb-2">
-      <div class="col-6"><b>Fecha:</b> <%= date_format(@course.from_date) %></div>
-      <div class="col-6"><b>Tipo de curso:</b> <%= @course.course_type.name %></div>
+      <div class="col-4"><b>Fecha:</b> <%= date_format(@course.from_date) %></div>
+      <div class="col-4"><b>Tipo de curso:</b> <%= @course.course_type.name %></div>
+      <div class="col-4"><b>Codigo:</b> <%= @course.code %></div>
     </div>
     <div class="row mb-2">
       <div class="col-4"><b>Nro anual:</b> <%= @course.year_number %></div>
