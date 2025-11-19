@@ -20,7 +20,7 @@ class BootstrapBuilder < ActionView::Helpers::FormBuilder
     super(*args, options)
   end
 
-  [ :text_field, :number_field, :date_field, :time_field, :email_field, :password_field ].each do |method|
+  [ :text_field, :number_field, :date_field, :time_field, :email_field, :password_field, :file_field ].each do |method|
     define_method method do |attribute, options = {}|
       style_options, custom_options = partition_custom_opts(options)
       content_tag :div, class: "col-6" do

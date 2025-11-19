@@ -91,6 +91,35 @@ class PeopleController < ApplicationController
     render json: { person: person }
   end
 
+  def upload_multiple_images
+    # recibimos un zip con muchas imagenes que van a ser usadas en el carnet
+    zip = params[:file]
+
+    dir = Rails.root.join("public/uploads/#{SecureRandom.hex}")
+    FileUtils.mkdir_p(dir)
+
+    Zip::File.open(zip.path) do |zip_file|
+      zip_file.each do |entry|
+        next unless entry.name.downcase.match(/\.(jpg|jpeg|png)$/i)
+        # entry.extract(File.join(dir, entry.name))
+        temp = Tempfile.new(binmode: true)
+        temp.write(entry.get_input_stream.read)
+        temp.rewind
+
+        person = Person.find_by(cuil: entry.name)
+        if person 
+          person.images.attach(
+            io: temp,
+            filename: entry.name,
+            content_type: Marcel::MimeType.for(entry.name)
+          )
+        end
+      end
+    end
+
+    render json: { message: "exito" }
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_person
@@ -100,6 +129,6 @@ class PeopleController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def person_params
-      params.expect(person: [ :cuil, :last_name, :name, :birthdate, :phone, :celphone, :email, :direction, :code, :city_id ])
+      params.expect(person: [ :cuil, :last_name, :name, :birthdate, :phone, :celphone, :email, :direction, :code, :city_id, :images ])
     end
 end
