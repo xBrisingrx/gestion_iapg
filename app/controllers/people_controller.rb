@@ -93,7 +93,10 @@ class PeopleController < ApplicationController
   end
 
   def credential_images
-    @people = Person.actives
+    # @query = Person.actives.ransack(params[:query])
+    filter = Person.actives.select(:name, :last_name, :cuil, :id).where("name LIKE ?", "%#{params[:name]}%")
+      .or(Person.actives.select(:name, :last_name, :cuil, :id).where("last_name LIKE ?", "%#{params[:name]}%"))
+    @pagy, @people = pagy(filter)
   end
 
   def upload_multiple_images
