@@ -49,7 +49,10 @@ Rails.application.routes.draw do
     resources :registration
     resources :in_company, only: [ :new, :create ]
     resources :theoric, only: [ :new, :create ]
-    resources :psicometric, only: [ :new, :create ]
+    resources :psicometric, only: [ :new, :create ] do
+      get "carga_psicometricos", to: "psicometric#upload_view", on: :collection
+      post "upload_files", on: :collection
+    end
   end
 
   resources :courses, except: [ :destroy ] do

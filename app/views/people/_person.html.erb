@@ -6,6 +6,14 @@
   <td><%= person.email %></td>
   <td>
     <% if policy(person).edit? %>
+      <% if person.psicometrics.blank? %>
+        <button class="btn btn-info btn-sm btn-sm btn-icon text-white" disabled><i class="bi bi-file-pdf-fill"></i></button>
+      <% else %>
+        <%= link_to rails_blob_url(person.psicometrics.last, disposition: "attachment"), 
+          class: "btn btn-info btn-sm btn-sm btn-icon text-white",title: 'Psicometrico' , target: "_blank" do %>
+          <i class="bi bi-file-pdf-fill"></i>
+        <% end %>
+      <% end %>
       <%= link_to edit_person_path(person), 
         class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
         <i class="bi bi-pencil-square"></i>
