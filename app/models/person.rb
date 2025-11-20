@@ -4,9 +4,9 @@ class Person < ApplicationRecord
   has_many :course_people
 
   has_many_attached :images do |attachable|
-    attachable.variant :thumb, resize_to_limit: [100, 100]
+    attachable.variant :thumb, resize_to_limit: [ 100, 100 ]
   end
-  
+  has_many_attached :psicometrics
   normalizes :email, with: ->(email) {  email.strip.downcase }
 
   validates :name, :last_name, :cuil, :birthdate, :phone, :celphone, :email, :direction, presence: true

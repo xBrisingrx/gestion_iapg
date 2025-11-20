@@ -35,4 +35,34 @@ class Courses::PsicometricController < ApplicationController
       render json: "Registro exitoso", status: :ok
     end
   end
+
+  def upload_view;end
+
+  def upload_files
+    zip = params[:zip_file]
+
+    dir = Rails.root.join("public/uploads/#{SecureRandom.hex}")
+    FileUtils.mkdir_p(dir)
+
+    Zip::File.open(zip.path) do |zip_file|
+      zip_file.each do |entry|
+        next unless entry.name.downcase.match(/\.(pdf)$/i)
+        temp = Tempfile.new(binmode: true)
+        temp.write(entry.get_input_stream.read)
+        temp.rewind
+
+        person = Person.find_by(cuil: entry.name.to_i)
+        if !person.blank?
+          person.psicometrics.attach(
+            io: temp,
+            filename: entry.name,
+            content_type: Marcel::MimeType.for(entry.name)
+          )
+        end # if
+      end # extract_files
+    end # open zip
+    respond_to do |format|
+      format.html { redirect_to carga_psicometricos_courses_psicometric_index_path, notice: "Company was successfully created." }
+    end
+  end
 end
