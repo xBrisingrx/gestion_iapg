@@ -43,8 +43,8 @@ class Api::CredentialController < ApplicationController
         dueno: "117"
     }
 
-    # if 
-      
+    # if
+
     # else
     # end
     render json: { persona: persona, error: false }
@@ -204,7 +204,7 @@ class Api::CredentialController < ApplicationController
     cuil = person.cuil
     categoria = teorico.fleet_category.name
 
-    face = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/example.jpg"))
+    face = (!person.images.blank?) ? person.images.last : MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/no_face.png"))
     firma = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/firma.png"))
     logoecd = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/ecd.png"))
     logoiapgsur = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/logo-sur.png"))
@@ -245,7 +245,8 @@ class Api::CredentialController < ApplicationController
     label = MiniMagick::Image.new(Rails.root.join("tmp/label.png"), "png")
     MiniMagick::Tool::Magick.new do |m|
       m.size "#{w}x#{(h / 5.9).round}"
-      m.canvas "white"
+      # m.canvas "white"
+      m.xc "none"    # fondo transparente
       m.gravity "north"
       m.font gotham_font.to_s
       m.pointsize (w * 7 / 100.0).round

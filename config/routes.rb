@@ -129,6 +129,8 @@ Rails.application.routes.draw do
   resources :people, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
+    get "imagenes_credenciales", to: "people#credential_images", on: :collection
+    post "upload_multiple_images", on: :collection
   end
 
   get "calendar/month", to: "calendar#month"

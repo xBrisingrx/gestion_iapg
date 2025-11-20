@@ -1,4 +1,5 @@
 class PeopleController < ApplicationController
+  require "zip"
   before_action :set_person, only: %i[ show edit update modal_disable disable ]
 
   # GET /people or /people.json
@@ -91,9 +92,13 @@ class PeopleController < ApplicationController
     render json: { person: person }
   end
 
+  def credential_images
+    @people = Person.actives
+  end
+
   def upload_multiple_images
     # recibimos un zip con muchas imagenes que van a ser usadas en el carnet
-    zip = params[:file]
+    zip = params[:zip_file]
 
     dir = Rails.root.join("public/uploads/#{SecureRandom.hex}")
     FileUtils.mkdir_p(dir)
@@ -106,17 +111,16 @@ class PeopleController < ApplicationController
         temp.write(entry.get_input_stream.read)
         temp.rewind
 
-        person = Person.find_by(cuil: entry.name)
-        if person 
+        person = Person.find_by(cuil: entry.name.to_i)
+        if !person.blank?
           person.images.attach(
             io: temp,
             filename: entry.name,
             content_type: Marcel::MimeType.for(entry.name)
           )
-        end
-      end
-    end
-
+        end # if
+      end # extract_files
+    end # open zip
     render json: { message: "exito" }
   end
 
