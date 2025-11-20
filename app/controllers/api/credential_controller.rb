@@ -204,7 +204,7 @@ class Api::CredentialController < ApplicationController
     cuil = person.cuil
     categoria = teorico.fleet_category.name
 
-    face = (!person.images.blank?) ? person.images.last : MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/no_face.png"))
+    face = (!person.images.blank?) ? MiniMagick::Image.read(person.images.last.download) : MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/no_face.png"))
     firma = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/firma.png"))
     logoecd = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/ecd.png"))
     logoiapgsur = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/logo-sur.png"))
