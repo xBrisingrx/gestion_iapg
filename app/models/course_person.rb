@@ -15,6 +15,7 @@ class CoursePerson < ApplicationRecord
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
   before_create :set_code
+  before_create :set_expiration_date
   # after_update :check_approved
 
   def assign_turn
@@ -268,5 +269,10 @@ class CoursePerson < ApplicationRecord
     else
       "Aprobado"
     end
+  end
+
+  def set_expiration_date
+    years_of_duration = self.course.duration
+    self.expiration_date = self.date + years_of_duration.years
   end
 end

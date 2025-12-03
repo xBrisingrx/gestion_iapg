@@ -164,17 +164,21 @@ class Api::CredentialController < ApplicationController
     data = decode["data"]
     person = Person.find_by(id: data["id"])
     course_people = person.course_people.where(approved: true)
-    teorico = course_people.joins(:unit).where(units: { category: "Teorico" }).last
-    if teorico.blank?
-      render json: { message: "no tiene cursos aprobados", error: true }
+    teorico = course_people.joins(:unit).where(expiration_date: ).where(units: { category: "Teorico" }).last
+    if teorico.blank? 
+      expiration_date = Date.today
+    else
+
+    end
+    start_date = Date.today - 6.month
+    practicos = course_people.joins(:unit).where(units: { category: " Practico" })
+    psicometrico = course_people.joins(:unit).where(units: { category: "Psicometrico" })
+    if teorico.blank? || practicos.blank? || psicometrico.black?
+      render json: { message: "Falta aprobar alguna de las instancias.", error: true }
     else
       render json: { message: "curso aprobado", error: false }
     end
   end
-
-  # def mostrar_credencial
-  #   render json: { message: "curso aprobado", error: false }
-  # end
 
   def mostrar_credencial
     # jwt = request.headers["HTTP_JWT"].split(" ").last
