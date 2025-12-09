@@ -158,22 +158,22 @@ class Api::CredentialController < ApplicationController
   end
 
   def validar
-    # debugger
     jwt = request.headers["Authorization"].split(" ").last
     decode = jwt_decode(jwt)
     data = decode["data"]
     person = Person.find_by(id: data["id"])
-    course_people = person.course_people.where(approved: true)
-    teorico = course_people.joins(:unit).where(expiration_date: ).where(units: { category: "Teorico" }).last
+    course_people = person.course_people
+    teorico = course_people.where(approved: true).where("expiration_date >= ? ", "#{Date.today}").joins(:unit).where(units: { category: "Teorico" }).last
     if teorico.blank? 
-      expiration_date = Date.today
+      credential_invalid = false
     else
-
+      limit_date = teorico.date - 6.month
+      practicos = course_people.where(approved: true).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Practico" })
+      psicometrico = course_people.where(attendance_status: :presence).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Psicometrico" })
+      credential_invalid = practicos.blank? || psicometrico.blank?
     end
-    start_date = Date.today - 6.month
-    practicos = course_people.joins(:unit).where(units: { category: " Practico" })
-    psicometrico = course_people.joins(:unit).where(units: { category: "Psicometrico" })
-    if teorico.blank? || practicos.blank? || psicometrico.black?
+    
+    if credential_invalid
       render json: { message: "Falta aprobar alguna de las instancias.", error: true }
     else
       render json: { message: "curso aprobado", error: false }
@@ -183,12 +183,19 @@ class Api::CredentialController < ApplicationController
   def mostrar_credencial
     # jwt = request.headers["HTTP_JWT"].split(" ").last
     person = Person.find_by(cuil: params[:c].to_i)
-    course_people = person.course_people.where(approved: true)
-    teorico = course_people.joins(:unit).where(units: { category: "Teorico" }).last
-    practicos = course_people.joins(:unit).where(units: { category: " 	Practico" })
-    psicometrico = course_people.joins(:unit).where(units: { category: "Psicometrico" })
+    course_people = person.course_people
+    teorico = course_people.where(approved: true).joins(:unit).where(units: { category: "Teorico" }).last
+    limit_date = teorico.date - 6.month
+    practicos = course_people.where(approved: true)
+                              .where("expiration_date >= ? ", "#{limit_date}")
+                              .joins(:unit)
+                                .where(units: { category: "Practico" })
+    psicometrico = course_people.where(attendance_status: :presence)
+                                .where("expiration_date >= ? ", "#{limit_date}")
+                                .joins(:unit)
+                                  .where(units: { category: "Psicometrico" })
     meses = [ nil, "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
-    credential_date = teorico.date + 2.years
+    credential_date = teorico.expiration_date
     w = (params[:w] || 1024).to_i - 10
     h = (params[:h] || 768).to_i
 
@@ -206,7 +213,7 @@ class Api::CredentialController < ApplicationController
 
     nombre = person.fullname
     cuil = person.cuil
-    categoria = teorico.fleet_category.name
+    categoria = practiso.map { |practico| categoria + "#{practico.fleet_category.name} - " }
 
     face = (!person.images.blank?) ? MiniMagick::Image.read(person.images.last.download) : MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/no_face.png"))
     firma = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/firma.png"))

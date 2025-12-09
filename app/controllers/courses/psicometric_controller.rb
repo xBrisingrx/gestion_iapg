@@ -1,6 +1,7 @@
 class Courses::PsicometricController < ApplicationController
   # este controlador lo usamos para registrar a una persona en un psicometrico de forma individual
   # generalmente es cuando desaprobaron o estuvieron ausentes
+  require "zip"
   def new
     @people = CoursePerson.personas_con_psicometrico_desaprobada_o_ausente
     @courses = CourseUnit

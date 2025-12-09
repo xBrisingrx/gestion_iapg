@@ -238,6 +238,8 @@ class CoursePerson < ApplicationRecord
     # tengo que buscarle la vuelta para no hacer todo este trabajo siempre
     course_people.each do |cp|
       unit_category = cp.unit.category
+      next if unit_category == "Psicometrico"
+      next if ( cp.scoring.nil? && cp.make_up_1.nil? && cp.make_up_2.nil? )
       if unit_category == "Teorico"
         number_approved = 80
       else
@@ -246,7 +248,13 @@ class CoursePerson < ApplicationRecord
       cp.make_up_1 = 0 if cp.make_up_1.nil?
       cp.make_up_2 = 0 if cp.make_up_2.nil?
       approved = (cp.scoring >= number_approved || cp.make_up_1 >= number_approved || cp.make_up_2 >= number_approved)
-      cp.update(approved: approved)
+      # si tiene nota registada es que la persona asistio, en ese caso actualizamos el estado
+      attendance_status = ( cp.scoring > 0 || cp.make_up_1 > 0 || cp.make_up_2 > 0 ) ? :presence : nil
+      if attendance_status.nil?
+        cp.update(approved: approved)
+      else
+        cp.update(approved: approved, attendance_status: attendance_status)
+      end
     end
   end
 
