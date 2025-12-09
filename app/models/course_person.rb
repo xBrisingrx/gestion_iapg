@@ -272,7 +272,7 @@ class CoursePerson < ApplicationRecord
   end
 
   def set_expiration_date
-    years_of_duration = self.course.duration
+    years_of_duration = self.course.years_of_duration
     self.expiration_date = self.date + years_of_duration.years
   end
 end
