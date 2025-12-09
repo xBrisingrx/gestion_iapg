@@ -84,7 +84,7 @@ class CoursesController < ApplicationController
   end
 
   def scoring
-    @course_types = CourseType.select(:id, :name).actives
+    @course_types = CourseType.select(:id, :name).actives.order(:name)
   end
 
   def by_course_type
