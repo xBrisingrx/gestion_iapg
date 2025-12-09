@@ -58,6 +58,7 @@ class Courses::PsicometricController < ApplicationController
             filename: entry.name,
             content_type: Marcel::MimeType.for(entry.name)
           )
+          person.update_attendance_status_last_psicometric
         end # if
       end # extract_files
     end # open zip

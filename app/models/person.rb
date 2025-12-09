@@ -33,6 +33,11 @@ class Person < ApplicationRecord
     [ "city", "province" ]
   end
 
+  def update_attendance_status_last_psicometric
+    last_psicometric = CoursePerson.where(person: self).joins(:unit).where(unit: { category: "Psicometrico" }).last
+    last_psicometric.update(attendance_status: :presence)
+  end
+
   private
   def set_province
     self.province = Province.find(self.city.province.id) if !self.city_id.blank?
