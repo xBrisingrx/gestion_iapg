@@ -117,18 +117,18 @@ class Api::ElearningController < ApplicationController
     end # end questions_answers each
 
     if person_deleted
-      message = ">.< desaprobado por errarle a una eliminatoria, tenga mas cuidado"
+      message = "Ah contestado mal una pregunta eliminatoria."
       porcent = 1
       status = false
       # render json: { message: "Desaprobado por errarle a una eliminatoria", correcto: 1, resultado: 0, estado: false, id: 1  }
     else
       porcent = questions_corrects*100/cant_questions
       if porcent >= 80
-        message = "Crack"
+        message = "Felicitaciones"
         status = true
         # render json: { message: "Crack", correcto: porcent, resultado: 1, estado: true  }
       else
-        message = ":( tenes que prestar mas atencion"
+        message = "Desaprobado"
         # render json: { message: "Fallido", correcto: porcent, resultado: 0, estado: false  }
       end
     end # end if person_deleted

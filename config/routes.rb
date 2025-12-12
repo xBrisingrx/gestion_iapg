@@ -56,6 +56,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get "modal_particular", to: "courses/theoric#modal_particular"
+  post "registrar_particular", to: "courses/theoric#registrar_particular"
+
   resources :courses, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member

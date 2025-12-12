@@ -27,4 +27,34 @@ class Courses::TheoricController < ApplicationController
       render json: "Registro exitoso", status: :ok
     end
   end
+
+  def modal_particular
+    @people = Person.actives.select(:id, :name, :last_name, :cuil)
+    @companies = Company.select(:id, :name, :cuit).actives.where(operator: true)
+  end
+
+  def registrar_particular
+    # agregamos una persona a un curso de teoria
+    company = Company.find_by(name: "Particular")
+    ActiveRecord::Base.transaction do
+      data = {
+        person_id: params[:person_id],
+        company: company,
+        manager: company.company_managers.first.person,
+        operator_id: params[:operator_id],
+        fleet_category_id: params[:fleet_category_id],
+        inscription_motive_id: params[:inscription_motive_id]
+      }
+      course_person_teoria = CoursePerson.new(data)
+      # course_person_teoria.date = params[:course][:date_teorico],
+      course_person_teoria.course_unit_id = params[:course][:teorico_id]
+      course_person_teoria.register_renovation
+    end # transaction
+    rescue ActiveRecord::StatementInvalid
+      render json: "bugssssss", status: :unprocessable_entity
+
+    if course_person_teoria
+      render json: "Registro exitoso", status: :ok
+    end
+  end
 end

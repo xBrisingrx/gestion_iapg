@@ -164,15 +164,23 @@ class Api::CredentialController < ApplicationController
     person = Person.find_by(id: data["id"])
     course_people = person.course_people
     teorico = course_people.where(approved: true).where("expiration_date >= ? ", "#{Date.today}").joins(:unit).where(units: { category: "Teorico" }).last
-    if teorico.blank? 
-      credential_invalid = false
+    if teorico.blank?
+      puts "no hay teoria valida"
+      credential_invalid = true
     else
-      limit_date = teorico.date - 6.month
-      practicos = course_people.where(approved: true).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Practico" })
-      psicometrico = course_people.where(attendance_status: :presence).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Psicometrico" })
-      credential_invalid = practicos.blank? || psicometrico.blank?
+        # company = Company.find_by(id: course_people.last.company_id)
+        # particular = company.name.downcase == "particular"
+        # if particular
+        #   puts "es particular"
+        #   credential_invalid = teorico.expiration_date < Date.today
+        # else
+        #   puts "no s particular"
+        limit_date = teorico.date - 6.month
+        practicos = course_people.where(approved: true).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Practico" })
+        psicometrico = course_people.where(attendance_status: :presence).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Psicometrico" })
+        credential_invalid = practicos.blank? || psicometrico.blank?
+      # end
     end
-    
     if credential_invalid
       render json: { message: "Falta aprobar alguna de las instancias.", error: true }
     else
@@ -213,7 +221,10 @@ class Api::CredentialController < ApplicationController
 
     nombre = person.fullname
     cuil = person.cuil
-    categoria = practiso.map { |practico| categoria + "#{practico.fleet_category.name} - " }
+    categoria = ""
+    practicos.each do |practico|
+      categoria = categoria + "#{practico.fleet_category.name} - "
+    end
 
     face = (!person.images.blank?) ? MiniMagick::Image.read(person.images.last.download) : MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/no_face.png"))
     firma = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/firma.png"))
