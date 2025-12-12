@@ -13,7 +13,7 @@
   </div>
   <%= render "shared/filter_form", url_path: price_courses_path %>
 </div>
-<% if @start_date !== "" %>
+<% if !@start_date.blank? %>
   <small>Precios válidos desde <%= date_format(@start_date) %> hasta <%= date_format(@end_date) %></small>
 <% end %>
 <%= turbo_frame_tag 'table', id: 'prices_table' do %>
