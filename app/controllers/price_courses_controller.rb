@@ -5,8 +5,9 @@ class PriceCoursesController < ApplicationController
   def index
     filter = PriceCourse.filter(params[:query])
     @pagy, @prices = pagy(filter)
-    @start_date = PriceCourse.last.start_date
-    @end_date = PriceCourse.last.end_date
+    last_price = PriceCourse.last
+    @start_date = (last_price.blank?) ? "" : last_price.start_date
+    @end_date = (last_price.blank?) ? "" : last_price.end_date
     authorize @prices
   end
 
