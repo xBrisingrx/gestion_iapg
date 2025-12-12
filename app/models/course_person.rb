@@ -151,15 +151,14 @@ class CoursePerson < ApplicationRecord
   end
 
   def scoring_theoric
+    # devuelvo la nota mas alta de las 3 instancias que tiene el teorico
     cp = CoursePerson
       .where(person: self.person, course: self.course)
       .joins(:unit)
       .where(units: { category: "Teorico" })
-    if !cp.blank?
-      cp.first.scoring
-    else
-      ""
-    end
+      .pluck(:scoring, :make_up_1, :make_up_2)
+    scoring = (cp.blank?) ? 0 : cp[0].max
+    scoring
   end
 
   def scoring_practica
@@ -239,7 +238,7 @@ class CoursePerson < ApplicationRecord
     course_people.each do |cp|
       unit_category = cp.unit.category
       next if unit_category == "Psicometrico"
-      next if ( cp.scoring.nil? && cp.make_up_1.nil? && cp.make_up_2.nil? )
+      next if cp.scoring.nil? && cp.make_up_1.nil? && cp.make_up_2.nil?
       if unit_category == "Teorico"
         number_approved = 80
       else
@@ -249,7 +248,7 @@ class CoursePerson < ApplicationRecord
       cp.make_up_2 = 0 if cp.make_up_2.nil?
       approved = (cp.scoring >= number_approved || cp.make_up_1 >= number_approved || cp.make_up_2 >= number_approved)
       # si tiene nota registada es que la persona asistio, en ese caso actualizamos el estado
-      attendance_status = ( cp.scoring > 0 || cp.make_up_1 > 0 || cp.make_up_2 > 0 ) ? :presence : nil
+      attendance_status = (cp.scoring > 0 || cp.make_up_1 > 0 || cp.make_up_2 > 0) ? :presence : nil
       if attendance_status.nil?
         cp.update(approved: approved)
       else
