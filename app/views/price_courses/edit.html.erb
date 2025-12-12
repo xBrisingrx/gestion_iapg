@@ -1,0 +1,12 @@
+<% content_for :title, "Editing price course" %>
+
+<h1>Editing price course</h1>
+
+<%= render "form", price_course: @price_course %>
+
+<br>
+
+<div>
+  <%= link_to "Show this price course", @price_course %> |
+  <%= link_to "Back to price courses", price_courses_path %>
+</div>

@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :price_courses, except: [ :destroy ]
   resources :course_hours_turns
   get "certificates/index"
   get "certificates/courses_by_type", to: "certificates#courses_by_type"

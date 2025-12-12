@@ -1,0 +1,42 @@
+<%= form_with(model: price_course, builder: BootstrapBuilder, data: { controller: "forms--price-course"}) do |form| %>
+  <table class="table">
+    <thead>
+      <tr>
+        <th><b>Tipo curso</b></th>
+        <th><b>Precio</b></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A partir de la fecha</td>
+        <td>
+          <input type="date"
+                  class="form-control form-control-sm" 
+                  name="price_course[start_date]" 
+                  id="price_course_start_date">
+        </td>
+      </tr>
+      <% @course_types.each_with_index do |course_type, index| %>
+        <input type="hidden" 
+                name="price_course[course_type_id][<%= index%>]" 
+                id="price_course_course_type_id[<%= index %>]" 
+                value="<%= course_type.id %>">
+        <tr>
+          <td><%= course_type.name %></td>
+          <td>
+            <input type="number" 
+                   name="price_course[price][<%= index%>]" 
+                   id="price_course_price[<%= index %>]"
+                   value="0"
+                   class="form-control form-control-sm">
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <div class='mt-2'>
+    <%= form.submit 'Guardar' %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+<% end %>
