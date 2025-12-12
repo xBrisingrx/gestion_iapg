@@ -10,7 +10,7 @@ class CoursePolicy < ApplicationPolicy
   end
 
   def index?
-    user.admin? || user.editor?
+    user.admin? || user.editor? || user.client?
   end
 
   def show?

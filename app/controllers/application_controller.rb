@@ -16,6 +16,10 @@ class ApplicationController < ActionController::Base
     def authenticate
       if session_record = Session.find_by_id(cookies.signed[:session_token])
         Current.session = session_record
+        puts "===============================#{Current.user.role}"
+        if current_user == 'client'
+          redirect_to clients_courses_path
+        end
       else
         redirect_to sign_in_path
       end

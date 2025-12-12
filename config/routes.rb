@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  namespace "clients" do
+    get "courses", to: "courses#index"
+  end
   resources :price_courses, except: [ :destroy ]
   resources :course_hours_turns
   get "certificates/index"
@@ -142,6 +145,8 @@ Rails.application.routes.draw do
   end
 
   get "calendar/month", to: "calendar#month"
+  get "calendar/admin", to: "calendar#admin"
+  get "calendar/clients", to: "calendar#clients"
   root "courses#index"
   draw(:authentication)
   draw(:errors)
