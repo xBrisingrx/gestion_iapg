@@ -103,6 +103,12 @@ class CoursePeopleController < ApplicationController
     @course_people = CoursePerson.by_course(params[:course_id])
   end
 
+  def show_survey
+    course_person = CoursePerson.find(params[:id])
+    @name = course_person.person.fullname
+    @surveys = Survey.where(person: course_person.person, course: course_person.course)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_person

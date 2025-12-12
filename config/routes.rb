@@ -82,6 +82,7 @@ Rails.application.routes.draw do
     end
     resources :turns, only: [ :index, :edit, :update ]
   end
+  get "show_survey", to: "course_people#show_survey"
   resources :instructors, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member

@@ -5,5 +5,11 @@
   <td><%= course_person.company.name %></td>
   <td><%= course_person.person.code %></td>
   <td><%= course_person.scoring_theoric %></td>
+  <td>
+    <%= link_to show_survey_path(id: course_person.id), 
+        class: "btn btn-info btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-pencil-square"></i>
+      <% end %>
+  </td>
   <%# <td>esto era por el covid</td> %>
 <% end %>
