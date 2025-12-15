@@ -3,4 +3,10 @@ class ClientsController < ApplicationController
     puts "\n\n\n ================================================== \n\n\n"
     puts current_user.role
   end
+
+  def new
+  end
+
+  def create
+  end
 end
