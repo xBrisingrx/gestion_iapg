@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   namespace "clients" do
     get "courses", to: "courses#index"
+    get "new_registration_course", to: "registration_course#new"
+    post "register_to_course", to: "registration_course#create"
   end
   resources :price_courses, except: [ :destroy ]
   resources :course_hours_turns
@@ -142,6 +144,7 @@ Rails.application.routes.draw do
     put "disable", on: :member
     get "imagenes_credenciales", to: "people#credential_images", on: :collection
     post "upload_multiple_images", on: :collection
+    get "by_cuil", on: :collection
   end
 
   get "calendar/month", to: "calendar#month"

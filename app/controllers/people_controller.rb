@@ -127,6 +127,15 @@ class PeopleController < ApplicationController
     render json: { message: "exito" }
   end
 
+  def by_cuil
+    person = Person.find_by(cuil: params[:cuil])
+    if person.blank?
+      render json: { name: '', cuil: '' }
+    else
+      render json: { name: person.fullname, id: person.id }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_person

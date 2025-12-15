@@ -3,9 +3,20 @@ class CoursePeopleController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @query = CoursePerson.by_course(params[:course_id])
+    if current_user.admin?
+      @query = CoursePerson.by_course(params[:course_id])
+    else
+      @query = CoursePerson.by_course_and_company(params[:course_id], current_user.company_id)
+      # debugger
+    end
     @course = Course.find(params[:course_id])
     @pagy, @course_people = pagy(@query)
+
+    if current_user.admin?
+      render :index
+    else
+      render :client_view
+    end
   end
 
   # GET /courses/1 or /courses/1.json

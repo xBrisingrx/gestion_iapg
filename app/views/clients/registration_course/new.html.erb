@@ -1,23 +1,24 @@
 <%= render "shared/modal", title: "Registrar a curso", fade_in: true do %>
   <%= form_with( url: clients_register_to_course_path,  builder: BootstrapBuilder, 
-    data: { controller: "forms--register-to-course forms--course-person", 
-      forms__register_to_course_target: "form" } ) do |form| %>
+    data: { controller: "forms--course-client forms--register-to-course", 
+      forms__course_client_target: "form" } ) do |form| %>
 
     <div class="form-group row mb-2">
     <%= form.label :person_id, "CUIL" %>
-    <div class="col-6">
-      <%= form.select :person_id, Person.select(:id, :name, :last_name, :cuil).actives.collect { |person| [ "#{person.fullname} - #{person.cuil}", person.id ] },
-        {:include_blank => "Seleccione persona"},
-        data: {controller: 'tselect',
-        }
-      %>
+    <%= form.number_field :cuil, data: {
+      forms__course_client_target: "cuil",
+      action: "forms--course-client#get_person_by_cuil"
+    } %>
+    <%= form.hidden_field :person_id, data: { forms__course_client_target: "personId" } %>
+    <div class="col-6 offset-3 my-2">
+      <input disabled=true class="form-control form-control-sm" data-forms--course-client-target="personName">
     </div>
   </div>
   
   <div class="form-group row mb-2">
     <%= form.label :operator_id, "Operadora" %>
     <div class="col-6">
-      <%= form.select :operator_id, Company.actives.where(operator: true).collect { |company| [ "#{company.name} - #{company.cuit}", company.id ] },
+      <%= form.select :operator_id, Company.actives.where(operator: true).collect { |company| [ "#{company.name}", company.id ] },
         {:include_blank => "Seleccione operadora"},
         data: {
           controller: 'tselect',

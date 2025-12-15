@@ -47,7 +47,7 @@ class CoursePerson < ApplicationRecord
           if course_type_unit.unit.category == "Practico"
             turn_id = self.practical_turn_id
           end
-
+          debugger
           # course_person.from_hour = set_hour(course_unit.unit_id, self.course_id, course_person.date, course_type_unit.shift_time)
           course_person.from_hour = set_turn(turn_id, course_person.date, course_type_unit.shift_time)
           course_person.to_hour = course_person.from_hour + course_type_unit.shift_time.minutes
@@ -114,6 +114,13 @@ class CoursePerson < ApplicationRecord
 
   def self.by_course(course_id)
     CoursePerson.where(course: course_id)
+      .includes(:person, :company)
+      .group(:person_id)
+      .order(people: { last_name: :asc })
+  end
+
+  def self.by_course_and_company(course_id, company_id)
+    CoursePerson.where(course: course_id, company_id: company_id)
       .includes(:person, :company)
       .group(:person_id)
       .order(people: { last_name: :asc })
