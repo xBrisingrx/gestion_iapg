@@ -1,13 +1,16 @@
 <div class="row justify-content-md-center">
-  <div class="col-lg-10 my-2">
+  <div class="col-lg-10 my-1">
     <!-- Card -->
     <div class="card card-shadow h-100">
         <div class="card-body">
-        <div class="mb-3">
-            <i class="bi-droplet fs-2 text-dark"></i>
-        </div>
-        <h4>Built with creativity</h4>
-        <p class="mb-0">We strive to embrace and drive change in our industry.</p>
+          <div class="row">
+            <div class="col-6">
+              <p class=""><b>Empresa: </b><%= current_user.company.name %></p>
+            </div>
+            <div class="col-6">
+              <p class=""><b>Referente: </b><%= current_user.person.fullname %></p>
+            </div>
+          </div>
         </div>
     </div>
     <!-- End Card -->

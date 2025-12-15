@@ -3,9 +3,13 @@ class CoursesController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @query = Course.ransack(params[:query])
-    @pagy, @courses = pagy(@query.result)
-    authorize @courses
+    if current_user.admin?
+      @query = Course.ransack(params[:query])
+      @pagy, @courses = pagy(@query.result)
+      authorize @courses
+    else
+      redirect_to clients_courses_path
+    end
   end
 
   # GET /courses/1 or /courses/1.json
