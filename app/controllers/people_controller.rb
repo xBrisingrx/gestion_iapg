@@ -94,8 +94,9 @@ class PeopleController < ApplicationController
 
   def credential_images
     # @query = Person.actives.ransack(params[:query])
-    filter = Person.actives.select(:name, :last_name, :cuil, :id).where("name LIKE ?", "%#{params[:name]}%")
-      .or(Person.actives.select(:name, :last_name, :cuil, :id).where("last_name LIKE ?", "%#{params[:name]}%"))
+    query = Person.actives.select(:name, :last_name, :cuil, :id, :email)
+    filter = query.where("name LIKE ?", "%#{params[:name]}%")
+      .or(query.where("last_name LIKE ?", "%#{params[:name]}%"))
     @pagy, @people = pagy(filter)
   end
 
@@ -124,7 +125,17 @@ class PeopleController < ApplicationController
         end # if
       end # extract_files
     end # open zip
-    render json: { message: "exito" }
+    respond_to do |format|
+      format.turbo_stream {
+          render turbo_stream: [            
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Carga exitosa", status_class: "primary" }),
+            turbo_stream.replace("form_images",
+              partial: "people/form_images")
+          ]
+        }
+    end
   end
 
   def by_cuil

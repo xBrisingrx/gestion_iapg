@@ -37,6 +37,11 @@ export default class extends Controller {
       this.selectPsicometricoTarget.src = `/courses/get_psicometricos?&date=${date}&course_id=${course_id}`
       document.querySelector("#course_date_teorico").value = date
     }
+
+    setTimeout(() => {
+      console.log("time out")
+      debugger
+    }, 1000);
   }
 
   set_date_practico() {

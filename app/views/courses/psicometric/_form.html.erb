@@ -1,0 +1,6 @@
+<%= turbo_frame_tag "psicometric_form" do %>
+    <%= form_with url: upload_files_courses_psicometric_index_path, local: true, multipart: true, builder: BootstrapBuilder do |f| %>
+    <%= f.file_field :zip_file %>
+    <%= f.submit %>
+    <% end %>
+<% end %>

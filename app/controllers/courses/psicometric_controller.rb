@@ -64,7 +64,17 @@ class Courses::PsicometricController < ApplicationController
       end # extract_files
     end # open zip
     respond_to do |format|
-      format.html { redirect_to carga_psicometricos_courses_psicometric_index_path, notice: "Company was successfully created." }
+      format.turbo_stream {
+          render turbo_stream: [            
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Carga exitosa", status_class: "primary" }),
+            turbo_stream.replace("psicometric_form",
+              partial: "courses/psicometric/form",)
+          ]
+        }
+      format.html { redirect_to carga_psicometricos_courses_psicometric_index_path, 
+        notice: "Company was successfully created." }
     end
   end
 end
