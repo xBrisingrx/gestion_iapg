@@ -1,4 +1,4 @@
-<%= render "shared/modal", title: "Inscribir a teoría", fade_in: true do %>
+<%= render "shared/modal", title: "Inscripcion para particular", fade_in: true do %>
   <%= form_with( url: registrar_particular_path,  builder: BootstrapBuilder, 
     data: { controller: "forms--register-to-course forms--course-person", 
       forms__register_to_course_target: "form" } ) do |form| %>
@@ -7,28 +7,6 @@
     <div class="col-6">
       <%= form.select :person_id, @people.collect { |person| [ "#{person.last_name} #{person.name} - #{person.cuil}", person.id ] },
         {:include_blank => "Seleccione persona"},
-        data: {controller: 'tselect',
-        }
-      %>
-    </div>
-  </div>
-
-  <div class="form-group row mb-2">
-    <%= form.label :operator_id, "Operadora" %>
-    <div class="col-6">
-      <%= form.select :operator_id, @companies.collect { |company| [ "#{company.name} - #{company.cuit}", company.id ] },
-        {:include_blank => "Seleccione operadora"},
-        data: {
-          controller: 'tselect',
-        }
-      %>
-    </div>
-  </div>
-  <div class="form-group row mb-2">
-    <%= form.label :fleet_category_id, "Flota" %>
-    <div class="col-6">
-      <%= form.select :fleet_category_id, FleetCategory.actives.collect { |fleet_category| [ fleet_category.name, fleet_category.id ] },
-        {:include_blank => "Seleccione categoría de flota"},
         data: {controller: 'tselect',
         }
       %>

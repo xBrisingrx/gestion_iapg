@@ -2,7 +2,7 @@ class Clients::RegistrationCourseController < ApplicationController
   def new;end
 
   def create
-    debugger
+    # debugger
     teorico = CourseUnit.find_by(id: params[:course][:teorico_id])
     course = Course.find_by(id: teorico.course_id)
     data = {
@@ -19,14 +19,14 @@ class Clients::RegistrationCourseController < ApplicationController
       course_person_teoria.course_unit_id = params[:course][:teorico_id]
       course_person_teoria.register_renovation
 
-      if params[:course][:date_practico].any?
+      if !params[:course][:date_practico].blank?
         course_person_practica = CoursePerson.new(data)
         course_person_practica.date = params[:course][:date_practico],
         course_person_practica.course_unit_id = params[:course][:practico_id]
         course_person_practica.register_renovation
       end
 
-      if params[:course][:date_psicometrico].any?
+      if !params[:course][:date_psicometrico].blank?
         course_person_psicometrico = CoursePerson.new(data)
         course_person_psicometrico.date = params[:course][:date_psicometrico],
         course_person_psicometrico.course_unit_id = params[:course][:psicometrico_id]

@@ -1,15 +1,17 @@
 <%= render "shared/modal", title: "Registrar a curso", fade_in: true do %>
   <%= form_with( url: clients_register_to_course_path,  builder: BootstrapBuilder, 
     data: { controller: "forms--course-client forms--register-to-course", 
-      forms__course_client_target: "form" } ) do |form| %>
+      forms__course_client_target: "form",
+      action: "forms--course-client#register" } ) do |form| %>
 
     <div class="form-group row mb-2">
     <%= form.label :person_id, "CUIL" %>
     <%= form.number_field :cuil, data: {
       forms__course_client_target: "cuil",
       action: "forms--course-client#get_person_by_cuil"
-    } %>
-    <%= form.hidden_field :person_id, data: { forms__course_client_target: "personId" } %>
+    }, required: true %>
+    <div class="offset-3 text-danger person_name"></div>
+    <%= form.hidden_field :person_id, data: { forms__course_client_target: "personId" }, required: true %>
     <div class="col-6 offset-3 my-2">
       <input disabled=true class="form-control form-control-sm" data-forms--course-client-target="personName">
     </div>
@@ -22,7 +24,8 @@
         {:include_blank => "Seleccione operadora"},
         data: {
           controller: 'tselect',
-        }
+        },
+        required: true
       %>
     </div>
   </div>
@@ -32,7 +35,8 @@
       <%= form.select :fleet_category_id, FleetCategory.actives.collect { |fleet_category| [ fleet_category.name, fleet_category.id ] },
         {:include_blank => "Seleccione categoría de flota"},
         data: {controller: 'tselect',
-        }
+        },
+        required: true
       %>
     </div>
   </div>
@@ -43,7 +47,8 @@
         {:include_blank => "Seleccione motivo"},
         data: {
           controller: 'tselect',
-        }
+        },
+        required: true
       %>
     </div>
   </div>
@@ -53,7 +58,7 @@
         <select name="course[type_fleet]" id="course_type_fleet"
           data-forms--register-to-course-target="filterCourses"
           data-action="change->forms--register-to-course#select_teoricos"
-          class="form-control form-control-sm">
+          class="form-control form-control-sm" required>
           <option value="">Seleccione ... </option>
           <option value="1" data-category="inicio" data-fleet="liviana" >Inicio liviano</option>
           <option value="2" data-category="inicio" data-fleet="pesada">Inicio pesado</option>

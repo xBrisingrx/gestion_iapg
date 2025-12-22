@@ -12,8 +12,16 @@ export default class extends Controller {
       fetch(`/people/by_cuil?cuil=${this.cuilTarget.value}`)
       .then(response => response.json())
       .then(data => {
-        this.personNameTarget.value = data.name
-        this.personIdTarget.value = data.id
+        const error = document.querySelector('.person_name')
+        if(data.name != '') {
+          this.personNameTarget.value = data.name
+          this.personIdTarget.value = data.id
+          error.innerHTML = ""
+          document.querySelector('input[type="submit"]').disabled = false
+        } else {
+          error.innerHTML = "Esta persona no esta registrada"
+          document.querySelector('input[type="submit"]').disabled = true
+        }
       })
     }
   }
@@ -26,29 +34,9 @@ export default class extends Controller {
     }
   }
 
-  select_practicos() {
-    const option_course_selected = this.filterCoursesTarget.selectedOptions[0]
-    const course_category = option_course_selected.dataset.category // categoria seleccionada [inicio/renovacion]
-    const fleet = option_course_selected.dataset.fleet // flota seleccionada [liviano/pesado]
-    const option_selected = this.courseTeoricoTarget.selectedOptions[0]
-    const date = option_selected.dataset.date
-    const course_id = option_selected.dataset.course
-    if(course_id != ""){
-      this.selectPracticoTarget.src = `/courses/get_cursos_practicos?&course_category=${course_category}&fleet=${fleet}&date=${date}&course_id=${course_id}`
-      this.selectPsicometricoTarget.src = `/courses/get_psicometricos?&date=${date}&course_id=${course_id}`
-      document.querySelector("#course_date_teorico").value = date
-    }
-  }
-
-  set_date_practico() {
-    const option_selected = this.coursePracticoTarget.selectedOptions[0]
-    console.log(option_selected.dataset.date)
-    document.querySelector("#course_date_practico").value = option_selected.dataset.date
-  }
-
-  set_date_psicometrico() {
-    const option_selected = this.coursePsicometricoTarget.selectedOptions[0]
-    console.log(option_selected.dataset.date)
-    document.querySelector("#course_date_psicometrico").value = option_selected.dataset.date
+  register(event) {
+    // event.preventDefault()
+    // event.stopPropagation()
+    
   }
 }
