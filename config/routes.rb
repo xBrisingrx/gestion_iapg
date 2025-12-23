@@ -84,6 +84,8 @@ Rails.application.routes.draw do
     post "change_turn", to: "courses#change_turn"
     resources :course_people, only: [ :index, :new, :create, :update ] do
       get "by_course", on: :collection
+      get "particular_modal", on: :collection
+      post "register_particular", on: :collection
     end
     resources :course_units, only: [ :new, :create ] do
       get "people_registered", to: "course_units#people_registered"

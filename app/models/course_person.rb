@@ -1,22 +1,26 @@
 class CoursePerson < ApplicationRecord
   belongs_to :course
   belongs_to :person
-  belongs_to :manager, class_name: "Person"
-  belongs_to :company
-  belongs_to :operator, class_name: "Company"
-  belongs_to :inscription_motive
-  belongs_to :fleet_category
+  belongs_to :manager, class_name: "Person", optional: true
+  belongs_to :company, optional: true
+  belongs_to :operator, class_name: "Company", optional: true
+  belongs_to :inscription_motive, optional: true
+  belongs_to :fleet_category, optional: true
   belongs_to :unit
   belongs_to :course_unit
   has_one :turn
 
   enum :attendance_status, [ :no_registeder, :presence, :absent, :no_documents ]
+  enum :quota_type, [ :company, :particular ]
 
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
   before_create :set_code
   before_create :set_expiration_date
   # after_update :check_approved
+
+  validate :check_introductory_course
+  validate :check_renovation_course
 
   def assign_turn
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
@@ -47,7 +51,6 @@ class CoursePerson < ApplicationRecord
           if course_type_unit.unit.category == "Practico"
             turn_id = self.practical_turn_id
           end
-          debugger
           # course_person.from_hour = set_hour(course_unit.unit_id, self.course_id, course_person.date, course_type_unit.shift_time)
           course_person.from_hour = set_turn(turn_id, course_person.date, course_type_unit.shift_time)
           course_person.to_hour = course_person.from_hour + course_type_unit.shift_time.minutes
@@ -288,5 +291,35 @@ class CoursePerson < ApplicationRecord
   def set_expiration_date
     years_of_duration = self.course.years_of_duration
     self.expiration_date = self.date + years_of_duration.years
+  end
+
+  def register_particular
+    course = self.course
+    teoria = CourseUnit.where(course: course).joins(:unit).where(units: { category: "Teorico" }).last
+    self.unit_id = teoria.unit_id
+    self.course_unit_id = teoria.id
+    self.quota_type = :particular
+    self.date = course.from_date
+    self.save
+  end
+
+  def check_introductory_course
+    # si el curso es de inicio, no deberia tener ningun curso hecho
+    # para poder anotarse
+    if self.course.course_type.category == "Inicio"
+      exist_course = CoursePerson.where(person: self.person, approved: true)
+      if exist_course.any?
+        errors.add(:person_id, "Esta persona ya tiene cursos realizados.")
+      end
+    end
+  end
+
+  def check_renovation_course
+    # si el curso es de renovacion, deberia tener ningun curso hecho
+    # para poder anotarse
+    if self.course.course_type.category == "Renovacion"
+      exist_course = CoursePerson.where(person: self.person, approved: true)
+      errors.add(:person_id, "Esta persona no ha hecho un inicio.") if exist_course.empty?
+    end
   end
 end

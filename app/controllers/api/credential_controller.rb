@@ -165,21 +165,16 @@ class Api::CredentialController < ApplicationController
     course_people = person.course_people
     teorico = course_people.where(approved: true).where("expiration_date >= ? ", "#{Date.today}").joins(:unit).where(units: { category: "Teorico" }).last
     if teorico.blank?
-      puts "no hay teoria valida"
       credential_invalid = true
     else
-        # company = Company.find_by(id: course_people.last.company_id)
-        # particular = company.name.downcase == "particular"
-        # if particular
-        #   puts "es particular"
-        #   credential_invalid = teorico.expiration_date < Date.today
-        # else
-        #   puts "no s particular"
+      if teorico.quota_type == "particular"
+        credential_invalid = false
+      else
         limit_date = teorico.date - 6.month
         practicos = course_people.where(approved: true).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Practico" })
         psicometrico = course_people.where(attendance_status: :presence).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Psicometrico" })
         credential_invalid = practicos.blank? || psicometrico.blank?
-      # end
+      end
     end
     if credential_invalid
       render json: { message: "Falta aprobar alguna de las instancias.", error: true }

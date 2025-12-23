@@ -1,0 +1,21 @@
+<%= render "shared/modal", title: "Registrar cupo particular", fade_in: true do %>
+  <%= form_with(model: [ @course, @course_person ],url: register_particular_course_course_people_path, builder: BootstrapBuilder, 
+      data: { controller: "forms--course-person" }) do |form| %>
+    <div class="form-group row mb-2">
+      <%= form.label :person_id, "Persona" %>
+      <div class="col-6">
+        <%= form.select :person_id, @people.collect { |person| [ "#{person.fullname} - #{person.cuil}", person.id ] },
+          {:include_blank => "Seleccione persona"},
+          data: {controller: 'tselect',
+            tselect_ids_value: [@course_person.person_id]
+          }
+        %>
+      </div>
+      <%= inline_error_for(:person_id, @course_person, "offset-3") %>
+    </div>
+    <div>
+      <%= form.submit "Guardar" %>
+      <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+    </div>
+  <% end %>
+<% end %>

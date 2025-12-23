@@ -1,0 +1,5 @@
+class AddQuotaTypeToCoursePeople < ActiveRecord::Migration[8.0]
+  def change
+    add_column :course_people, :quota_type, :integer, default: :company
+  end
+end

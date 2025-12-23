@@ -58,6 +58,7 @@ class CoursePeopleController < ApplicationController
         format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
         format.json { render :show, status: :created, location: @course_person }
       else
+        @units = @course.course_units.group(:unit_id)
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @course_person.errors, status: :unprocessable_entity }
       end
@@ -118,6 +119,38 @@ class CoursePeopleController < ApplicationController
     course_person = CoursePerson.find(params[:id])
     @name = course_person.person.fullname
     @surveys = Survey.where(person: course_person.person, course: course_person.course)
+  end
+
+  def particular_modal
+    @course = Course.find(params[:course_id])
+    @course_person = CoursePerson.new
+    @people = Person.select(:id, :name, :last_name, :cuil).actives
+  end
+
+  def register_particular
+    @course = Course.find(params[:course_id])
+    @course_person = @course.course_people.new(person_id: params[:course_person][:person_id])
+    respond_to do |format|
+      if @course_person.register_particular
+        format.turbo_stream {
+          render turbo_stream: [
+              turbo_stream.replace("toasts",
+                partial: "shared/toasts",
+                locals: { message: "Inscripción exitosa.", status_class: "primary" }),
+              turbo_stream.append("tbody_course_people",
+                partial: "course_people/course_person",
+                locals: { course_person: @course_person })
+          ]
+        }
+        format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
+        format.json { render :show, status: :created, location: @course_person }
+      else
+        debugger
+        @people = Person.select(:id, :name, :last_name, :cuil).actives
+        format.html { render :particular_modal, status: :unprocessable_entity }
+        format.json { render json: @course_person.errors, status: :unprocessable_entity }
+      end
+    end
   end
 
   private
