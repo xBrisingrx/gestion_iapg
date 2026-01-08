@@ -170,7 +170,7 @@ class Api::CredentialController < ApplicationController
       if teorico.quota_type == "particular"
         credential_invalid = false
       else
-        limit_date = teorico.date - 6.month
+        limit_date = teorico.date
         practicos = course_people.where(approved: true).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Practico" })
         psicometrico = course_people.where(attendance_status: :presence).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Psicometrico" })
         credential_invalid = practicos.blank? || psicometrico.blank?
@@ -188,7 +188,7 @@ class Api::CredentialController < ApplicationController
     person = Person.find_by(cuil: params[:c].to_i)
     course_people = person.course_people
     teorico = course_people.where(approved: true).joins(:unit).where(units: { category: "Teorico" }).last
-    limit_date = teorico.date - 6.month
+    limit_date = teorico.date
     practicos = course_people.where(approved: true)
                               .where("expiration_date >= ? ", "#{limit_date}")
                               .joins(:unit)
