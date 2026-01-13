@@ -35,7 +35,7 @@ class Person < ApplicationRecord
 
   def update_attendance_status_last_psicometric
     last_psicometric = CoursePerson.where(person: self).joins(:unit).where(unit: { category: "Psicometrico" }).last
-    last_psicometric.update(attendance_status: :presence)
+    last_psicometric.update(attendance_status: :presence, approved: true)
   end
 
   private

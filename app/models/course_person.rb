@@ -19,8 +19,8 @@ class CoursePerson < ApplicationRecord
   before_create :set_expiration_date
   # after_update :check_approved
 
-  validate :check_introductory_course
-  validate :check_renovation_course
+  # validate :check_introductory_course
+  # validate :check_renovation_course
 
   def assign_turn
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
@@ -289,7 +289,7 @@ class CoursePerson < ApplicationRecord
   end
 
   def set_expiration_date
-    years_of_duration = self.course.years_of_duration
+    years_of_duration = (self.company&.credential_years.blank?) ? self.course.years_of_duration : self.company.credential_years
     self.expiration_date = self.date + years_of_duration.years
   end
 
