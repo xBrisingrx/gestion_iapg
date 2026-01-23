@@ -1,6 +1,6 @@
 <h1>Cupos pendientes</h1>
 <div class="row justify-content-between mb-2">
-  <div class="col-6 col-md-4 col-lg-3">
+  <div class="offset-6 offset-md-8 col-6 col-md-4 col-lg-3">
     <%= search_form_for @query, url: payments_courses_path, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
       <div class="input-group input-group-sm">
         <span class="input-group-text">
@@ -21,11 +21,11 @@
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
-          <th>Curso</th>
-          <th>Persona</th>
-          <th>Empresa</th>
-          <th>Importe</th>
-          <th>Estado</th>
+          <th><%= sort_link(@query, :course_name, "Curso") %></th>
+          <th><%= sort_link(@query, :person_last_name, "Persona") %></th>
+          <th><%= sort_link(@query, :company_name, "Empresa") %></th>
+          <th><%= sort_link(@query, :price, "Importe") %></th>
+          <th><%= sort_link(@query, :pay_status, "Estado") %></th>
         </tr>
       </thead>
       <tbody id='tbody_companies'>
