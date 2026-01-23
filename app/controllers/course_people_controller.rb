@@ -153,6 +153,10 @@ class CoursePeopleController < ApplicationController
     end
   end
 
+  def modal_payments_statuses # mostramos un modal con los cursos persona y el estado, es un detalle de items a pagar
+    @course_people = CoursePerson.where(course_id: params[:course_id], person_id: params[:person_id])
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_person

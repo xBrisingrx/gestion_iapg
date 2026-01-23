@@ -9,6 +9,7 @@ class CoursePerson < ApplicationRecord
   belongs_to :unit
   belongs_to :course_unit
   has_one :turn
+  has_one :course_type, through: :course
 
   enum :attendance_status, [ :no_registeder, :presence, :absent, :no_documents ]
   enum :quota_type, [ :company, :particular ]
@@ -22,6 +23,15 @@ class CoursePerson < ApplicationRecord
 
   # validate :check_introductory_course
   # validate :check_renovation_course
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "active", "person_id", "manager_id", "course_id", "operator_id", "created_at", "inscription_motive_id", "fleet_category_id",
+      "unit_id", "id", "id_value", "turn_id", "course_unit_id","updated_at" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "person", "unit", "course", "course_unit", "turn", "course_type" ]
+  end
 
   def assign_turn
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
@@ -297,13 +307,23 @@ class CoursePerson < ApplicationRecord
     self.expiration_date = self.date + years_of_duration.years
   end
 
+  # def register_particular
+  #   course = self.course
+  #   teoria = CourseUnit.where(course: course).joins(:unit).where(units: { category: "Teorico" }).last
+  #   self.unit_id = teoria.unit_id
+  #   self.course_unit_id = teoria.id
+  #   self.quota_type = :particular
+  #   self.date = course.from_date
+  #   self.save
+  # end
+
   def register_particular
-    course = self.course
-    teoria = CourseUnit.where(course: course).joins(:unit).where(units: { category: "Teorico" }).last
-    self.unit_id = teoria.unit_id
-    self.course_unit_id = teoria.id
+    self.unit = self.course_unit.unit
+    self.course = self.course_unit.course
+    self.date = self.course_unit.date
+    self.price = self.unit.get_particular_price(self.course.room.headquarter.sectional.id)
     self.quota_type = :particular
-    self.date = course.from_date
+    self.date = self.course.from_date
     self.save
   end
 
@@ -325,5 +345,13 @@ class CoursePerson < ApplicationRecord
       exist_course = CoursePerson.where(person: self.person, approved: true)
       errors.add(:person_id, "Esta persona no ha hecho un inicio.") if exist_course.empty?
     end
+  end
+
+  def get_price # obtenemos el precio de todo el curso, no solo de este registro
+    unit_prices = 0
+    course_people = CoursePerson.where(course: self.course, person: self.person)
+
+    course_people.map { |course_person| unit_prices = unit_prices + course_person.price }
+    unit_prices
   end
 end

@@ -48,6 +48,10 @@ class Course < ApplicationRecord
     attributes["exam_id"].blank?
   end
 
+  def name
+     self.course_type.name 
+  end
+
   private
   def set_to_date
     days = self.course_type.days - 1

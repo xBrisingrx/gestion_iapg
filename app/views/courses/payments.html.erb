@@ -1,0 +1,56 @@
+<h1>Cupos pendientes</h1>
+<div class="row justify-content-between mb-2">
+  <div class="col-6 col-md-4 col-lg-3">
+    <%= search_form_for @query, url: payments_courses_path, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
+      <div class="input-group input-group-sm">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <%= form.search_field :course_type_name_or_person_name_or_person_last_name_cont,
+          placeholder: "Filtrar...",
+          class: "form-control form-control-sm",
+          autocomplete: "off",
+          data: { action: "input->filter#search" }
+        %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= turbo_frame_tag 'table', id: 'companies_table' do %>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>Curso</th>
+          <th>Persona</th>
+          <th>Empresa</th>
+          <th>Importe</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody id='tbody_companies'>
+        <% @course_people.each do |course_person| %>
+          <tr>
+            <td><%= course_person.course.name %></td>
+            <td><%= course_person.person.fullname %></td>
+            <td><%= course_person.company&.name %></td>
+            <td><%= "$#{course_person.get_price}.00" %></td>
+            <td>
+              <% if course_person.no_pay? %>
+                <%= link_to payments_statuses_path(course_id: course_person.course_id, person_id: course_person.person_id), 
+                  title: 'Estado de pago', 
+                  data: { turbo_frame: "modal"} do %>
+                  <span class='badge bg-warning'>Pendiente</span>
+                <% end %>
+              <% elsif course_person.pay? %>
+                <span class='badge bg-success'>Pagado</span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 4}) if @course_people.empty?%>
+      </tbody>
+    </table>
+    <%== pagy_bootstrap_nav(@pagy) %>
+  </div>
+<% end %>

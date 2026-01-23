@@ -231,6 +231,11 @@ class CoursesController < ApplicationController
       locals: { course_units: course_units, available_turns: available_turns, unit_id: unit_id, list: params[:list].to_i })
   end
 
+  def payments
+    @query = CoursePerson.ransack(params[:query])
+    @pagy, @course_people = pagy(@query.result.group(:course_id, :person_id).includes(:course), limit: 10)
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course

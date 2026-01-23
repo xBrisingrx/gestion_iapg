@@ -31,4 +31,10 @@ class Unit < ApplicationRecord
     price = (unit_prices.any?) ? unit_prices.last.price : 0
     price
   end
+
+  def get_particular_price(sectional_id)
+    unit_price = self.prices.actives.where(sectional_id: sectional_id, client_type: :particular)
+    price = (unit_price.any?) ? unit_price.last.price : 0
+    price
+  end
 end
