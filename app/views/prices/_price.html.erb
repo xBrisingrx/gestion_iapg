@@ -1,0 +1,8 @@
+<%= tag.tr id: dom_id(price) do %>
+  <td><%= price.unit.name %></td>
+  <td><%= "$#{price.price}.00" %></td>
+  <td><%= price.client_type %></td>
+  <td><%= (!price.company.blank?) ? price.company.name : "General" %></td>
+  <td><%= (!price.sectional.blank?) ? price.sectional.name : "General" %></td>
+  <td> Acciones </td>
+<% end %>

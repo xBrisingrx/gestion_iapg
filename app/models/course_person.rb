@@ -12,6 +12,7 @@ class CoursePerson < ApplicationRecord
 
   enum :attendance_status, [ :no_registeder, :presence, :absent, :no_documents ]
   enum :quota_type, [ :company, :particular ]
+  enum :pay_status, [ :no_pay, :pay, :free ] # free es cuando no corresponde que paguen
 
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
@@ -27,10 +28,12 @@ class CoursePerson < ApplicationRecord
     # return if self.course.course_type.days == 1 || CoursePerson.where(course_id: self.course_id, person_id: self.person_id).count > 1
     course_units = CourseUnit.where(course_id: self.course_id).group(:unit_id)
     course_date = self.course.from_date
+    sectional_id = self.course.room.headquarter.sectional.id
     ActiveRecord::Base.transaction do
       course_units.each do |course_unit|
         next if CoursePerson.find_by(course_id: self.course_id, person_id: self.person_id, unit_id: course_unit.unit_id)
         course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: course_unit.unit_id)
+        unit_price = course_unit.unit.get_price(sectional_id, self.company_id)
         course_person = CoursePerson.new(
           course_id: self.course_id,
           person_id: self.person_id,
@@ -40,7 +43,8 @@ class CoursePerson < ApplicationRecord
           inscription_motive_id: self.inscription_motive_id,
           fleet_category_id: self.fleet_category_id,
           unit_id: course_unit.unit_id,
-          course_unit_id: course_unit.id
+          course_unit_id: course_unit.id,
+          price: unit_price
         )
         course_person.date = course_date + (course_unit.day - 1).day
         if course_type_unit.is_by_turn

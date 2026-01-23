@@ -59,4 +59,10 @@ class CourseType < ApplicationRecord
   def self.unit_of_theory
     self.joins(:course_type_unit).where(units: { category: "Teorico" }).first
   end
+
+  def price
+    unit_prices = 0
+    self.units.group(:unit_id).map { |unit| unit_prices = unit_prices + unit.last_price }
+    unit_prices
+  end
 end

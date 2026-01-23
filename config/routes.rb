@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :prices
   namespace "clients" do
     get "courses", to: "courses#index"
     get "new_registration_course", to: "registration_course#new"

@@ -58,6 +58,7 @@ class CoursesController < ApplicationController
           ]
         }
       else
+        debugger
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @course.errors, status: :unprocessable_entity }
       end
