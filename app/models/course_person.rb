@@ -26,7 +26,7 @@ class CoursePerson < ApplicationRecord
 
   def self.ransackable_attributes(auth_object = nil)
     [ "active", "person_id", "manager_id", "course_id", "operator_id", "created_at", "inscription_motive_id", "fleet_category_id",
-      "unit_id", "id", "id_value", "turn_id", "course_unit_id","updated_at", "company_id" ]
+      "unit_id", "id", "id_value", "turn_id", "course_unit_id", "updated_at", "company_id" ]
   end
 
   def self.ransackable_associations(auth_object = nil)
@@ -348,10 +348,6 @@ class CoursePerson < ApplicationRecord
   end
 
   def get_price # obtenemos el precio de todo el curso, no solo de este registro
-    unit_prices = 0
-    course_people = CoursePerson.where(course: self.course, person: self.person)
-
-    course_people.map { |course_person| unit_prices = unit_prices + course_person.price }
-    unit_prices
+    CoursePerson.where(course: self.course, person: self.person).sum(:price)
   end
 end
