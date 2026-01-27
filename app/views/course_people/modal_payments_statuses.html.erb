@@ -19,6 +19,10 @@
           <td><%= "$#{course_person.price}.00" %></td>
         </tr>
       <% end %>
+        <tr>
+          <td class="text-end">Total:</td>
+          <td><%= "$#{@total}" %></td>
+        </tr>
     </tbody>
   </table>
 <% end %>
