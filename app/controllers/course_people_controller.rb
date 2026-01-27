@@ -155,6 +155,7 @@ class CoursePeopleController < ApplicationController
 
   def modal_payments_statuses # mostramos un modal con los cursos persona y el estado, es un detalle de items a pagar
     @course_people = CoursePerson.where(course_id: params[:course_id], person_id: params[:person_id])
+    @total = @course_people.sum(:price)
   end
 
   private
