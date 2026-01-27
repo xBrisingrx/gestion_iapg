@@ -158,6 +158,11 @@ class CoursePeopleController < ApplicationController
     @total = @course_people.sum(:price)
   end
 
+  def get_pendings
+    @course_people = CoursePerson.where(company_id: params[:company_id], pay_status: :no_pay)
+    render :pendings_table
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_person

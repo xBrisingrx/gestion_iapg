@@ -28,7 +28,7 @@ class Unit < ApplicationRecord
     if unit_prices.empty? # la empresa no tiene contrato, entonces no filtramos por empresa
       unit_prices = self.prices.actives.where(sectional_id: sectional_id, company_id: nil, client_type: :empresa)
     end
-    price = (unit_prices.any?) ? unit_prices.last.price : 0
+    price = (!unit_prices.empty?) ? unit_prices.last.price : 0
     price
   end
 

@@ -1,52 +1,34 @@
-<%= form_with(model: invoice) do |form| %>
-  <% if invoice.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
-
-      <ul>
-        <% invoice.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
+<%= form_with(model: invoice, builder: BootstrapBuilder, 
+      data: { controller: "forms--invoice", 
+        forms__invoice_target: "form",
+        action: "forms--invoice#register" }) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :date, "Fecha"%>
+    <%= form.date_field :date, required: true %>
+    <%= inline_error_for(:date, invoice, "offset-3") %>
+  </div>
+  
+  <div class="form-group row mb-2">
+    <%= form.label :company_id, "Cliente" %>
+    <div class="col-6">
+      <%= form.select :company_id, Company.actives.collect { |company| [ "#{company.name}", company.id ] },
+        {:include_blank => "Seleccione cliente"},
+        data: {
+          controller: "tselect",
+          forms__invoice_target: "company",
+          action: "forms--invoice#get_pendings",
+          tselect_ids_value: [invoice.company_id]
+        },
+        required: true
+      %>
     </div>
-  <% end %>
-
-  <div>
-    <%= form.label :number, style: "display: block" %>
-    <%= form.text_field :number %>
+    <%= inline_error_for(:company_id, invoice, "offset-3") %>
   </div>
 
-  <div>
-    <%= form.label :company_id, style: "display: block" %>
-    <%= form.text_field :company_id %>
-  </div>
+  <%= turbo_frame_tag "pendings", data: {forms__invoice_target: "items"} %>
 
-  <div>
-    <%= form.label :status, style: "display: block" %>
-    <%= form.number_field :status %>
-  </div>
-
-  <div>
-    <%= form.label :detail, style: "display: block" %>
-    <%= form.text_field :detail %>
-  </div>
-
-  <div>
-    <%= form.label :date, style: "display: block" %>
-    <%= form.date_field :date %>
-  </div>
-
-  <div>
-    <%= form.label :pay_date, style: "display: block" %>
-    <%= form.date_field :pay_date %>
-  </div>
-
-  <div>
-    <%= form.label :active, style: "display: block" %>
-    <%= form.checkbox :active %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="mt-2">
+    <%= form.submit "Guardar" %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
   </div>
 <% end %>

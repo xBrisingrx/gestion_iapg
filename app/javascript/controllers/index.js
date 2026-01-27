@@ -28,6 +28,9 @@ application.register("forms--course-person", Forms__CoursePersonController)
 import Forms__CourseTypeUnitController from "./forms/course_type_unit_controller"
 application.register("forms--course-type-unit", Forms__CourseTypeUnitController)
 
+import Forms__InvoiceController from "./forms/invoice_controller"
+application.register("forms--invoice", Forms__InvoiceController)
+
 import Forms__PersonController from "./forms/person_controller"
 application.register("forms--person", Forms__PersonController)
 

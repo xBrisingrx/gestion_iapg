@@ -1,0 +1,36 @@
+<%= turbo_frame_tag "pendings", data: {forms__invoice_target: "table_items"} do %>
+  <table id="table_items" class="table table-hover">
+    <thead class="thead-light">
+      <tr>
+        <th></th>
+        <th>Modulo</th>
+        <th>Importe</th>
+      </tr>
+    </thead>
+    <tbody id='tbody_course_people'>
+      <% @course_people.each do |course_person| %>
+        <tr>
+          <td>
+            <div class="form-check mb-3">
+              <input type="checkbox" id="formCheck11" class="form-check-input" data-action="forms--invoice#add_item" data-forms--invoice-target="add">
+              <label class="form-check-label" for="formCheck11"></label>
+            </div>
+          </td>
+          <td>
+            <% if course_person.particular? %>
+              <%= "#{course_person.unit.name} (Particular)" %>
+            <% else %>
+              <%= course_person.unit.name %>
+            <% end %>
+          </td>
+          <td><%= "$#{course_person.price}.00" %></td>
+          <input type="hidden" value="<%= course_person.price %>" class="item_price">
+        </tr>
+      <% end %>
+        <tr>
+          <td class="text-end">Total:</td>
+          <td id="total"></td>
+        </tr>
+    </tbody>
+  </table>
+<% end %>

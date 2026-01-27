@@ -1,6 +1,13 @@
 <h1>Cupos pendientes</h1>
+
 <div class="row justify-content-between mb-2">
-  <div class="offset-6 offset-md-8 col-6 col-md-4 col-lg-3">
+  <div class="col-4">
+      <%= link_to "Generar factura", 
+        new_invoice_path,
+        data: { turbo_frame: "modal"},
+        class: "btn btn-sm btn-primary" %>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
     <%= search_form_for @query, url: payments_courses_path, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
       <div class="input-group input-group-sm">
         <span class="input-group-text">
