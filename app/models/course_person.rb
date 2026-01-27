@@ -26,11 +26,11 @@ class CoursePerson < ApplicationRecord
 
   def self.ransackable_attributes(auth_object = nil)
     [ "active", "person_id", "manager_id", "course_id", "operator_id", "created_at", "inscription_motive_id", "fleet_category_id",
-      "unit_id", "id", "id_value", "turn_id", "course_unit_id","updated_at" ]
+      "unit_id", "id", "id_value", "turn_id", "course_unit_id","updated_at", "company_id" ]
   end
 
   def self.ransackable_associations(auth_object = nil)
-    [ "person", "unit", "course", "course_unit", "turn", "course_type" ]
+    [ "person", "unit", "course", "course_unit", "turn", "course_type", "company" ]
   end
 
   def assign_turn
