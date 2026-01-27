@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :invoices
   resources :prices
   namespace "clients" do
     get "courses", to: "courses#index"
