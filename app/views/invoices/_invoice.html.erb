@@ -1,37 +1,28 @@
-<div id="<%= dom_id invoice %>">
-  <p>
-    <strong>Number:</strong>
-    <%= invoice.number %>
-  </p>
+<%= tag.tr id: dom_id(invoice) do %>
+  <td><%= invoice.number %></td>
+  <td><%= date_format invoice.date %></td>
+  <td><%= invoice.company.name %></td>
+  <td><%= "$#{invoice.total}.00" %></td>
+  <td>
+    <%if invoice.status == "Pagado"%>
+      <span class='badge bg-success'><%= invoice.status %></span>
+    <% elsif invoice.status == "Pagado a confirmar"%>
+      <span class='badge bg-warning' title="<%= invoice.detail %>"><%= invoice.status %></span>
+    <% end %>
+  </td>
+  <td>
+      <%= link_to generate_pdf_invoice_path(invoice), 
+        class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
+        title: 'Ver factura', 
+        target: "_blank" do %>
+        <i class="bi bi-brush"></i>
+      <% end %>
 
-  <p>
-    <strong>Company:</strong>
-    <%= invoice.company_id %>
-  </p>
-
-  <p>
-    <strong>Status:</strong>
-    <%= invoice.status %>
-  </p>
-
-  <p>
-    <strong>Detail:</strong>
-    <%= invoice.detail %>
-  </p>
-
-  <p>
-    <strong>Date:</strong>
-    <%= invoice.date %>
-  </p>
-
-  <p>
-    <strong>Pay date:</strong>
-    <%= invoice.pay_date %>
-  </p>
-
-  <p>
-    <strong>Active:</strong>
-    <%= invoice.active %>
-  </p>
-
-</div>
+      <%= link_to edit_invoice_path(invoice), 
+        class: "btn btn-info btn-sm btn-sm btn-icon text-white",
+        title: 'Registrar pago',
+        data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-cash-stack"></i>
+      <% end %>
+  </td>
+<% end %>

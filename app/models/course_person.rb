@@ -13,7 +13,7 @@ class CoursePerson < ApplicationRecord
 
   enum :attendance_status, [ :no_registeder, :presence, :absent, :no_documents ]
   enum :quota_type, [ :company, :particular ]
-  enum :pay_status, [ :no_pay, :pay, :free ] # free es cuando no corresponde que paguen
+  enum :pay_status, [ :no_pay, :pay, :free, :invoiced ] # free es cuando no corresponde que paguen
 
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
@@ -26,7 +26,7 @@ class CoursePerson < ApplicationRecord
 
   def self.ransackable_attributes(auth_object = nil)
     [ "active", "person_id", "manager_id", "course_id", "operator_id", "created_at", "inscription_motive_id", "fleet_category_id",
-      "unit_id", "id", "id_value", "turn_id", "course_unit_id", "updated_at", "company_id" ]
+      "unit_id", "id", "id_value", "turn_id", "course_unit_id", "updated_at", "company_id", "status", "pay_status" ]
   end
 
   def self.ransackable_associations(auth_object = nil)
@@ -54,7 +54,8 @@ class CoursePerson < ApplicationRecord
           fleet_category_id: self.fleet_category_id,
           unit_id: course_unit.unit_id,
           course_unit_id: course_unit.id,
-          price: unit_price
+          price: unit_price,
+          status: "Pendiente"
         )
         course_person.date = course_date + (course_unit.day - 1).day
         if course_type_unit.is_by_turn
@@ -348,6 +349,6 @@ class CoursePerson < ApplicationRecord
   end
 
   def get_price # obtenemos el precio de todo el curso, no solo de este registro
-    CoursePerson.where(course: self.course, person: self.person).sum(:price)
+    CoursePerson.where(course: self.course, person: self.person).where.not(pay_status: :free).sum(:price)
   end
 end

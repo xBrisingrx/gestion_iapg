@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :invoices
+  resources :invoices do
+    get "generate_pdf", on: :member
+  end
   resources :prices
   namespace "clients" do
     get "courses", to: "courses#index"

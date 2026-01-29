@@ -35,6 +35,10 @@
         </div>
       </div>
     </section>
+    <div class="form-check mb-2">
+      <%= form.check_box :is_free, class: "form-check-input" %>
+      <%= form.label :is_free, "Bonificado" %>
+    </div>
     <%= form.submit "Guardar" %>
     <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
   <% end %>

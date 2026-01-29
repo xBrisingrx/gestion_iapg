@@ -13,7 +13,7 @@
         <span class="input-group-text">
           <i class="bi bi-search"></i>
         </span>
-        <%= form.search_field :company_name_or_course_type_name_or_person_name_or_person_last_name_cont,
+        <%= form.search_field :company_name_or_course_type_name_or_person_name_or_person_last_name_or_status_cont,
           placeholder: "Filtrar...",
           class: "form-control form-control-sm",
           autocomplete: "off",
@@ -32,7 +32,7 @@
           <th><%= sort_link(@query, :person_last_name, "Persona") %></th>
           <th><%= sort_link(@query, :company_name, "Empresa") %></th>
           <th><%= sort_link(@query, :price, "Importe") %></th>
-          <th><%= sort_link(@query, :pay_status, "Estado") %></th>
+          <th><%= sort_link(@query, :status, "Estado") %></th>
         </tr>
       </thead>
       <tbody id='tbody_companies'>
@@ -52,10 +52,12 @@
                 <%= link_to payments_statuses_path(course_id: course_person.course_id, person_id: course_person.person_id), 
                   title: 'Estado de pago', 
                   data: { turbo_frame: "modal"} do %>
-                  <span class='badge bg-warning'>Pendiente</span>
+                  <span class='badge bg-warning'><%= course_person.status %></span>
                 <% end %>
               <% elsif course_person.pay? %>
-                <span class='badge bg-success'>Pagado</span>
+                <span class='badge bg-success'><%= course_person.status %></span>
+              <% elsif course_person.invoiced? %>
+                <span class='badge bg-info'><%= course_person.status %></span>
               <% end %>
             </td>
           </tr>

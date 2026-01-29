@@ -16,7 +16,13 @@
               <%= course_person.unit.name %>
             <% end %>
           </td>
-          <td><%= "$#{course_person.price}.00" %></td>
+          <td>
+            <% if course_person.free? %>
+              <span class='badge bg-info'>Bonificado</span>
+            <% else %>
+              <%= "$#{course_person.price}.00" %>
+            <% end %>
+          </td>
         </tr>
       <% end %>
         <tr>

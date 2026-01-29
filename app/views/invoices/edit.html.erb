@@ -1,12 +1,26 @@
-<% content_for :title, "Editing invoice" %>
+<%= render "shared/modal", title: "Registrar pago", fade_in: true do %>
+  <%= form_with(model: @invoice, builder: BootstrapBuilder) do |form| %>
+    <div class="form-group row mb-2">
+      <%= form.label :status, "Ciudad" %>
+      <div class="col-6">
+        <%= form.select :status, ["Pagado", "Pagado a confirmar"].each { |pago| [ pago, pago ] },
+          {:include_blank => "Seleccione estado de pago"},
+          data: { controller: 'tselect',
+            tselect_ids_value: [@invoice.status]
+          }
+        %>
+      </div>
+      <%= inline_error_for(:status, @invoice, "offset-3") %>
+    </div>
 
-<h1>Editing invoice</h1>
+    <div class="form-group row mb-2">
+      <%= form.text_area :detail, placeholder: "Observacion" %>
+      <%= inline_error_for(:detail, @invoice, "offset-3") %>
+    </div>
 
-<%= render "form", invoice: @invoice %>
-
-<br>
-
-<div>
-  <%= link_to "Show this invoice", @invoice %> |
-  <%= link_to "Back to invoices", invoices_path %>
-</div>
+    <div class='mt-2'>
+      <%= form.submit 'Guardar' %>
+      <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+  <% end %>
+<% end %>

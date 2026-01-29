@@ -22,7 +22,8 @@ class Courses::PsicometricController < ApplicationController
         manager_id: course_person.manager_id,
         operator_id: course_person.operator_id,
         fleet_category_id: course_person.fleet_category_id,
-        inscription_motive_id: course_person.inscription_motive_id
+        inscription_motive_id: course_person.inscription_motive_id,
+        pay_status: (params[:is_free]) ? :free : :no_pay
       }
       course_person_psicometrico = CoursePerson.new(data)
       course_person_psicometrico.date = params[:course][:date_psicometrico],

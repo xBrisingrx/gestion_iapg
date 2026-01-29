@@ -25,4 +25,28 @@ export default class extends Controller {
     }
     document.getElementById("total").innerText = `$${sumatoria}.00`
   }
+
+  submit(event) {
+    event.preventDefault()
+    let form = new FormData()
+    form.append(`invoice[date]`, document.getElementById("invoice_date").value)
+    form.append(`invoice[company_id]`, document.getElementById("invoice_company_id").value)
+    const course_people = document.querySelectorAll(".course_person")
+    for (let i = 0; i < course_people.length; i++) {
+      if (course_people[i].querySelector(".form-check-input").checked) {
+        const course_person_id = course_people[i].querySelector("#course_person_id").value
+        form.append(`invoice[invoice_items_attributes][${i}][course_person_id]`, course_person_id)
+      }
+    }
+    fetch("/invoices", {
+      method: "POST",
+      headers: {           
+        'X-CSRF-Token': document.getElementsByName('csrf-token')[0].content,
+      },
+      body: form
+    })
+    .then( response => response.json() )
+    .then( data => window.location.reload() )
+    .catch( error => console.error('error', 'Ocurrio un error') )
+  }
 }

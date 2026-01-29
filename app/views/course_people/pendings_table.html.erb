@@ -3,18 +3,23 @@
     <thead class="thead-light">
       <tr>
         <th></th>
+        <th>Curso</th>
         <th>Modulo</th>
+        <th>Persona</th>
         <th>Importe</th>
       </tr>
     </thead>
     <tbody id='tbody_course_people'>
       <% @course_people.each do |course_person| %>
-        <tr>
+        <tr class="course_person">
           <td>
             <div class="form-check mb-3">
               <input type="checkbox" id="formCheck11" class="form-check-input" data-action="forms--invoice#add_item" data-forms--invoice-target="add">
               <label class="form-check-label" for="formCheck11"></label>
             </div>
+          </td>
+          <td>
+            <%= course_person.course.course_type.name %>
           </td>
           <td>
             <% if course_person.particular? %>
@@ -23,8 +28,12 @@
               <%= course_person.unit.name %>
             <% end %>
           </td>
+          <td>
+            <%= course_person.person.fullname %>
+          </td>
           <td><%= "$#{course_person.price}.00" %></td>
           <input type="hidden" value="<%= course_person.price %>" class="item_price">
+          <input type="hidden" value="<%= course_person.id %>" id="course_person_id">
         </tr>
       <% end %>
         <tr>

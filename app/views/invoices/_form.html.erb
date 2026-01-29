@@ -1,7 +1,7 @@
 <%= form_with(model: invoice, builder: BootstrapBuilder, 
       data: { controller: "forms--invoice", 
         forms__invoice_target: "form",
-        action: "forms--invoice#register" }) do |form| %>
+        action: "forms--invoice#submit" }) do |form| %>
   <div class="form-group row mb-2">
     <%= form.label :date, "Fecha"%>
     <%= form.date_field :date, required: true %>
