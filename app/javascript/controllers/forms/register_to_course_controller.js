@@ -57,4 +57,11 @@ export default class extends Controller {
     const option_selected = this.coursePsicometricoTarget.selectedOptions[0]
     document.querySelector("#course_date_psicometrico").value = option_selected.dataset.date
   }
+
+  select_solo_practicos(event) {
+    const fleet = event.target.value
+    if (fleet != "") {
+      this.selectPracticoTarget.src = `/courses/practices/get_practices?&fleet=${fleet}`
+    }
+  }
 }

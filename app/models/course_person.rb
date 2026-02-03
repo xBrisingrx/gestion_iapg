@@ -149,7 +149,7 @@ class CoursePerson < ApplicationRecord
     self.course = self.course_unit.course
     self.date = self.course_unit.date
     sectional_id = self.course.room.headquarter.sectional.id
-    self.price = self.unit.get_price(sectional_id, self.company_id)
+    self.price = (self.is_free) ? 0 : self.unit.get_price(sectional_id, self.company_id)
     course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.course_unit.unit_id)
     if course_type_unit.is_by_turn
       self.from_hour = set_hour(course_unit.unit_id, self.course_id, self.date, course_type_unit.shift_time)
@@ -351,7 +351,7 @@ class CoursePerson < ApplicationRecord
   end
 
   def get_price # obtenemos el precio de todo el curso, no solo de este registro
-    CoursePerson.where(course: self.course, person: self.person).where.not(pay_status: :free).sum(:price)
+    CoursePerson.where(course: self.course, person: self.person).where(is_free: false).sum(:price)
   end
 
   def check_status

@@ -56,7 +56,9 @@ Rails.application.routes.draw do
     end
   end
   namespace :courses do
-    resources :practices, only: [ :new, :create ]
+    resources :practices, only: [ :new, :create ] do
+      get "get_practices", to: "get_practices", on: :collection
+    end
     resources :registration
     resources :in_company, only: [ :new, :create ]
     resources :theoric, only: [ :new, :create ]
@@ -97,6 +99,7 @@ Rails.application.routes.draw do
     end
     resources :turns, only: [ :index, :edit, :update ]
     get "payments", on: :collection
+    get "people_registered", on: :member
   end
   get "payments_statuses", to: "course_people#modal_payments_statuses"
   get "show_survey", to: "course_people#show_survey"

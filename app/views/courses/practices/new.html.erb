@@ -1,5 +1,5 @@
-<%= render "shared/modal", title: "Inscribir a teoría", fade_in: true do %>
-  <%= form_with( url: courses_theoric_index_path,  builder: BootstrapBuilder, 
+<%= render "shared/modal", title: "Inscribir a practica", fade_in: true do %>
+  <%= form_with( url: courses_practices_path,  builder: BootstrapBuilder, 
     data: { controller: "forms--register-to-course forms--course-person", 
       forms__register_to_course_target: "form" } ) do |form| %>
     <div class="form-group row mb-2">
@@ -69,16 +69,16 @@
       <%= form.label "Selecciona flota y tipo de curso" %>
       <div class="col-4">
         <select name="course[type_fleet]" id="course_type_fleet"
-          data-forms--register-to-course-target="filterCourses"
-          data-action="change->forms--register-to-course#select_practicos"
+          data-forms--register-to-course-target="typeFleet"
+          data-action="change->forms--register-to-course#select_solo_practicos"
           class="form-control form-control-sm">
           <option value="">Seleccione ... </option>
-          <option value="1" data-category="inicio" data-fleet="liviana" >Liviano</option>
-          <option value="2" data-category="inicio" data-fleet="pesada">Pesado</option>
+          <option value="Liviana" data-category="inicio" data-fleet="liviana" >Liviano</option>
+          <option value="Pesada" data-category="inicio" data-fleet="pesada">Pesado</option>
         </select>
       </div>
     </div>
-    <input type="hidden" name="course[date_teorico]" id="course_date_teorico">
+    <input type="hidden" name="course[date_practico]" id="course_date_practico">
     <section class="mb-2">
       <%= turbo_frame_tag "courses", data: {forms__register_to_course_target: "selectPractico"} %>
     </section>
