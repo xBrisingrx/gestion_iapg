@@ -23,7 +23,7 @@ class Courses::PsicometricController < ApplicationController
         operator_id: course_person.operator_id,
         fleet_category_id: course_person.fleet_category_id,
         inscription_motive_id: course_person.inscription_motive_id,
-        pay_status: (params[:is_free]) ? :free : :no_pay
+        is_free: params[:is_free]
       }
       course_person_psicometrico = CoursePerson.new(data)
       course_person_psicometrico.date = params[:course][:date_psicometrico],
@@ -66,7 +66,7 @@ class Courses::PsicometricController < ApplicationController
     end # open zip
     respond_to do |format|
       format.turbo_stream {
-          render turbo_stream: [            
+          render turbo_stream: [
             turbo_stream.replace("toasts",
               partial: "shared/toasts",
               locals: { message: "Carga exitosa", status_class: "primary" }),
@@ -74,7 +74,7 @@ class Courses::PsicometricController < ApplicationController
               partial: "courses/psicometric/form",)
           ]
         }
-      format.html { redirect_to carga_psicometricos_courses_psicometric_index_path, 
+      format.html { redirect_to carga_psicometricos_courses_psicometric_index_path,
         notice: "Company was successfully created." }
     end
   end

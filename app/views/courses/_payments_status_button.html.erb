@@ -1,0 +1,11 @@
+<% if status == "Pendiente" %>
+  <%= link_to payments_statuses_path(course_id: course_id, person_id: person_id), 
+    title: 'Estado de pago', 
+    data: { turbo_frame: "modal"} do %>
+    <span class='badge bg-warning'><%= status %></span>
+<% end %>
+<% elsif status == "Pagado" %>
+  <span class='badge bg-success'><%= status %></span>
+<% elsif status == "Facturado" %>
+  <span class='badge bg-info'><%= status %></span>
+<% end %>

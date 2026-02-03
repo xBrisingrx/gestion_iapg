@@ -48,17 +48,12 @@
             <td><%= course_person.company&.name %></td>
             <td><%= "$#{course_person.get_price}.00" %></td>
             <td>
-              <% if course_person.no_pay? %>
-                <%= link_to payments_statuses_path(course_id: course_person.course_id, person_id: course_person.person_id), 
-                  title: 'Estado de pago', 
-                  data: { turbo_frame: "modal"} do %>
-                  <span class='badge bg-warning'><%= course_person.status %></span>
-                <% end %>
-              <% elsif course_person.pay? %>
-                <span class='badge bg-success'><%= course_person.status %></span>
-              <% elsif course_person.invoiced? %>
-                <span class='badge bg-info'><%= course_person.status %></span>
-              <% end %>
+              <%= render(partial: "courses/payments_status_button" , 
+                locals: { 
+                  status: course_person.check_status, 
+                  course_id: course_person.course_id, 
+                  person_id: course_person.person_id 
+                }) %>
             </td>
           </tr>
         <% end %>

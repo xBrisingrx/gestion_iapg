@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     end
   end
   namespace :courses do
+    resources :practices, only: [ :new, :create ]
     resources :registration
     resources :in_company, only: [ :new, :create ]
     resources :theoric, only: [ :new, :create ]

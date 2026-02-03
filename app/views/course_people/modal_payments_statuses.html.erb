@@ -17,7 +17,7 @@
             <% end %>
           </td>
           <td>
-            <% if course_person.free? %>
+            <% if course_person.is_free %>
               <span class='badge bg-info'>Bonificado</span>
             <% else %>
               <%= "$#{course_person.price}.00" %>

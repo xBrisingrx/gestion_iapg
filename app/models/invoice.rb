@@ -6,8 +6,17 @@ class Invoice < ApplicationRecord
 
   before_create :generate_number
 
+  def self.ransackable_attributes(auth_object = nil)
+    [ "id", "number", "status", "company_id", "date", "created_at",
+    "id_value", "updated_at" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "company" ]
+  end
+
   def total
-    self.course_people.sum(:price)  
+    self.course_people.sum(:price)
   end
 
   private

@@ -1,6 +1,21 @@
-<h1>Salas</h1>
+<h1>Facturas</h1>
 <div class="row justify-content-between mb-2">
   <div class="col-4">
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <%= search_form_for @query, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
+      <div class="input-group input-group-sm">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <%= form.search_field :number_or_company_name_or_status_cont,
+          placeholder: "Filtrar...",
+          class: "form-control form-control-sm",
+          autocomplete: "off",
+          data: { action: "input->filter#search" }
+        %>
+      </div>
+    <% end %>
   </div>
 </div>
 <%= turbo_frame_tag 'table', id: 'invoices_table' do %>
@@ -8,11 +23,11 @@
     <table class="table table-hover">
       <thead class="thead-light">
         <tr>
-          <th>#</th>
-          <th>Fecha</th>
-          <th>Empresa</th>
-          <th>Importe</th>
-          <th>Estado</th>
+          <th><%= sort_link(@query, :number, "#") %></th>
+          <th><%= sort_link(@query, :date, "Fecha") %></th>
+          <th><%= sort_link(@query, :company_name, "Empresa") %></th>
+          <th><%= sort_link(@query, :price, "Importe") %></th>
+          <th><%= sort_link(@query, :status, "Estado") %></th>
           <th>Acciones</th>
         </tr>
       </thead>

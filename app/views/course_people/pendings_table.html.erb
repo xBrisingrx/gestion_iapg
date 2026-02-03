@@ -31,7 +31,13 @@
           <td>
             <%= course_person.person.fullname %>
           </td>
-          <td><%= "$#{course_person.price}.00" %></td>
+          <td>
+            <% if course_person.is_free %>
+              <span class='badge bg-info'>Bonificado</span>
+            <% else %>
+              <%= "$#{course_person.price}.00" %>
+            <% end %>
+          </td>
           <input type="hidden" value="<%= course_person.price %>" class="item_price">
           <input type="hidden" value="<%= course_person.id %>" id="course_person_id">
         </tr>

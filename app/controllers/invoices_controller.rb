@@ -3,7 +3,8 @@ class InvoicesController < ApplicationController
 
   # GET /invoices or /invoices.json
   def index
-    @invoices = Invoice.all
+    @query = Invoice.ransack(params[:query])
+    @pagy, @invoices = pagy(@query.result)
   end
 
   # GET /invoices/1 or /invoices/1.json
@@ -75,13 +76,13 @@ class InvoicesController < ApplicationController
     pdf.image Rails.root.join("app/assets/images/logo.png")
     pdf.move_down 5
     pdf.text "Razon social: #{invoice.company.name}                  CUIT: #{invoice.company.cuit}", align: :left, size: 12
-    table_data = [["Nombre y apellido", "Fecha", "Modulo","Sede", "Valor"]] +
-                      invoice_items.map { |u| [u.person.fullname, u.course_person.date.strftime("%d-%m-%y"), u.course_person.unit.name,u.course.room.headquarter.name, "$#{u.course_person.price}.00"] }
+    table_data = [ [ "Nombre y apellido", "Fecha", "Modulo", "Sede", "Valor" ] ] +
+                      invoice_items.map { |u| [ u.person.fullname, u.course_person.date.strftime("%d-%m-%y"), u.course_person.unit.name, u.course.room.headquarter.name, "$#{u.course_person.price}.00" ] }
     pdf.move_down 12
     pdf.table(table_data, header: true, width: pdf.bounds.width) do
       row(0).font_style = :bold
-      self.row_colors = ["DDDDDD", "FFFFFF"]
-      self.cell_style = { borders: [:top, :bottom, :left, :right], padding: 5 }
+      self.row_colors = [ "DDDDDD", "FFFFFF" ]
+      self.cell_style = { borders: [ :top, :bottom, :left, :right ], padding: 5 }
     end
     pdf.move_down 10
     pdf.text "TOTAL: $#{invoice.total}.00", align: :right, size: 12
@@ -97,7 +98,7 @@ class InvoicesController < ApplicationController
     # The title of the document is the name of the model
     pdf.text collection.klass.name.humanize, align: :center, size: 24
 
-    pdf.table([headers, *attributes], width: pdf.bounds.width, header: true,
+    pdf.table([ headers, *attributes ], width: pdf.bounds.width, header: true,
               cell_style: {
                 borders: %i[top bottom left right], padding: 5,
                 size: 10,
@@ -118,7 +119,7 @@ class InvoicesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def invoice_params
       params.require(:invoice).permit(:number, :company_id, :status, :detail, :date, :pay_date, :active,
-                    invoice_items_attributes: [:id, :invoice, :course_person_id])
+                    invoice_items_attributes: [ :id, :invoice, :course_person_id ])
       # params.expect(invoice: [ :number, :company_id, :status, :detail, :date, :pay_date, :active,
       #               invoice_items_attributes: [:id, :invoice, :course_person_id] ])
     end

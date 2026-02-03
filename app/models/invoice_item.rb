@@ -9,6 +9,6 @@ class InvoiceItem < ApplicationRecord
 
   private
   def update_course_person_status
-    self.course_person.update(pay_status: :invoiced, status: "Facturado")
+    self.course_person.update(pay_status: :invoiced, status: "Facturado", invoiced: true)
   end
 end

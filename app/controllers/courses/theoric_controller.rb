@@ -13,7 +13,8 @@ class Courses::TheoricController < ApplicationController
         manager_id: params[:course_person][:manager_id],
         operator_id: params[:operator_id],
         fleet_category_id: params[:fleet_category_id],
-        inscription_motive_id: params[:inscription_motive_id]
+        inscription_motive_id: params[:inscription_motive_id],
+        is_free: params[:is_free]
       }
       course_person_teoria = CoursePerson.new(data)
       course_person_teoria.date = params[:course][:date_teorico],
@@ -47,7 +48,7 @@ class Courses::TheoricController < ApplicationController
     course_person_teoria = CoursePerson.new(data)
     # course_person_teoria.date = params[:course][:date_teorico],
     course_person_teoria.course_unit_id = params[:course][:teorico_id]
-    
+
     respond_to do |format|
       if course_person_teoria.register_particular
         format.turbo_stream {

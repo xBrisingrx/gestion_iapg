@@ -21,6 +21,13 @@
   </div>
 
   <div class="col-2">
+    <%= link_to "Solo practica", 
+      new_courses_practice_path,
+      data: { turbo_frame: "modal"},
+      class: "btn btn-sm btn-info" %>
+  </div>
+
+  <div class="col-2">
     <%= link_to "Solo psicometrico", 
       new_courses_psicometric_path,
       data: { turbo_frame: "modal"},
