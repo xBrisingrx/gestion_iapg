@@ -40,3 +40,6 @@
 
 # Ignore file with local variables
 /config/local_env.yml
+
+/config/keys
+/config/ssl
