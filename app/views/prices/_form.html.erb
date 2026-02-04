@@ -1,0 +1,68 @@
+<%= form_with(model: price, builder: BootstrapBuilder) do |form| %>
+  <div class="form-group row mb-2">
+    <%= form.label :price, "Precio" %>
+    <%= form.number_field :price, required: true %>
+    <%= inline_error_for(:price, price, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :unit_id, "Unidad" %>
+    <div class="col-6">
+      <%= form.select :unit_id, Unit.actives.collect { |unit| [ unit.name, unit.id ] },
+        {:include_blank => "Seleccione unidad"},
+        data: { controller: 'tselect',
+          tselect_ids_value: [price.unit_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:unit_id, price, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :company_id, "Cliente" %>
+    <div class="col-6">
+      <%= form.select :company_id, Company.actives.collect { |company| [ company.name, company.id ] },
+        {:include_blank => "Seleccione cliente"},
+        data: { controller: 'tselect',
+          tselect_ids_value: [price.company_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:company_id, price, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :sectional_id, "Seccional" %>
+    <div class="col-6">
+      <%= form.select :sectional_id, Sectional.actives.collect { |sectional| [ sectional.name, sectional.id ] },
+        {:include_blank => "Seleccione seccional"},
+        data: { controller: 'tselect',
+          tselect_ids_value: [price.sectional_id]
+        }
+      %>
+    </div>
+    <%= inline_error_for(:sectional_id, price, "offset-3") %>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :client_type, "Es para" %>
+    <div class="col-6">
+      <%= form.select :client_type, [:empresa, :particular].map { |client_type| [ "#{client_type}", client_type ] },
+        {:include_blank => "Seleccione tipo de cliente"},
+        data: { controller: 'tselect',
+          tselect_ids_value: [price.client_type]
+        }
+      %>
+    </div>
+  </div>
+
+  <div class="form-group row mb-2">
+    <%= form.label :start_date, "Fecha inicio" %>
+    <%= form.date_field :start_date, value: Date.today %>
+  </div>
+
+  <div class='mt-2'>
+    <%= form.submit 'Guardar' %>
+    <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Cancelar</button>
+  </div>
+<% end %>

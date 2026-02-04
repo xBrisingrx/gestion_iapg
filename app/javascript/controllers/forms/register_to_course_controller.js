@@ -37,17 +37,31 @@ export default class extends Controller {
       this.selectPsicometricoTarget.src = `/courses/get_psicometricos?&date=${date}&course_id=${course_id}`
       document.querySelector("#course_date_teorico").value = date
     }
+
+    setTimeout(() => {
+      if( document.querySelector("#practico_id") != null ) {
+        document.querySelector("#course_date_practico").value = document.querySelector("#practico_id").selectedOptions[0].dataset.date
+      }
+      if( document.querySelector("#psicometrico_id") != null ) {
+        document.querySelector("#course_date_psicometrico").value = document.querySelector("#psicometrico_id").selectedOptions[0].dataset.date
+      }
+    }, 2000);
   }
 
   set_date_practico() {
     const option_selected = this.coursePracticoTarget.selectedOptions[0]
-    console.log(option_selected.dataset.date)
     document.querySelector("#course_date_practico").value = option_selected.dataset.date
   }
 
   set_date_psicometrico() {
     const option_selected = this.coursePsicometricoTarget.selectedOptions[0]
-    console.log(option_selected.dataset.date)
     document.querySelector("#course_date_psicometrico").value = option_selected.dataset.date
+  }
+
+  select_solo_practicos(event) {
+    const fleet = event.target.value
+    if (fleet != "") {
+      this.selectPracticoTarget.src = `/courses/practices/get_practices?&fleet=${fleet}`
+    }
   }
 }

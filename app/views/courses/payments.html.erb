@@ -1,0 +1,65 @@
+<h1>Cupos pendientes</h1>
+
+<div class="row justify-content-between mb-2">
+  <div class="col-4">
+      <%= link_to "Generar factura", 
+        new_invoice_path,
+        data: { turbo_frame: "modal"},
+        class: "btn btn-sm btn-primary" %>
+  </div>
+  <div class="col-6 col-md-4 col-lg-3">
+    <%= search_form_for @query, url: payments_courses_path, method: :get, data: { controller: "filter", filter_target: "form", turbo_frame: "table" } do |form| %>
+      <div class="input-group input-group-sm">
+        <span class="input-group-text">
+          <i class="bi bi-search"></i>
+        </span>
+        <%= form.search_field :company_name_or_course_type_name_or_person_name_or_person_last_name_or_status_cont,
+          placeholder: "Filtrar...",
+          class: "form-control form-control-sm",
+          autocomplete: "off",
+          data: { action: "input->filter#search" }
+        %>
+      </div>
+    <% end %>
+  </div>
+</div>
+<%= turbo_frame_tag 'table', id: 'companies_table' do %>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th><%= sort_link(@query, :course_name, "Curso") %></th>
+          <th><%= sort_link(@query, :person_last_name, "Persona") %></th>
+          <th><%= sort_link(@query, :company_name, "Empresa") %></th>
+          <th><%= sort_link(@query, :price, "Importe") %></th>
+          <th><%= sort_link(@query, :status, "Estado") %></th>
+        </tr>
+      </thead>
+      <tbody id='tbody_companies'>
+        <% @course_people.each do |course_person| %>
+          <tr>
+            <td>
+              <% if course_person.particular? %>
+                <%= "#{course_person.course.name} (Solo teoria)" %>
+              <% else %>
+                <%= course_person.course.name %></td>
+              <% end %>
+            <td><%= course_person.person.fullname %></td>
+            <td><%= course_person.company&.name %></td>
+            <td><%= "$#{course_person.get_price}.00" %></td>
+            <td>
+              <%= render(partial: "courses/payments_status_button" , 
+                locals: { 
+                  status: course_person.check_status, 
+                  course_id: course_person.course_id, 
+                  person_id: course_person.person_id 
+                }) %>
+            </td>
+          </tr>
+        <% end %>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 4}) if @course_people.empty?%>
+      </tbody>
+    </table>
+    <%== pagy_bootstrap_nav(@pagy) %>
+  </div>
+<% end %>

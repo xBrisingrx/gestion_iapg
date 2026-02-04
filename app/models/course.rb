@@ -26,6 +26,7 @@ class Course < ApplicationRecord
   scope :by_year, ->(year) { where("extract(year from created_at) = ?", year) }
 
   before_create :set_to_date
+  before_create :set_years_of_duration
 
   def disable
     self.update(active: false)
@@ -47,6 +48,10 @@ class Course < ApplicationRecord
     attributes["exam_id"].blank?
   end
 
+  def name
+     self.course_type.name 
+  end
+
   private
   def set_to_date
     days = self.course_type.days - 1
@@ -55,5 +60,9 @@ class Course < ApplicationRecord
 
   def course_is_company
     self.is_company
+  end
+
+  def set_years_of_duration
+    self.years_of_duration = self.course_type.duration
   end
 end

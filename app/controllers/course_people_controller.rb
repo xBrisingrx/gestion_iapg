@@ -3,9 +3,20 @@ class CoursePeopleController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @query = CoursePerson.by_course(params[:course_id])
+    if current_user.admin?
+      @query = CoursePerson.by_course(params[:course_id])
+    else
+      @query = CoursePerson.by_course_and_company(params[:course_id], current_user.company_id)
+      # debugger
+    end
     @course = Course.find(params[:course_id])
     @pagy, @course_people = pagy(@query)
+
+    if current_user.admin?
+      render :index
+    else
+      render :client_view
+    end
   end
 
   # GET /courses/1 or /courses/1.json
@@ -47,6 +58,7 @@ class CoursePeopleController < ApplicationController
         format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
         format.json { render :show, status: :created, location: @course_person }
       else
+        @units = @course.course_units.group(:unit_id)
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @course_person.errors, status: :unprocessable_entity }
       end
@@ -83,24 +95,72 @@ class CoursePeopleController < ApplicationController
   def modal_disable;end
 
   def disable
-    if @course.disable
+    if @course_person.disable
         render turbo_stream: [
-          turbo_stream.remove(@course),
+          turbo_stream.remove(@course_person),
           turbo_stream.replace("toasts",
             partial: "shared/toasts",
-            locals: { message: "Inscripción dado de baja.", status_class: "primary" })
+            locals: { message: "Persona quitada del curso.", status_class: "primary" })
         ], status: :ok
     else
       render turbo_stream: [
         turbo_stream.replace("toasts",
           partial: "shared/toasts",
-          locals: { message: "No se pudo dar de baja la inscripción.", status_class: "danger" }) ],
+          locals: { message: "No se pudo quitar a esta persona.", status_class: "danger" }) ],
         status: :unprocessable_entity
     end
   end
 
   def by_course
     @course_people = CoursePerson.by_course(params[:course_id])
+  end
+
+  def show_survey
+    course_person = CoursePerson.find(params[:id])
+    @name = course_person.person.fullname
+    @surveys = Survey.where(person: course_person.person, course: course_person.course)
+  end
+
+  def particular_modal
+    @course = Course.find(params[:course_id])
+    @course_person = CoursePerson.new
+    @people = Person.select(:id, :name, :last_name, :cuil).actives
+  end
+
+  def register_particular
+    @course = Course.find(params[:course_id])
+    @course_person = @course.course_people.new(person_id: params[:course_person][:person_id])
+    respond_to do |format|
+      if @course_person.register_particular
+        format.turbo_stream {
+          render turbo_stream: [
+              turbo_stream.replace("toasts",
+                partial: "shared/toasts",
+                locals: { message: "Inscripción exitosa.", status_class: "primary" }),
+              turbo_stream.append("tbody_course_people",
+                partial: "course_people/course_person",
+                locals: { course_person: @course_person })
+          ]
+        }
+        format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
+        format.json { render :show, status: :created, location: @course_person }
+      else
+        debugger
+        @people = Person.select(:id, :name, :last_name, :cuil).actives
+        format.html { render :particular_modal, status: :unprocessable_entity }
+        format.json { render json: @course_person.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def modal_payments_statuses # mostramos un modal con los cursos persona y el estado, es un detalle de items a pagar
+    @course_people = CoursePerson.where(course_id: params[:course_id], person_id: params[:person_id])
+    @total = @course_people.where(is_free: false).sum(:price)
+  end
+
+  def get_pendings
+    @course_people = CoursePerson.where(company_id: params[:company_id], pay_status: :no_pay)
+    render :pendings_table
   end
 
   private

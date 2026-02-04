@@ -1,0 +1,28 @@
+<%= turbo_frame_tag "course_people" do %>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>Apellido</th>
+          <th>Nombre</th>
+          <th>CUIL</th>
+          <th>Codigo</th>
+          <th>Restado examen</th>
+        </tr>
+      </thead>
+      <tbody id='tbody_course_people'>
+        <% @course_people.each do |course_person| %>
+          <tr>
+            <td><%= course_person.person.last_name %></td>
+            <td><%= course_person.person.name %></td>
+            <td><%= course_person.person.cuil %></td>
+            <td><%= course_person.person.code %></td>
+            <td><%= course_person.scoring_theoric %></td>
+          </tr>
+        <% end %>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 7}) if @course_people.empty?%>
+      </tbody>
+    </table>
+    <%# pagy_bootstrap_nav(@pagy) %>
+  </div>
+<% end %>

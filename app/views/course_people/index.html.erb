@@ -6,6 +6,12 @@
       data: { turbo_frame: "modal"} do %>
       <i class="bi bi-person-add"></i>
     <% end %>
+    <%= link_to particular_modal_course_course_people_path(@course), 
+      class: "btn btn-danger btn-sm btn-sm btn-icon text-white",
+      title: 'Registrar cupo particular', 
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-person-add"></i>
+    <% end %>
     
     <%= link_to register_attendance_course_path(@course), 
       class: "btn btn-info btn-sm btn-sm btn-icon text-white",
@@ -30,6 +36,12 @@
       data: { turbo_frame: "modal"} do %>
       <i class="bi bi-person-add"></i>
     <% end %>
+    <%= link_to modal_files_course_path(@course), 
+      class: "btn btn-sm btn-icon btn-info",
+      title: 'Legajo curso',
+      data: { turbo_frame: "modal"} do %>
+      <i class="bi bi-file-pdf"></i>
+    <% end %>
   </div>
   <div class="table-responsive">
     <table class="table table-hover">
@@ -40,8 +52,9 @@
           <th>CUIL</th>
           <th>Empresa</th>
           <th>Codigo</th>
-          <th>Restado</th>
-          <th>Declaracion</th>
+          <th>Restado examen</th>
+          <th>Encuesta</th>
+          <%# <th>Declaración jurada</th> %>
         </tr>
       </thead>
       <tbody id='tbody_course_people'>

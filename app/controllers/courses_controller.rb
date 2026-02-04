@@ -3,9 +3,13 @@ class CoursesController < ApplicationController
 
   # GET /courses or /courses.json
   def index
-    @query = Course.ransack(params[:query])
-    @pagy, @courses = pagy(@query.result)
-    authorize @courses
+    if current_user.admin?
+      @query = Course.ransack(params[:query])
+      @pagy, @courses = pagy(@query.result)
+      authorize @courses
+    else
+      redirect_to clients_courses_path
+    end
   end
 
   # GET /courses/1 or /courses/1.json
@@ -54,6 +58,7 @@ class CoursesController < ApplicationController
           ]
         }
       else
+        debugger
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @course.errors, status: :unprocessable_entity }
       end
@@ -84,7 +89,7 @@ class CoursesController < ApplicationController
   end
 
   def scoring
-    @course_types = CourseType.select(:id, :name).actives
+    @course_types = CourseType.select(:id, :name).actives.order(:name)
   end
 
   def by_course_type
@@ -130,7 +135,7 @@ class CoursesController < ApplicationController
                 .where(course_units: { unit_id: units })
                 .where(is_company: false)
                 .select("courses.id, courses.room_id, courses.from_date, course_units.id as course_unit_id, rooms.name as room_name, units.name as unit_name")
-                .order(:date)
+                .order(date: :desc)
   end
 
   def get_teoricos_in_company
@@ -224,6 +229,25 @@ class CoursesController < ApplicationController
     render turbo_stream: turbo_stream.replace("turns_body",
       partial: "courses/turns_body",
       locals: { course_units: course_units, available_turns: available_turns, unit_id: unit_id, list: params[:list].to_i })
+  end
+
+  def payments
+    @query = CoursePerson.ransack(params[:query])
+    @pagy, @course_people = pagy(@query.result.group(:course_id, :person_id).includes(:course), limit: 10)
+  end
+
+  def modal_files
+    @course_id = params[:id]
+  end
+
+  def people_registered # descargamos un PDF con el listado de gente anotada en el curso
+    course = Course.find(params[:id])
+    course_people = course.course_people.joins(:unit).where(units: { category: params[:category] }).group(:person_id).order(from_hour: :asc)
+    pdf = ListadoPdf.new(course, course_people)
+    send_data pdf.render,
+            filename: "asistencia_#{params[:category]}.pdf".downcase,
+            type: "application/pdf",
+            disposition: "inline"
   end
 
   private

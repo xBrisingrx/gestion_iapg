@@ -1,0 +1,25 @@
+<%= turbo_frame_tag "courses", data: {forms__register_to_course_target: "selectPractico"} do %>
+  <div class="form-group row">
+    <div class="col-3">
+      <label for="">Practica: </label>
+    </div>
+    <div class="col-8">
+      <select name="course[practico_id]" id="practico_id"
+        data-controller="tselect forms--register-to-course"
+        data-forms--register-to-course-target="coursePractico"
+        data-action="change->forms--register-to-course#set_date_practico"
+        data-tselect-ids-value="[<%= @course_unit_id %>]" >
+        <option value="">Seleccione practica</option>
+        <% @courses.each do |course| %>
+          <%# if (course.course.course_type.category.downcase == @course_category) && ( course.course.course_type.fleet == @fleet || course.course.course_type.fleet == "both" )  %>
+            <option 
+              value="<%= course.id %>"
+              data-date="<%= course.date %>"> 
+              <%= "#{date_format(course.date)} #{course.unit.name} sala: #{course.course.room.name}"  %>
+            </option>
+          <%# end %>
+        <% end %>
+      </select>
+    </div>
+  </div>
+<% end %>

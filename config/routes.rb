@@ -1,4 +1,14 @@
 Rails.application.routes.draw do
+  resources :invoices do
+    get "generate_pdf", on: :member
+  end
+  resources :prices
+  namespace "clients" do
+    get "courses", to: "courses#index"
+    get "new_registration_course", to: "registration_course#new"
+    post "register_to_course", to: "registration_course#create"
+  end
+  resources :price_courses, except: [ :destroy ]
   resources :course_hours_turns
   get "certificates/index"
   get "certificates/courses_by_type", to: "certificates#courses_by_type"
@@ -46,11 +56,20 @@ Rails.application.routes.draw do
     end
   end
   namespace :courses do
+    resources :practices, only: [ :new, :create ] do
+      get "get_practices", to: "get_practices", on: :collection
+    end
     resources :registration
     resources :in_company, only: [ :new, :create ]
     resources :theoric, only: [ :new, :create ]
-    resources :psicometric, only: [ :new, :create ]
+    resources :psicometric, only: [ :new, :create ] do
+      get "carga_psicometricos", to: "psicometric#upload_view", on: :collection
+      post "upload_files", on: :collection
+    end
   end
+
+  get "modal_particular", to: "courses/theoric#modal_particular"
+  post "registrar_particular", to: "courses/theoric#registrar_particular"
 
   resources :courses, except: [ :destroy ] do
     get "modal_disable", on: :member
@@ -72,12 +91,22 @@ Rails.application.routes.draw do
     post "change_turn", to: "courses#change_turn"
     resources :course_people, only: [ :index, :new, :create, :update ] do
       get "by_course", on: :collection
+      get "particular_modal", on: :collection
+      post "register_particular", on: :collection
+      get "modal_disable", on: :member
+      put "disable", on: :member
     end
     resources :course_units, only: [ :new, :create ] do
       get "people_registered", to: "course_units#people_registered"
     end
     resources :turns, only: [ :index, :edit, :update ]
+    get "payments", on: :collection
+    get "people_registered", on: :member
+    get "modal_files", on: :member
   end
+  get "payments_statuses", to: "course_people#modal_payments_statuses"
+  get "show_survey", to: "course_people#show_survey"
+  get "get_pendings", to: "course_people#get_pendings"
   resources :instructors, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
@@ -129,9 +158,14 @@ Rails.application.routes.draw do
   resources :people, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member
+    get "imagenes_credenciales", to: "people#credential_images", on: :collection
+    post "upload_multiple_images", on: :collection
+    get "by_cuil", on: :collection
   end
 
   get "calendar/month", to: "calendar#month"
+  get "calendar/admin", to: "calendar#admin"
+  get "calendar/clients", to: "calendar#clients"
   root "courses#index"
   draw(:authentication)
   draw(:errors)

@@ -13,6 +13,9 @@ application.register("forms--answer", Forms__AnswerController)
 import Forms__CertificatesController from "./forms/certificates_controller"
 application.register("forms--certificates", Forms__CertificatesController)
 
+import Forms__CourseClientController from "./forms/course_client_controller"
+application.register("forms--course-client", Forms__CourseClientController)
+
 import Forms__CourseController from "./forms/course_controller"
 application.register("forms--course", Forms__CourseController)
 
@@ -25,8 +28,14 @@ application.register("forms--course-person", Forms__CoursePersonController)
 import Forms__CourseTypeUnitController from "./forms/course_type_unit_controller"
 application.register("forms--course-type-unit", Forms__CourseTypeUnitController)
 
+import Forms__InvoiceController from "./forms/invoice_controller"
+application.register("forms--invoice", Forms__InvoiceController)
+
 import Forms__PersonController from "./forms/person_controller"
 application.register("forms--person", Forms__PersonController)
+
+import Forms__PriceCourseController from "./forms/price_course_controller"
+application.register("forms--price-course", Forms__PriceCourseController)
 
 import Forms__RegisterAttendanceController from "./forms/register_attendance_controller"
 application.register("forms--register-attendance", Forms__RegisterAttendanceController)

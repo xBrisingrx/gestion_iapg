@@ -103,6 +103,6 @@ class CourseTypesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def course_type_params
       params.expect(course_type: [ :name, :description, :min_quota, :max_quota, :min_score, :max_score,
-        :passing_score, :number_of_repeat, :room_id, :category, :fleet ])
+        :passing_score, :number_of_repeat, :room_id, :category, :fleet, :duration, :need_code ])
     end
 end

@@ -4,6 +4,7 @@ class Company < ApplicationRecord
   belongs_to :sector, optional: true
   belongs_to :province, optional: true
   belongs_to :city, optional: true
+  has_many :company_managers
 
   validates :name,
     presence: true,

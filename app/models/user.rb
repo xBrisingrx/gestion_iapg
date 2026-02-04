@@ -1,6 +1,7 @@
 class User < ApplicationRecord
   has_secure_password
-
+  belongs_to :person
+  belongs_to :company, optional: true
   generates_token_for :email_verification, expires_in: 2.days do
     email
   end
@@ -19,7 +20,7 @@ class User < ApplicationRecord
 
   normalizes :email, with: -> { _1.strip.downcase }
 
-  enum :role, [ :admin, :editor, :guest ]
+  enum :role, [ :admin, :editor, :guest, :client ]
 
   before_validation if: :email_changed?, on: :update do
     self.verified = false

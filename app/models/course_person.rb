@@ -1,31 +1,67 @@
 class CoursePerson < ApplicationRecord
   belongs_to :course
   belongs_to :person
-  belongs_to :manager, class_name: "Person"
-  belongs_to :company
-  belongs_to :operator, class_name: "Company"
-  belongs_to :inscription_motive
-  belongs_to :fleet_category
+  belongs_to :manager, class_name: "Person", optional: true
+  belongs_to :company, optional: true
+  belongs_to :operator, class_name: "Company", optional: true
+  belongs_to :inscription_motive, optional: true
+  belongs_to :fleet_category, optional: true
   belongs_to :unit
   belongs_to :course_unit
   has_one :turn
+  has_one :course_type, through: :course
 
   enum :attendance_status, [ :no_registeder, :presence, :absent, :no_documents ]
+  enum :quota_type, [ :company, :particular ]
+  enum :pay_status, [ :no_pay, :pay, :free, :invoiced ] # free es cuando no corresponde que paguen
 
   attr_accessor :practical_turn_id, :psicometrico_turn_id
 
   before_create :set_code
+  before_create :set_expiration_date
   # after_update :check_approved
+
+  # validate :check_introductory_course
+  # validate :check_renovation_course
+
+  def self.ransackable_attributes(auth_object = nil)
+    [ "active", "person_id", "manager_id", "course_id", "operator_id", "created_at", "inscription_motive_id", "fleet_category_id",
+      "unit_id", "id", "id_value", "turn_id", "course_unit_id", "updated_at", "company_id", "status", "pay_status" ]
+  end
+
+  def self.ransackable_associations(auth_object = nil)
+    [ "person", "unit", "course", "course_unit", "turn", "course_type", "company" ]
+  end
+
+  def disable
+    course_people = CoursePerson.where(course: self.course, person: self.person)
+    ActiveRecord::Base.transaction do
+      course_people.each do |course_person|
+        course_person.active = false
+        turn = Turn.find_by(person: course_person.person, course: course_person.course, course_unit: course_person.course_unit)
+        if !turn.blank?
+          turn.update(person: nil, status: :available, available: true)
+        end
+        raise ActiveRecord::Rollback if course_person.has_scoring?
+      end
+    end
+  end
+
+  def has_scoring?
+    (self.scoring > 0 || self.make_up_1 > 0 || self.make_up_2 > 0)
+  end
 
   def assign_turn
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
     # return if self.course.course_type.days == 1 || CoursePerson.where(course_id: self.course_id, person_id: self.person_id).count > 1
     course_units = CourseUnit.where(course_id: self.course_id).group(:unit_id)
     course_date = self.course.from_date
+    sectional_id = self.course.room.headquarter.sectional.id
     ActiveRecord::Base.transaction do
       course_units.each do |course_unit|
         next if CoursePerson.find_by(course_id: self.course_id, person_id: self.person_id, unit_id: course_unit.unit_id)
         course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: course_unit.unit_id)
+        unit_price = course_unit.unit.get_price(sectional_id, self.company_id)
         course_person = CoursePerson.new(
           course_id: self.course_id,
           person_id: self.person_id,
@@ -35,7 +71,9 @@ class CoursePerson < ApplicationRecord
           inscription_motive_id: self.inscription_motive_id,
           fleet_category_id: self.fleet_category_id,
           unit_id: course_unit.unit_id,
-          course_unit_id: course_unit.id
+          course_unit_id: course_unit.id,
+          price: unit_price,
+          status: "Pendiente"
         )
         course_person.date = course_date + (course_unit.day - 1).day
         if course_type_unit.is_by_turn
@@ -46,7 +84,6 @@ class CoursePerson < ApplicationRecord
           if course_type_unit.unit.category == "Practico"
             turn_id = self.practical_turn_id
           end
-
           # course_person.from_hour = set_hour(course_unit.unit_id, self.course_id, course_person.date, course_type_unit.shift_time)
           course_person.from_hour = set_turn(turn_id, course_person.date, course_type_unit.shift_time)
           course_person.to_hour = course_person.from_hour + course_type_unit.shift_time.minutes
@@ -118,10 +155,19 @@ class CoursePerson < ApplicationRecord
       .order(people: { last_name: :asc })
   end
 
+  def self.by_course_and_company(course_id, company_id)
+    CoursePerson.where(course: course_id, company_id: company_id)
+      .includes(:person, :company)
+      .group(:person_id)
+      .order(people: { last_name: :asc })
+  end
+
   def register_renovation
     self.unit = self.course_unit.unit
     self.course = self.course_unit.course
     self.date = self.course_unit.date
+    sectional_id = self.course.room.headquarter.sectional.id
+    self.price = (self.is_free) ? 0 : self.unit.get_price(sectional_id, self.company_id)
     course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.course_unit.unit_id)
     if course_type_unit.is_by_turn
       self.from_hour = set_hour(course_unit.unit_id, self.course_id, self.date, course_type_unit.shift_time)
@@ -150,15 +196,24 @@ class CoursePerson < ApplicationRecord
   end
 
   def scoring_theoric
+    # devuelvo la nota mas alta de las 3 instancias que tiene el teorico
     cp = CoursePerson
       .where(person: self.person, course: self.course)
       .joins(:unit)
       .where(units: { category: "Teorico" })
-    if !cp.blank?
-      cp.first.scoring
-    else
-      ""
-    end
+      .pluck(:scoring, :make_up_1, :make_up_2)
+    scoring = (cp.blank?) ? 0 : cp[0].max
+    scoring
+  end
+
+  def las_theoric_data
+    cp = CoursePerson
+      .where(person: self.person, course: self.course)
+      .joins(:unit)
+      .where(units: { category: "Teorico" })
+    notas = cp.pluck(:scoring, :make_up_1, :make_up_2)
+    scoring = (notas.blank?) ? 0 : notas[0].max
+    "#{cp.last.date.strftime("%d/%m/%Y")} #{scoring}"
   end
 
   def scoring_practica
@@ -229,6 +284,7 @@ class CoursePerson < ApplicationRecord
   end
 
   def self.check_approved(id)
+    # tengo que disparar esto para el desaprobado
     course_person = CoursePerson.find_by(id: id) # id del primer modulo
     # obtenemos todos los modulos en los q se registro esta persona en ese curso
     course_people = CoursePerson.where(person: course_person.person, course: course_person.course)
@@ -236,13 +292,23 @@ class CoursePerson < ApplicationRecord
     # tengo que buscarle la vuelta para no hacer todo este trabajo siempre
     course_people.each do |cp|
       unit_category = cp.unit.category
+      next if unit_category == "Psicometrico"
+      next if cp.scoring.nil? && cp.make_up_1.nil? && cp.make_up_2.nil?
       if unit_category == "Teorico"
         number_approved = 80
       else
         number_approved = 2
       end
+      cp.make_up_1 = 0 if cp.make_up_1.nil?
+      cp.make_up_2 = 0 if cp.make_up_2.nil?
       approved = (cp.scoring >= number_approved || cp.make_up_1 >= number_approved || cp.make_up_2 >= number_approved)
-      cp.update(approved: approved)
+      # si tiene nota registada es que la persona asistio, en ese caso actualizamos el estado
+      attendance_status = (cp.scoring > 0 || cp.make_up_1 > 0 || cp.make_up_2 > 0) ? :presence : nil
+      if attendance_status.nil?
+        cp.update(approved: approved)
+      else
+        cp.update(approved: approved, attendance_status: attendance_status)
+      end
     end
   end
 
@@ -264,6 +330,56 @@ class CoursePerson < ApplicationRecord
       "Falta psicometrico"
     else
       "Aprobado"
+    end
+  end
+
+  def set_expiration_date
+    years_of_duration = (self.company&.credential_years.blank?) ? self.course.years_of_duration : self.company.credential_years
+    self.expiration_date = self.date + years_of_duration.years
+  end
+
+  def register_particular
+    self.unit = self.course_unit.unit
+    self.course = self.course_unit.course
+    self.date = self.course_unit.date
+    self.price = self.unit.get_particular_price(self.course.room.headquarter.sectional.id)
+    self.quota_type = :particular
+    self.date = self.course.from_date
+    self.save
+  end
+
+  def check_introductory_course
+    # si el curso es de inicio, no deberia tener ningun curso hecho
+    # para poder anotarse
+    if self.course.course_type.category == "Inicio"
+      exist_course = CoursePerson.where(person: self.person, approved: true)
+      if exist_course.any?
+        errors.add(:person_id, "Esta persona ya tiene cursos realizados.")
+      end
+    end
+  end
+
+  def check_renovation_course
+    # si el curso es de renovacion, deberia tener ningun curso hecho
+    # para poder anotarse
+    if self.course.course_type.category == "Renovacion"
+      exist_course = CoursePerson.where(person: self.person, approved: true)
+      errors.add(:person_id, "Esta persona no ha hecho un inicio.") if exist_course.empty?
+    end
+  end
+
+  def get_price # obtenemos el precio de todo el curso, no solo de este registro
+    CoursePerson.where(course: self.course, person: self.person).where(is_free: false).sum(:price)
+  end
+
+  def check_status
+    records = CoursePerson.where(person: self.person, course: self.course).group(:pay_status).count
+    if !records["no_pay"].nil?
+      "Pendiente"
+    elsif !records["invoiced"].nil?
+      "Facturado"
+    else
+      "Pagado"
     end
   end
 end

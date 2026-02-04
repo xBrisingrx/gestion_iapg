@@ -10,8 +10,8 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
-  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
+  create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
     t.bigint "record_id", null: false
@@ -21,7 +21,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
-  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_blobs", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "key", null: false
     t.string "filename", null: false
     t.string "content_type"
@@ -33,13 +33,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
-  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "active_storage_variant_records", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
-  create_table "answers", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "answers", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "question_id", null: false
     t.string "answer", null: false
     t.boolean "correct", default: false
@@ -50,7 +50,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["question_id"], name: "index_answers_on_question_id"
   end
 
-  create_table "cities", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "cities", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name"
     t.bigint "province_id", null: false
     t.boolean "active"
@@ -60,7 +60,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["province_id"], name: "index_cities_on_province_id"
   end
 
-  create_table "companies", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "companies", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "cuit", limit: 30, null: false
     t.string "direction", limit: 100
@@ -84,7 +84,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["sector_id"], name: "index_companies_on_sector_id"
   end
 
-  create_table "company_categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "company_categories", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
     t.integer "quota", null: false
@@ -94,7 +94,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["name"], name: "index_company_categories_on_name", unique: true
   end
 
-  create_table "company_managers", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "company_managers", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "company_id", null: false
     t.bigint "person_id", null: false
     t.string "email"
@@ -107,7 +107,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["person_id"], name: "index_company_managers_on_person_id"
   end
 
-  create_table "course_exams", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "course_exams", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.bigint "exam_id", null: false
     t.boolean "retake"
@@ -120,7 +120,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["exam_id"], name: "index_course_exams_on_exam_id"
   end
 
-  create_table "course_hours_turns", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "course_hours_turns", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_type_unit_id", null: false
     t.time "hour"
     t.datetime "created_at", null: false
@@ -128,7 +128,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["course_type_unit_id"], name: "index_course_hours_turns_on_course_type_unit_id"
   end
 
-  create_table "course_people", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "course_people", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.bigint "person_id", null: false
     t.bigint "manager_id"
@@ -152,6 +152,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.date "date_make_up_2"
     t.string "code", limit: 20
     t.boolean "approved", default: false
+    t.date "expiration_date"
     t.index ["company_id"], name: "index_course_people_on_company_id"
     t.index ["course_id"], name: "index_course_people_on_course_id"
     t.index ["course_unit_id"], name: "index_course_people_on_course_unit_id"
@@ -163,7 +164,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["unit_id"], name: "index_course_people_on_unit_id"
   end
 
-  create_table "course_type_units", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "course_type_units", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_type_id", null: false
     t.bigint "unit_id", null: false
     t.integer "day", null: false
@@ -179,7 +180,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["unit_id"], name: "index_course_type_units_on_unit_id"
   end
 
-  create_table "course_types", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "course_types", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "description", null: false
     t.integer "max_quota", null: false
@@ -195,10 +196,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "duration", default: 2
     t.index ["room_id"], name: "index_course_types_on_room_id"
   end
 
-  create_table "course_units", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "course_units", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.bigint "unit_id", null: false
     t.string "shift"
@@ -218,7 +220,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["unit_id"], name: "index_course_units_on_unit_id"
   end
 
-  create_table "courses", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "courses", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_type_id", null: false
     t.bigint "company_id"
     t.bigint "room_id", null: false
@@ -231,12 +233,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "years_of_duration"
     t.index ["company_id"], name: "index_courses_on_company_id"
     t.index ["course_type_id"], name: "index_courses_on_course_type_id"
     t.index ["room_id"], name: "index_courses_on_room_id"
   end
 
-  create_table "exam_modules", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "exam_modules", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "exam_id", null: false
     t.string "name", null: false
     t.string "quote_type", null: false
@@ -247,7 +250,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["exam_id"], name: "index_exam_modules_on_exam_id"
   end
 
-  create_table "exam_questions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "exam_questions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "exam_id", null: false
     t.bigint "question_id", null: false
     t.integer "question_order"
@@ -258,7 +261,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["question_id"], name: "index_exam_questions_on_question_id"
   end
 
-  create_table "exams", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "exams", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "title", null: false
     t.boolean "video"
     t.string "retake", limit: 5
@@ -268,7 +271,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "fleet_categories", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "fleet_categories", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
     t.boolean "active", default: true
@@ -277,7 +280,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["name"], name: "index_fleet_categories_on_name", unique: true
   end
 
-  create_table "headquarters", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "headquarters", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 100, null: false
     t.string "description"
     t.string "location", limit: 100
@@ -294,7 +297,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["sectional_id"], name: "index_headquarters_on_sectional_id"
   end
 
-  create_table "inscription_motives", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "inscription_motives", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
     t.boolean "active", default: true
@@ -303,7 +306,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["name"], name: "index_inscription_motives_on_name", unique: true
   end
 
-  create_table "instructors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "instructors", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "person_id", null: false
     t.date "start_date", null: false
     t.date "end_date"
@@ -316,7 +319,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["person_id"], name: "index_instructors_on_person_id"
   end
 
-  create_table "iva_conditions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "iva_conditions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
     t.boolean "active", default: true
@@ -325,7 +328,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["name"], name: "index_iva_conditions_on_name", unique: true
   end
 
-  create_table "module_questions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "module_questions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "exam_module_id", null: false
     t.bigint "question_id", null: false
     t.integer "question_order", null: false
@@ -336,7 +339,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["question_id"], name: "index_module_questions_on_question_id"
   end
 
-  create_table "module_videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "module_videos", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "exam_module_id", null: false
     t.bigint "video_id", null: false
     t.integer "video_order", null: false
@@ -347,7 +350,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["video_id"], name: "index_module_videos_on_video_id"
   end
 
-  create_table "people", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "people", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "cuil", limit: 20, null: false
     t.string "last_name", limit: 50, null: false
     t.string "name", limit: 50, null: false
@@ -367,14 +370,41 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["province_id"], name: "index_people_on_province_id"
   end
 
-  create_table "provinces", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "person_exams", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "person_id", null: false
+    t.bigint "exam_id", null: false
+    t.bigint "course_id", null: false
+    t.bigint "question_id", null: false
+    t.bigint "answer_id"
+    t.integer "instance", default: 1, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["answer_id"], name: "index_person_exams_on_answer_id"
+    t.index ["course_id"], name: "index_person_exams_on_course_id"
+    t.index ["exam_id"], name: "index_person_exams_on_exam_id"
+    t.index ["person_id"], name: "index_person_exams_on_person_id"
+    t.index ["question_id"], name: "index_person_exams_on_question_id"
+  end
+
+  create_table "price_courses", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.integer "price", default: 0, null: false
+    t.bigint "course_type_id", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_type_id"], name: "index_price_courses_on_course_type_id"
+  end
+
+  create_table "provinces", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 20, null: false
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "questionnaires", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "questionnaires", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "question"
     t.string "q_type"
     t.integer "q_order"
@@ -382,7 +412,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "questions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "questions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "question", null: false
     t.boolean "eliminating", default: false
     t.boolean "active", default: true
@@ -390,7 +420,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "rooms", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "rooms", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "description"
     t.integer "capacity", null: false
@@ -401,7 +431,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["headquarter_id"], name: "index_rooms_on_headquarter_id"
   end
 
-  create_table "sectionals", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sectionals", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "direction", null: false
     t.bigint "city_id", null: false
@@ -413,7 +443,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["province_id"], name: "index_sectionals_on_province_id"
   end
 
-  create_table "sectors", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sectors", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "description"
     t.boolean "active", default: true
@@ -422,7 +452,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["name"], name: "index_sectors_on_name", unique: true
   end
 
-  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "sessions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.string "user_agent"
     t.string "ip_address"
@@ -431,7 +461,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["user_id"], name: "index_sessions_on_user_id"
   end
 
-  create_table "turns", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "surveys", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "course_id", null: false
+    t.bigint "person_id", null: false
+    t.string "question", null: false
+    t.string "answer"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_id"], name: "index_surveys_on_course_id"
+    t.index ["person_id"], name: "index_surveys_on_person_id"
+  end
+
+  create_table "turns", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.bigint "course_id", null: false
     t.bigint "person_id"
     t.bigint "unit_id", null: false
@@ -450,7 +491,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.index ["unit_id"], name: "index_turns_on_unit_id"
   end
 
-  create_table "units", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "units", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
     t.string "fleet", limit: 20, null: false
@@ -461,7 +502,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "users", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "users", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "username", null: false
     t.string "email", null: false
@@ -470,10 +511,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
     t.boolean "verified", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "person_id", null: false
+    t.bigint "company_id"
+    t.index ["company_id"], name: "index_users_on_company_id"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["person_id"], name: "index_users_on_person_id"
   end
 
-  create_table "videos", charset: "utf8mb4", collation: "utf8mb4_general_ci", force: :cascade do |t|
+  create_table "videos", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "title", limit: 500, null: false
     t.string "file", limit: 100
     t.string "vimeo", limit: 100
@@ -528,12 +573,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_08_26_154023) do
   add_foreign_key "module_videos", "videos"
   add_foreign_key "people", "cities"
   add_foreign_key "people", "provinces"
+  add_foreign_key "person_exams", "answers"
+  add_foreign_key "person_exams", "courses"
+  add_foreign_key "person_exams", "exams"
+  add_foreign_key "person_exams", "people"
+  add_foreign_key "person_exams", "questions"
+  add_foreign_key "price_courses", "course_types"
   add_foreign_key "rooms", "headquarters"
   add_foreign_key "sectionals", "cities"
   add_foreign_key "sectionals", "provinces"
   add_foreign_key "sessions", "users"
+  add_foreign_key "surveys", "courses"
+  add_foreign_key "surveys", "people"
   add_foreign_key "turns", "course_units"
   add_foreign_key "turns", "courses"
   add_foreign_key "turns", "people"
   add_foreign_key "turns", "units"
+  add_foreign_key "users", "companies"
+  add_foreign_key "users", "people"
 end

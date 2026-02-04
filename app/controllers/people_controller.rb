@@ -1,4 +1,5 @@
 class PeopleController < ApplicationController
+  require "zip"
   before_action :set_person, only: %i[ show edit update modal_disable disable ]
 
   # GET /people or /people.json
@@ -91,6 +92,61 @@ class PeopleController < ApplicationController
     render json: { person: person }
   end
 
+  def credential_images
+    # @query = Person.actives.ransack(params[:query])
+    query = Person.actives.select(:name, :last_name, :cuil, :id, :email)
+    filter = query.where("name LIKE ?", "%#{params[:name]}%")
+      .or(query.where("last_name LIKE ?", "%#{params[:name]}%"))
+    @pagy, @people = pagy(filter)
+  end
+
+  def upload_multiple_images
+    # recibimos un zip con muchas imagenes que van a ser usadas en el carnet
+    zip = params[:zip_file]
+
+    dir = Rails.root.join("public/uploads/#{SecureRandom.hex}")
+    FileUtils.mkdir_p(dir)
+
+    Zip::File.open(zip.path) do |zip_file|
+      zip_file.each do |entry|
+        next unless entry.name.downcase.match(/\.(jpg|jpeg|png)$/i)
+        # entry.extract(File.join(dir, entry.name))
+        temp = Tempfile.new(binmode: true)
+        temp.write(entry.get_input_stream.read)
+        temp.rewind
+
+        person = Person.find_by(cuil: entry.name.to_i)
+        if !person.blank?
+          person.images.attach(
+            io: temp,
+            filename: entry.name,
+            content_type: Marcel::MimeType.for(entry.name)
+          )
+        end # if
+      end # extract_files
+    end # open zip
+    respond_to do |format|
+      format.turbo_stream {
+          render turbo_stream: [            
+            turbo_stream.replace("toasts",
+              partial: "shared/toasts",
+              locals: { message: "Carga exitosa", status_class: "primary" }),
+            turbo_stream.replace("form_images",
+              partial: "people/form_images")
+          ]
+        }
+    end
+  end
+
+  def by_cuil
+    person = Person.find_by(cuil: params[:cuil])
+    if person.blank?
+      render json: { name: '', cuil: '' }
+    else
+      render json: { name: person.fullname, id: person.id }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_person
@@ -100,6 +156,6 @@ class PeopleController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def person_params
-      params.expect(person: [ :cuil, :last_name, :name, :birthdate, :phone, :celphone, :email, :direction, :code, :city_id ])
+      params.expect(person: [ :cuil, :last_name, :name, :birthdate, :phone, :celphone, :email, :direction, :code, :city_id, :images, :psicometrics ])
     end
 end

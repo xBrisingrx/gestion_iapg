@@ -4,6 +4,7 @@ class Api::CredentialController < ApplicationController
   skip_before_action :authenticate
 
   def login
+    # tengo que atajar cuando la persona no existe
     person = Person.find_by(cuil: params[:id]) # buscamos a la persona que solicita la credencial
     iat = Time.new.to_i
     exp = iat * (60 * 60)
@@ -42,6 +43,10 @@ class Api::CredentialController < ApplicationController
         dueno: "117"
     }
 
+    # if
+
+    # else
+    # end
     render json: { persona: persona, error: false }
   end
 
@@ -153,22 +158,47 @@ class Api::CredentialController < ApplicationController
   end
 
   def validar
-    render json: { message: "curso aprobado", error: false }
+    jwt = request.headers["Authorization"].split(" ").last
+    decode = jwt_decode(jwt)
+    data = decode["data"]
+    person = Person.find_by(id: data["id"])
+    course_people = person.course_people
+    teorico = course_people.where(approved: true).where("expiration_date >= ? ", "#{Date.today}").joins(:unit).where(units: { category: "Teorico" }).last
+    if teorico.blank?
+      credential_invalid = true
+    else
+      if teorico.quota_type == "particular"
+        credential_invalid = false
+      else
+        limit_date = teorico.date
+        practicos = course_people.where(approved: true).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Practico" })
+        psicometrico = course_people.where(attendance_status: :presence).where("expiration_date >= ? ", "#{limit_date}").joins(:unit).where(units: { category: "Psicometrico" })
+        credential_invalid = practicos.blank? || psicometrico.blank?
+      end
+    end
+    if credential_invalid
+      render json: { message: "Falta aprobar alguna de las instancias.", error: true }
+    else
+      render json: { message: "curso aprobado", error: false }
+    end
   end
-
-  # def mostrar_credencial
-  #   render json: { message: "curso aprobado", error: false }
-  # end
 
   def mostrar_credencial
     # jwt = request.headers["HTTP_JWT"].split(" ").last
     person = Person.find_by(cuil: params[:c].to_i)
-    course_people = person.course_people.where(approved: true)
-    teorico = course_people.joins(:unit).where(units: { category: "Teorico" }).last
-    practicos = course_people.joins(:unit).where(units: { category: " 	Practico" })
-    psicometrico = course_people.joins(:unit).where(units: { category: "Psicometrico" })
+    course_people = person.course_people
+    teorico = course_people.where(approved: true).joins(:unit).where(units: { category: "Teorico" }).last
+    limit_date = teorico.date
+    practicos = course_people.where(approved: true)
+                              .where("expiration_date >= ? ", "#{limit_date}")
+                              .joins(:unit)
+                                .where(units: { category: "Practico" })
+    psicometrico = course_people.where(attendance_status: :presence)
+                                .where("expiration_date >= ? ", "#{limit_date}")
+                                .joins(:unit)
+                                  .where(units: { category: "Psicometrico" })
     meses = [ nil, "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ]
-    credential_date = teorico.date + 2.years
+    credential_date = teorico.expiration_date
     w = (params[:w] || 1024).to_i - 10
     h = (params[:h] || 768).to_i
 
@@ -186,9 +216,12 @@ class Api::CredentialController < ApplicationController
 
     nombre = person.fullname
     cuil = person.cuil
-    categoria = teorico.fleet_category.name
+    categoria = ""
+    practicos.each do |practico|
+      categoria = categoria + "#{practico.fleet_category.name} - "
+    end
 
-    face = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/example.jpg"))
+    face = (!person.images.blank?) ? MiniMagick::Image.read(person.images.last.download) : MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/faces/no_face.png"))
     firma = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/firma.png"))
     logoecd = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/ecd.png"))
     logoiapgsur = MiniMagick::Image.open(Rails.root.join("app/assets/images/credencial/logo-sur.png"))
@@ -229,7 +262,8 @@ class Api::CredentialController < ApplicationController
     label = MiniMagick::Image.new(Rails.root.join("tmp/label.png"), "png")
     MiniMagick::Tool::Magick.new do |m|
       m.size "#{w}x#{(h / 5.9).round}"
-      m.canvas "white"
+      # m.canvas "white"
+      m.xc "none"    # fondo transparente
       m.gravity "north"
       m.font gotham_font.to_s
       m.pointsize (w * 7 / 100.0).round

@@ -1,5 +1,6 @@
 class Unit < ApplicationRecord
   # modelamos los modulos de los cursos
+  has_many :prices
   validates :name, :fleet, :methodology, :category, presence: true
 
   scope :actives, -> { where(active: true) }
@@ -14,5 +15,26 @@ class Unit < ApplicationRecord
 
   def disable
     self.update(active: false)
+  end
+
+  def last_price
+    prices = self.prices.actives
+    price = (prices.blank?) ? 0 : prices.last&.price
+    price
+  end
+
+  def get_price (sectional_id, company_id = nil)
+    unit_prices = self.prices.actives.where(sectional_id: sectional_id, company_id: company_id, client_type: :empresa)
+    if unit_prices.empty? # la empresa no tiene contrato, entonces no filtramos por empresa
+      unit_prices = self.prices.actives.where(sectional_id: sectional_id, company_id: nil, client_type: :empresa)
+    end
+    price = (!unit_prices.empty?) ? unit_prices.last.price : 0
+    price
+  end
+
+  def get_particular_price(sectional_id)
+    unit_price = self.prices.actives.where(sectional_id: sectional_id, client_type: :particular)
+    price = (unit_price.any?) ? unit_price.last.price : 0
+    price
   end
 end

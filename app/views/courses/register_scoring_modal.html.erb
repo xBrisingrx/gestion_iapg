@@ -2,7 +2,7 @@
   <%= form_with(model: @course, builder: BootstrapBuilder)  do |form| %>
     <p><b>Nombre y apellido:</b> <%= @person.fullname %> </p>
     <p><b>Empresa:</b> <%= @course_person.first.company.name %> </p>
-    <p><b>Tipo de cupo:</b> -- </p>
+    <p><b>Tipo de cupo:</b> <%= @course.course_type.name %> </p>
     <% @course_person.each_with_index do |c_p, index| %>
       <input type="hidden" 
           name="course[course_people_attributes][<%= index %>][id]" 

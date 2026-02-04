@@ -1,0 +1,31 @@
+<div class="row justify-content-md-center">
+  <div class="col-lg-10 my-1">
+    <!-- Card -->
+    <div class="card card-shadow h-100">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-6">
+              <p class=""><b>Empresa: </b><%= current_user.company.name %></p>
+            </div>
+            <div class="col-6">
+              <p class=""><b>Referente: </b><%= current_user.person.fullname %></p>
+            </div>
+          </div>
+        </div>
+    </div>
+    <!-- End Card -->
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-2">
+    <%= link_to "Registrar cupo", 
+        clients_new_registration_course_path,
+        data: { turbo_frame: "modal"},
+        class: "btn btn-sm btn-info" %>
+  </div>
+</div>
+
+<section class="mx-2">
+  <%= turbo_frame_tag "calendar", src: calendar_clients_path %>
+</section>
