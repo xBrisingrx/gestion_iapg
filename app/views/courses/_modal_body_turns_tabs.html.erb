@@ -1,9 +1,10 @@
+<%= turbo_frame_tag "turns" do %>
 <!-- Nav -->
     <div class="text-center">
       <ul class="nav nav-segment nav-pills mb-7" role="tablist">
         <% @units.each do |unit| %>
           <li class="nav-item">
-            <a class="nav-link" 
+            <a class="nav-link <%= (@tab_active == unit[1]) ? 'active' : '' %>" 
                 id="nav-<%= unit[0] %>-tab" 
                 href="#nav-<%= unit[0] %>" 
                 data-bs-toggle="pill" 
@@ -81,3 +82,4 @@
             <% end %>
           </div>
           <!-- End Tab Content -->
+<% end %>

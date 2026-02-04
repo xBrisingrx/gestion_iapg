@@ -304,6 +304,17 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
     t.index ["sectional_id"], name: "index_headquarters_on_sectional_id"
   end
 
+  create_table "incoive_items", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "invoice_id", null: false
+    t.bigint "course_people_id", null: false
+    t.integer "status"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_people_id"], name: "index_incoive_items_on_course_people_id"
+    t.index ["invoice_id"], name: "index_incoive_items_on_invoice_id"
+  end
+
   create_table "inscription_motives", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
@@ -330,7 +341,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
     t.bigint "invoice_id", null: false
     t.bigint "course_person_id", null: false
     t.integer "status"
-    t.boolean "active"
+    t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_person_id"], name: "index_invoice_items_on_course_person_id"
@@ -615,6 +626,8 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
   add_foreign_key "headquarters", "cities"
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"
+  add_foreign_key "incoive_items", "course_people", column: "course_people_id"
+  add_foreign_key "incoive_items", "invoices"
   add_foreign_key "instructors", "people"
   add_foreign_key "invoice_items", "course_people"
   add_foreign_key "invoice_items", "invoices"
@@ -646,5 +659,4 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
   add_foreign_key "turns", "people"
   add_foreign_key "turns", "units"
   add_foreign_key "users", "companies"
-  add_foreign_key "users", "people"
 end
