@@ -20,6 +20,7 @@ class CoursePerson < ApplicationRecord
   before_create :set_code
   before_create :set_expiration_date
   # after_update :check_approved
+  scope :actives, -> { where(active: true) }
 
   # validate :check_introductory_course
   # validate :check_renovation_course
