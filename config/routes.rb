@@ -100,6 +100,7 @@ Rails.application.routes.draw do
     resources :turns, only: [ :index, :edit, :update ]
     get "payments", on: :collection
     get "people_registered", on: :member
+    get "modal_files", on: :member
   end
   get "payments_statuses", to: "course_people#modal_payments_statuses"
   get "show_survey", to: "course_people#show_survey"

@@ -36,10 +36,10 @@
       data: { turbo_frame: "modal"} do %>
       <i class="bi bi-person-add"></i>
     <% end %>
-    <%= link_to people_registered_course_path(@course), 
+    <%= link_to modal_files_course_path(@course), 
       class: "btn btn-sm btn-icon btn-info",
-      title: 'Descargar listado',
-      target: "_blank" do %>
+      title: 'Legajo curso',
+      data: { turbo_frame: "modal"} do %>
       <i class="bi bi-file-pdf"></i>
     <% end %>
   </div>

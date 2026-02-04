@@ -188,6 +188,16 @@ class CoursePerson < ApplicationRecord
     scoring
   end
 
+  def las_theoric_data
+    cp = CoursePerson
+      .where(person: self.person, course: self.course)
+      .joins(:unit)
+      .where(units: { category: "Teorico" })
+    notas = cp.pluck(:scoring, :make_up_1, :make_up_2)
+    scoring = (notas.blank?) ? 0 : notas[0].max
+    "#{cp.last.date.strftime("%d/%m/%Y")} #{scoring}"
+  end
+
   def scoring_practica
     cp = CoursePerson
       .where(person: self.person, course: self.course)

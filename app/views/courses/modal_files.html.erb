@@ -1,0 +1,28 @@
+<%= render "shared/modal", title: "Legajo de Curso", fade_in: true do %>
+  <div class="text-center">
+    <div class="mb-2">
+      <%= link_to people_registered_course_path(id: @course_id, category: "Teorico"), 
+        class: "badge bg-info",
+        title: 'Legajo teoria',
+        target: "_blank" do %>
+        Asistencia teoria
+      <% end %>
+    </div>
+    <div class="mb-2">
+      <%= link_to people_registered_course_path(id: @course_id, category: "Practico"), 
+        class: "badge bg-success",
+        title: 'Legajo practica',
+        target: "_blank" do %>
+        Asistencia practica
+      <% end %>
+    </div>
+    <div class="mb-2">
+      <%= link_to people_registered_course_path(id: @course_id, category: "Psicometrico"), 
+        class: "badge bg-primary",
+        title: 'Legajo psicometrico',
+        target: "_blank" do %>
+        Asistencia psicometrico
+      <% end %>
+    </div>
+  </div>
+<% end %>

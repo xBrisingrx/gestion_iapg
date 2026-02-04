@@ -236,43 +236,18 @@ class CoursesController < ApplicationController
     @pagy, @course_people = pagy(@query.result.group(:course_id, :person_id).includes(:course), limit: 10)
   end
 
+  def modal_files
+    @course_id = params[:id]
+  end
+
   def people_registered # descargamos un PDF con el listado de gente anotada en el curso
     course = Course.find(params[:id])
-    course_people = course.course_people.joins(:unit)
-    people_practico = course_people.where(units: { category: "Practico" }).group(:person_id).order(from_hour: :asc)
-    people_psicometrico = course_people.where(units: { category: "Psicometrico" }).group(:person_id).order(from_hour: :asc)
-    pdf = Prawn::Document.new
-    pdf.font "Helvetica"
-    pdf.text "Listado personas", align: :center, size: 24
-    pdf.image Rails.root.join("app/assets/images/logo.png")
-    pdf.move_down 5
-    # pdf.text "Razon social: #{invoice.company.name}                  CUIT: #{invoice.company.cuit}", align: :left, size: 12
-    # nombre, apellido, cuil, empresa, categoria, horario, firma
-    if !people_practico.blank?
-      table_data = [ [ "Nombre y apellido", "Cuil", "Empresa", "Teorico", "Categoria", "Turno", "Firma" ] ] +
-                        people_practico.map { |u| [ 
-                          u.person.fullname, u.person.cuil, u.company.name, u.scoring_theoric, u.fleet_category.name, u.from_hour.strftime("%H:%M"), "  " ] }
-      pdf.move_down 12
-      pdf.table(table_data, header: true, width: pdf.bounds.width) do
-        row(0).font_style = :bold
-        self.row_colors = [ "DDDDDD", "FFFFFF" ]
-        self.cell_style = { borders: [ :top, :bottom, :left, :right ], padding: 5 }
-      end
-    end
-
-    if !people_psicometrico.blank?
-      table_data = [ [ "Nombre y apellido", "Cuil", "Empresa", "Teorico", "Categoria", "Turno", "Firma" ] ] +
-                        people_psicometrico.map { |u| [ 
-                          u.person.fullname, u.person.cuil, u.company.name, u.scoring_theoric, u.fleet_category.name, u.from_hour.strftime("%H:%M"), "  " ] }
-      pdf.move_down 12
-      pdf.table(table_data, header: true, width: pdf.bounds.width) do
-        row(0).font_style = :bold
-        self.row_colors = [ "DDDDDD", "FFFFFF" ]
-        self.cell_style = { borders: [ :top, :bottom, :left, :right ], padding: 5 }
-      end
-    end
-    pdf.render_file("public/listado.pdf")
-    send_file(Rails.root.join("public/listado.pdf"), filename: "listado.pdf", type: "application/pdf", disposition: "attachment")
+    course_people = course.course_people.joins(:unit).where(units: { category: params[:category] }).group(:person_id).order(from_hour: :asc)
+    pdf = ListadoPdf.new(course, course_people)
+    send_data pdf.render,
+            filename: "asistencia_#{params[:category]}.pdf".downcase,
+            type: "application/pdf",
+            disposition: "inline"
   end
 
   private
