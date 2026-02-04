@@ -33,6 +33,24 @@ class CoursePerson < ApplicationRecord
     [ "person", "unit", "course", "course_unit", "turn", "course_type", "company" ]
   end
 
+  def disable
+    course_people = CoursePerson.where(course: self.course, person: self.person)
+    ActiveRecord::Base.transaction do
+      course_people.each do |course_person|
+        course_person.active = false
+        turn = Turn.find_by(person: course_person.person, course: course_person.course, course_unit: course_person.course_unit)
+        if !turn.blank?
+          turn.update(person: nil, status: :available, available: true)
+        end
+        raise ActiveRecord::Rollback if course_person.has_scoring?
+      end
+    end
+  end
+
+  def has_scoring?
+    (self.scoring > 0 || self.make_up_1 > 0 || self.make_up_2 > 0)
+  end
+
   def assign_turn
     # metodo mal hecho porq lo llamamos de una instancia que no guardamos nunca
     # return if self.course.course_type.days == 1 || CoursePerson.where(course_id: self.course_id, person_id: self.person_id).count > 1
@@ -319,16 +337,6 @@ class CoursePerson < ApplicationRecord
     years_of_duration = (self.company&.credential_years.blank?) ? self.course.years_of_duration : self.company.credential_years
     self.expiration_date = self.date + years_of_duration.years
   end
-
-  # def register_particular
-  #   course = self.course
-  #   teoria = CourseUnit.where(course: course).joins(:unit).where(units: { category: "Teorico" }).last
-  #   self.unit_id = teoria.unit_id
-  #   self.course_unit_id = teoria.id
-  #   self.quota_type = :particular
-  #   self.date = course.from_date
-  #   self.save
-  # end
 
   def register_particular
     self.unit = self.course_unit.unit

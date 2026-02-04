@@ -95,18 +95,18 @@ class CoursePeopleController < ApplicationController
   def modal_disable;end
 
   def disable
-    if @course.disable
+    if @course_person.disable
         render turbo_stream: [
-          turbo_stream.remove(@course),
+          turbo_stream.remove(@course_person),
           turbo_stream.replace("toasts",
             partial: "shared/toasts",
-            locals: { message: "Inscripción dado de baja.", status_class: "primary" })
+            locals: { message: "Persona quitada del curso.", status_class: "primary" })
         ], status: :ok
     else
       render turbo_stream: [
         turbo_stream.replace("toasts",
           partial: "shared/toasts",
-          locals: { message: "No se pudo dar de baja la inscripción.", status_class: "danger" }) ],
+          locals: { message: "No se pudo quitar a esta persona.", status_class: "danger" }) ],
         status: :unprocessable_entity
     end
   end
