@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
+ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -75,6 +75,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
     t.boolean "active", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "credential_years"
     t.index ["city_id"], name: "index_companies_on_city_id"
     t.index ["company_category_id"], name: "index_companies_on_company_category_id"
     t.index ["cuit"], name: "index_companies_on_cuit", unique: true
@@ -132,10 +133,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
     t.bigint "course_id", null: false
     t.bigint "person_id", null: false
     t.bigint "manager_id"
-    t.bigint "company_id", null: false
+    t.bigint "company_id"
     t.bigint "operator_id"
-    t.bigint "inscription_motive_id", null: false
-    t.bigint "fleet_category_id", null: false
+    t.bigint "inscription_motive_id"
+    t.bigint "fleet_category_id"
     t.bigint "unit_id", null: false
     t.bigint "course_unit_id", null: false
     t.date "date", null: false
@@ -153,6 +154,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
     t.string "code", limit: 20
     t.boolean "approved", default: false
     t.date "expiration_date"
+    t.integer "quota_type"
+    t.integer "price", default: 0
+    t.integer "pay_status", default: 0
+    t.string "status"
+    t.boolean "is_free", default: false
+    t.boolean "invoiced", default: false
     t.index ["company_id"], name: "index_course_people_on_company_id"
     t.index ["course_id"], name: "index_course_people_on_course_id"
     t.index ["course_unit_id"], name: "index_course_people_on_course_unit_id"
@@ -319,6 +326,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
     t.index ["person_id"], name: "index_instructors_on_person_id"
   end
 
+  create_table "invoice_items", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.bigint "invoice_id", null: false
+    t.bigint "course_person_id", null: false
+    t.integer "status"
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["course_person_id"], name: "index_invoice_items_on_course_person_id"
+    t.index ["invoice_id"], name: "index_invoice_items_on_invoice_id"
+  end
+
+  create_table "invoices", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.string "number", null: false
+    t.bigint "company_id", null: false
+    t.string "status"
+    t.string "detail"
+    t.date "date"
+    t.date "pay_date"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_invoices_on_company_id"
+  end
+
   create_table "iva_conditions", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", limit: 50, null: false
     t.string "description"
@@ -395,6 +426,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["course_type_id"], name: "index_price_courses_on_course_type_id"
+  end
+
+  create_table "prices", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
+    t.integer "price", null: false
+    t.bigint "unit_id", null: false
+    t.integer "client_type"
+    t.bigint "sectional_id"
+    t.bigint "company_id"
+    t.date "start_date"
+    t.date "end_date"
+    t.boolean "active", default: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["company_id"], name: "index_prices_on_company_id"
+    t.index ["sectional_id"], name: "index_prices_on_sectional_id"
+    t.index ["unit_id"], name: "index_prices_on_unit_id"
   end
 
   create_table "provinces", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -485,7 +532,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "duration", default: 0
+    t.bigint "course_person_id"
     t.index ["course_id"], name: "index_turns_on_course_id"
+    t.index ["course_person_id"], name: "index_turns_on_course_person_id"
     t.index ["course_unit_id"], name: "index_turns_on_course_unit_id"
     t.index ["person_id"], name: "index_turns_on_person_id"
     t.index ["unit_id"], name: "index_turns_on_unit_id"
@@ -567,6 +616,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"
   add_foreign_key "instructors", "people"
+  add_foreign_key "invoice_items", "course_people"
+  add_foreign_key "invoice_items", "invoices"
+  add_foreign_key "invoices", "companies"
   add_foreign_key "module_questions", "exam_modules"
   add_foreign_key "module_questions", "questions"
   add_foreign_key "module_videos", "exam_modules"
@@ -579,12 +631,16 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_12_150711) do
   add_foreign_key "person_exams", "people"
   add_foreign_key "person_exams", "questions"
   add_foreign_key "price_courses", "course_types"
+  add_foreign_key "prices", "companies"
+  add_foreign_key "prices", "sectionals"
+  add_foreign_key "prices", "units"
   add_foreign_key "rooms", "headquarters"
   add_foreign_key "sectionals", "cities"
   add_foreign_key "sectionals", "provinces"
   add_foreign_key "sessions", "users"
   add_foreign_key "surveys", "courses"
   add_foreign_key "surveys", "people"
+  add_foreign_key "turns", "course_people"
   add_foreign_key "turns", "course_units"
   add_foreign_key "turns", "courses"
   add_foreign_key "turns", "people"
