@@ -17,7 +17,6 @@ export default class extends Controller {
   }
 
   change_turn() {
-    console.info("turnitos")
     this.changeTurnTarget.requestSubmit();
   }
 

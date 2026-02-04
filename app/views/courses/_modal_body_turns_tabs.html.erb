@@ -58,7 +58,7 @@
                                                   course_unit_id: course_unit.id,
                                                   list: list), data: {controller: "forms--turn", "forms--turn-target": "changeTurn"}) do |form| %>
                                               <%= form.select :change_turn_id, 
-                                                @available_turns.map { |turn| [hour_format(turn.hour), turn.id] },
+                                                @course.turns.where(status: :available, unit_id: unit[0]).select(:id, :hour).map { |turn| [hour_format(turn.hour), turn.id] },
                                                 { include_blank: true, placeholder: "cambiar hora" },
                                                 class: "form-select form-select-sm",
                                                 data: {

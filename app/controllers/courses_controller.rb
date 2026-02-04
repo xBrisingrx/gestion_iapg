@@ -223,17 +223,17 @@ class CoursesController < ApplicationController
   def change_turn
     turn = Turn.find_by(id: params[:turn_id])
     turn.change_to(params[:change_turn_id])
-    course = Course.find(params[:course_id])
-    course_units = course.course_units
-    available_turns = course.turns.where(status: :available).select(:id, :hour)
+    @course = Course.find(params[:course_id])
+    course_units = @course.course_units
+    available_turns = @course.turns.where(status: :available).select(:id, :hour)
     unit_id = CourseUnit.find_by(id: params[:course_unit_id]).unit.id
-    @units = course.units.group(:name).pluck(:id, :name)
-    @course_units = course.course_units
-    @available_turns = course.turns.where(status: :available).select(:id, :hour)
+    @units = @course.units.group(:name).pluck(:id, :name)
+    @course_units = @course.course_units
+    @available_turns = @course.turns.where(status: :available).select(:id, :hour)
     @tab_active = turn.unit.name
     render turbo_stream: turbo_stream.replace("turns",
       partial: "courses/modal_body_turns_tabs",
-      locals: { course_units: course_units, available_turns: available_turns, unit_id: unit_id, list: params[:list].to_i, units: course.units.group(:name).pluck(:id, :name) })
+      locals: { course_units: course_units, available_turns: available_turns, unit_id: unit_id, list: params[:list].to_i, units: @course.units.group(:name).pluck(:id, :name) })
   end
 
   def payments
