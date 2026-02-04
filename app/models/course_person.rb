@@ -35,10 +35,10 @@ class CoursePerson < ApplicationRecord
   end
 
   def disable
-    course_people = CoursePerson.where(course: self.course, person: self.person)
+    course_people = CoursePerson.actives.where(course: self.course, person: self.person)
     ActiveRecord::Base.transaction do
       course_people.each do |course_person|
-        course_person.active = false
+        course_person.update(active: false)
         turn = Turn.find_by(person: course_person.person, course: course_person.course, course_unit: course_person.course_unit)
         if !turn.blank?
           turn.update(person: nil, status: :available, available: true)
