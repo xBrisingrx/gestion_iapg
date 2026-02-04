@@ -247,7 +247,8 @@ class CoursesController < ApplicationController
 
   def people_registered # descargamos un PDF con el listado de gente anotada en el curso
     course = Course.find(params[:id])
-    course_people = course.course_people.actives.joins(:unit).where(units: { category: params[:category] }).order(from_hour: :asc)
+    order_by_column = (params[:category] == "Teorico") ? "last_name" : "from_hour"
+    course_people = course.course_people.actives.joins(:unit).joins(:person).where(units: { category: params[:category] }).order("#{order_by_column} ASC")
     pdf = ListadoPdf.new(course, course_people)
     send_data pdf.render,
             filename: "asistencia_#{params[:category]}.pdf".downcase,
