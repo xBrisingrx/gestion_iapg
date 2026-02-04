@@ -1,7 +1,7 @@
 <%= render "shared/modal", title: "Registrar pago", fade_in: true do %>
   <%= form_with(model: @invoice, builder: BootstrapBuilder) do |form| %>
     <div class="form-group row mb-2">
-      <%= form.label :status, "Ciudad" %>
+      <%= form.label :status, "Pago" %>
       <div class="col-6">
         <%= form.select :status, ["Pagado", "Pagado a confirmar"].each { |pago| [ pago, pago ] },
           {:include_blank => "Seleccione estado de pago"},
