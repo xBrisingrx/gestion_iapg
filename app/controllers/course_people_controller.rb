@@ -4,9 +4,9 @@ class CoursePeopleController < ApplicationController
   # GET /courses or /courses.json
   def index
     if current_user.admin?
-      @query = CoursePerson.by_course(params[:course_id])
+      @query = CoursePerson.actives.by_course(params[:course_id])
     else
-      @query = CoursePerson.by_course_and_company(params[:course_id], current_user.company_id)
+      @query = CoursePerson.actives.by_course_and_company(params[:course_id], current_user.company_id)
       # debugger
     end
     @course = Course.find(params[:course_id])
@@ -112,7 +112,7 @@ class CoursePeopleController < ApplicationController
   end
 
   def by_course
-    @course_people = CoursePerson.by_course(params[:course_id])
+    @course_people = CoursePerson.actives.by_course(params[:course_id])
   end
 
   def show_survey
