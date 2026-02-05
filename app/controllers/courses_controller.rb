@@ -237,7 +237,7 @@ class CoursesController < ApplicationController
   end
 
   def payments
-    @query = CoursePerson.ransack(params[:query])
+    @query = CoursePerson.actives.ransack(params[:query])
     @pagy, @course_people = pagy(@query.result.group(:course_id, :person_id).includes(:course), limit: 10)
   end
 
