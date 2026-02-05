@@ -1,16 +1,15 @@
 <%= turbo_frame_tag "course_people" do %>
-  <table class="table">
-    <thead>
+  <table class="table table-hover">
+    <thead class="thead-light">
       <tr>
-        <td>Cuil</td>
-        <td>Nombre</td>
-        <td>Empesa</td>
-        <td>Resultado teórico</td>
-        <td>Nota examen</td>
-        <td>Resultado práctica</td>
-        <td>Psicométrico</td>
-        <td></td>
-        <td>Acciones</td>
+        <th>Cuil</th>
+        <th>Nombre</th>
+        <th>Empesa</th>
+        <th>Resultado teórico</th>
+        <th>Nota teorico</th>
+        <th>Nota práctica</th>
+        <th>Nota psicométrico</th>
+        <th>Acciones</th>
       </tr>
     </thead>
     <tbody>
@@ -22,7 +21,6 @@
           <td><%= course_person.status_theoric %></td>
           <td><%= course_person.scoring_theoric %></td>
           <td><%= course_person.scoring_practica %></td>
-          <td><%= course_person.person.name %></td>
           <td><%= course_person.person.name %></td>
           <td>
             <%= link_to register_scoring_modal_course_path(id: course_person.course_id, person_id: course_person.person_id), 

@@ -19,12 +19,7 @@ export default class extends Controller {
 
   set_bonus(event) {
     const row = event.target.parentElement.parentElement.parentElement
-    if (event.target.checked) {
-      row.querySelector(".price").innerHTML = "<span class='badge bg-info'>Bonificado</span>"
-    } else {
-      const item_price = row.querySelector("#course_person_price").value
-      row.querySelector(".price").innerHTML = `$${item_price}.00`
-    }
+    this.change_amount_text(row, event.target.checked)
     this.calculate_total()
   }
 
@@ -67,5 +62,29 @@ export default class extends Controller {
     .then( response => response.json() )
     .then( data => window.location.reload() )
     .catch( error => console.error('error', 'Ocurrio un error') )
+  }
+
+  set_is_free(event) {
+    const row = event.target.parentElement.parentElement.parentElement
+    this.change_amount_text(row, event.target.checked)
+    row.querySelector(".invoice_item_set_free").value = event.target.checked
+    const items = document.querySelectorAll(".item_price")
+    let sumatoria = 0
+    for (const item of items) {
+      const is_free = item.parentElement.querySelector(".bonus").checked
+      if (!is_free) {
+        sumatoria += parseInt(item.value)
+      }
+    }
+    document.getElementById("total").innerText = `$${sumatoria}.00`
+  }
+
+  change_amount_text(row, is_free) {
+    if (is_free) {
+      row.querySelector(".price").innerHTML = "<span class='badge bg-info'>Bonificado</span>"
+    } else {
+      const item_price = row.querySelector("#course_person_price").value
+      row.querySelector(".price").innerHTML = `$${item_price}.00`
+    }
   }
 }
