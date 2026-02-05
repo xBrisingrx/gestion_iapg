@@ -4,7 +4,7 @@ class Invoice < ApplicationRecord
   has_many :course_people, through: :invoice_items
   accepts_nested_attributes_for :invoice_items
 
-  before_create :generate_number
+  before_create :set_invoice_data
 
   def self.ransackable_attributes(auth_object = nil)
     [ "id", "number", "status", "company_id", "date", "created_at",
@@ -16,11 +16,11 @@ class Invoice < ApplicationRecord
   end
 
   def total
-    self.course_people.sum(:price)
+    self.course_people.where(is_free: false).sum(:price)
   end
 
   private
-  def generate_number
+  def set_invoice_data
     self.number = Invoice.all.count + 1
   end
 end

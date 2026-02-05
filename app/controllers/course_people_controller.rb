@@ -154,8 +154,8 @@ class CoursePeopleController < ApplicationController
   end
 
   def modal_payments_statuses # mostramos un modal con los cursos persona y el estado, es un detalle de items a pagar
-    @course_people = CoursePerson.actives.where(course_id: params[:course_id], person_id: params[:person_id])
-    @total = @course_people.where(is_free: false).sum(:price)
+    @course_people = CoursePerson.actives.where(course_id: params[:course_id], person_id: params[:person_id], invoiced: false)
+    @total = @course_people.first.amount_owed
   end
 
   def get_pendings

@@ -370,11 +370,15 @@ class CoursePerson < ApplicationRecord
   end
 
   def get_price # obtenemos el precio de todo el curso, no solo de este registro
-    CoursePerson.where(course: self.course, person: self.person).where(is_free: false).sum(:price)
+    CoursePerson.actives.where(course: self.course, person: self.person).where(is_free: false).sum(:price)
+  end
+
+  def amount_owed
+    CoursePerson.actives.where(course: self.course, person: self.person, is_free: false, invoiced: false).sum(:price)
   end
 
   def check_status
-    records = CoursePerson.where(person: self.person, course: self.course).group(:pay_status).count
+    records = CoursePerson.actives.where(person: self.person, course: self.course).group(:pay_status).count
     if !records["no_pay"].nil?
       "Pendiente"
     elsif !records["invoiced"].nil?
@@ -382,5 +386,9 @@ class CoursePerson < ApplicationRecord
     else
       "Pagado"
     end
+  end
+
+  def invoice_price
+    (self.is_free) ? "Bonificado" : "$#{self.price}.00"
   end
 end

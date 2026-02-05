@@ -3,6 +3,7 @@
     <thead class="thead-light">
       <tr>
         <th></th>
+        <th>Bonificar</th>
         <th>Curso</th>
         <th>Modulo</th>
         <th>Persona</th>
@@ -14,7 +15,19 @@
         <tr class="course_person">
           <td>
             <div class="form-check mb-3">
-              <input type="checkbox" id="formCheck11" class="form-check-input" data-action="forms--invoice#add_item" data-forms--invoice-target="add">
+              <input type="checkbox" id="add_item" class="form-check-input" data-action="forms--invoice#add_item" data-forms--invoice-target="add">
+              <label class="form-check-label" for="formCheck11"></label>
+            </div>
+          </td>
+          <td>
+            <div class="form-check mb-3">
+              <input 
+                type="checkbox" 
+                id="bonus" 
+                class="form-check-input" 
+                data-action="forms--invoice#set_bonus" 
+                data-forms--invoice-target="bonus"
+                <%= course_person.is_free ? "Disabled" : "" %>>
               <label class="form-check-label" for="formCheck11"></label>
             </div>
           </td>
@@ -31,7 +44,7 @@
           <td>
             <%= course_person.person.fullname %>
           </td>
-          <td>
+          <td class="price">
             <% if course_person.is_free %>
               <span class='badge bg-info'>Bonificado</span>
             <% else %>
@@ -39,13 +52,14 @@
             <% end %>
           </td>
           <input type="hidden" 
+                 id="course_person_price"
                  value="<%= ( course_person.is_free ) ? 0 : course_person.price %>" 
                  class="item_price">
           <input type="hidden" value="<%= course_person.id %>" id="course_person_id">
         </tr>
       <% end %>
         <tr>
-          <td class="text-end">Total:</td>
+          <td class="text-end" colspan="5"><b>Total:</b></td>
           <td id="total"></td>
         </tr>
     </tbody>

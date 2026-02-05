@@ -2,10 +2,9 @@ import { Controller } from "@hotwired/stimulus"
 
 // Connects to data-controller="forms--invoice"
 export default class extends Controller {
-  static targets = ["form", "company", "items", "add"]
+  static targets = ["form", "company", "items", "add", "bonus"]
 
   connect() {
-    console.log("conectado")
   }
 
   get_pendings() {
@@ -14,18 +13,34 @@ export default class extends Controller {
     }
   }
 
-  add_item(event) {
+  add_item() {
+    this.calculate_total()
+  }
+
+  set_bonus(event) {
+    const row = event.target.parentElement.parentElement.parentElement
+    if (event.target.checked) {
+      row.querySelector(".price").innerHTML = "<span class='badge bg-info'>Bonificado</span>"
+    } else {
+      const item_price = row.querySelector("#course_person_price").value
+      row.querySelector(".price").innerHTML = `$${item_price}.00`
+    }
+    this.calculate_total()
+  }
+
+  calculate_total() {
     const items = document.querySelectorAll(".item_price")
     let sumatoria = 0
     for (const item of items) {
-      const element = item.parentElement.querySelector(".form-check-input").checked
-      if (element) {
+      const add_item = item.parentElement.querySelector("#add_item").checked
+      const is_free = item.parentElement.querySelector("#bonus").checked
+      if (add_item && !is_free) {
         sumatoria += parseInt(item.value)
       }
     }
     document.getElementById("total").innerText = `$${sumatoria}.00`
   }
-
+  
   submit(event) {
     event.preventDefault()
     let form = new FormData()
@@ -35,7 +50,11 @@ export default class extends Controller {
     for (let i = 0; i < course_people.length; i++) {
       if (course_people[i].querySelector(".form-check-input").checked) {
         const course_person_id = course_people[i].querySelector("#course_person_id").value
+        const set_free = course_people[i].querySelector("#bonus").checked
         form.append(`invoice[invoice_items_attributes][${i}][course_person_id]`, course_person_id)
+        if (set_free) {
+          form.append(`invoice[invoice_items_attributes][${i}][set_free]`, set_free)
+        }
       }
     }
     fetch("/invoices", {
