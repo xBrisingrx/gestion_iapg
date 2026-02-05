@@ -35,10 +35,10 @@ class CoursePerson < ApplicationRecord
   end
 
   def disable
-    course_people = CoursePerson.where(course: self.course, person: self.person)
+    course_people = CoursePerson.actives.where(course: self.course, person: self.person)
     ActiveRecord::Base.transaction do
       course_people.each do |course_person|
-        course_person.active = false
+        course_person.update(active: false)
         turn = Turn.find_by(person: course_person.person, course: course_person.course, course_unit: course_person.course_unit)
         if !turn.blank?
           turn.update(person: nil, status: :available, available: true)
@@ -185,7 +185,7 @@ class CoursePerson < ApplicationRecord
       .joins(:unit)
       .where(units: { category: "Teorico" })
     if !cp.blank?
-      if cp.first.scoring
+      if cp.first.scoring?
         nota = [ cp.first.scoring, cp.first.make_up_1, cp.first.make_up_2 ].max
         nota >= 90 ? "Aprobado" : "Desaprobado"
       else
@@ -370,11 +370,15 @@ class CoursePerson < ApplicationRecord
   end
 
   def get_price # obtenemos el precio de todo el curso, no solo de este registro
-    CoursePerson.where(course: self.course, person: self.person).where(is_free: false).sum(:price)
+    CoursePerson.actives.where(course: self.course, person: self.person).where(is_free: false).sum(:price)
+  end
+
+  def amount_owed
+    CoursePerson.actives.where(course: self.course, person: self.person, is_free: false, invoiced: false).sum(:price)
   end
 
   def check_status
-    records = CoursePerson.where(person: self.person, course: self.course).group(:pay_status).count
+    records = CoursePerson.actives.where(person: self.person, course: self.course).group(:pay_status).count
     if !records["no_pay"].nil?
       "Pendiente"
     elsif !records["invoiced"].nil?
@@ -382,5 +386,9 @@ class CoursePerson < ApplicationRecord
     else
       "Pagado"
     end
+  end
+
+  def invoice_price
+    (self.is_free) ? "Bonificado" : "$#{self.price}.00"
   end
 end

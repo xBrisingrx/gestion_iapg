@@ -72,12 +72,12 @@ class InvoicesController < ApplicationController
     invoice = Invoice.find(params[:id])
     pdf = Prawn::Document.new
     pdf.font "Helvetica"
-    pdf.text "Factura X", align: :center, size: 24
+    pdf.text "Factura #{invoice.number}", align: :center, size: 24
     pdf.image Rails.root.join("app/assets/images/logo.png")
     pdf.move_down 5
     pdf.text "Razon social: #{invoice.company.name}                  CUIT: #{invoice.company.cuit}", align: :left, size: 12
     table_data = [ [ "Nombre y apellido", "Fecha", "Modulo", "Sede", "Valor" ] ] +
-                      invoice_items.map { |u| [ u.person.fullname, u.course_person.date.strftime("%d-%m-%y"), u.course_person.unit.name, u.course.room.headquarter.name, "$#{u.course_person.price}.00" ] }
+                      invoice_items.map { |u| [ u.person.fullname, u.course_person.date.strftime("%d-%m-%y"), u.course_person.unit.name, u.course.room.headquarter.name, u.course_person.invoice_price ] }
     pdf.move_down 12
     pdf.table(table_data, header: true, width: pdf.bounds.width) do
       row(0).font_style = :bold
@@ -86,8 +86,12 @@ class InvoicesController < ApplicationController
     end
     pdf.move_down 10
     pdf.text "TOTAL: $#{invoice.total}.00", align: :right, size: 12
-    pdf.render_file("public/invoice.pdf")
-    send_file(Rails.root.join("public/invoice.pdf"), filename: "filename", type: "application/pdf", disposition: "attachment")
+    # pdf.render_file("public/invoice.pdf")
+    # send_file(Rails.root.join("public/invoice.pdf"), filename: "filename", type: "application/pdf", disposition: "attachment")
+    send_data pdf.render,
+            filename: "factura_#{invoice.number}.pdf",
+            type: "application/pdf",
+            disposition: "inline"
   end
 
   def create_pdf_from(collection, column_names)
@@ -119,8 +123,6 @@ class InvoicesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def invoice_params
       params.require(:invoice).permit(:number, :company_id, :status, :detail, :date, :pay_date, :active,
-                    invoice_items_attributes: [ :id, :invoice, :course_person_id ])
-      # params.expect(invoice: [ :number, :company_id, :status, :detail, :date, :pay_date, :active,
-      #               invoice_items_attributes: [:id, :invoice, :course_person_id] ])
+                    invoice_items_attributes: [ :id, :invoice, :course_person_id, :set_free ])
     end
 end

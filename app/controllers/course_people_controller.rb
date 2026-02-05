@@ -4,9 +4,9 @@ class CoursePeopleController < ApplicationController
   # GET /courses or /courses.json
   def index
     if current_user.admin?
-      @query = CoursePerson.by_course(params[:course_id])
+      @query = CoursePerson.actives.by_course(params[:course_id])
     else
-      @query = CoursePerson.by_course_and_company(params[:course_id], current_user.company_id)
+      @query = CoursePerson.actives.by_course_and_company(params[:course_id], current_user.company_id)
       # debugger
     end
     @course = Course.find(params[:course_id])
@@ -112,7 +112,7 @@ class CoursePeopleController < ApplicationController
   end
 
   def by_course
-    @course_people = CoursePerson.by_course(params[:course_id])
+    @course_people = CoursePerson.actives.by_course(params[:course_id])
   end
 
   def show_survey
@@ -154,12 +154,12 @@ class CoursePeopleController < ApplicationController
   end
 
   def modal_payments_statuses # mostramos un modal con los cursos persona y el estado, es un detalle de items a pagar
-    @course_people = CoursePerson.where(course_id: params[:course_id], person_id: params[:person_id])
-    @total = @course_people.where(is_free: false).sum(:price)
+    @course_people = CoursePerson.actives.where(course_id: params[:course_id], person_id: params[:person_id], invoiced: false)
+    @total = @course_people.first.amount_owed
   end
 
   def get_pendings
-    @course_people = CoursePerson.where(company_id: params[:company_id], pay_status: :no_pay)
+    @course_people = CoursePerson.actives.where(company_id: params[:company_id], pay_status: :no_pay)
     render :pendings_table
   end
 
