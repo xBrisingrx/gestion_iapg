@@ -27,7 +27,7 @@ class CoursePeopleController < ApplicationController
   def new
     @course = Course.find(params[:course_id])
     @course_person = CoursePerson.new
-    @units = @course.course_units.group(:unit_id)
+    @course_units = @course.course_units.group(:unit_id)
   end
 
   # GET /courses/1/edit
@@ -59,7 +59,7 @@ class CoursePeopleController < ApplicationController
         format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
         format.json { render :show, status: :created, location: @course_person }
       else
-        @units = @course.course_units.group(:unit_id)
+        @course_units = @course.course_units.group(:unit_id)
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @course_person.errors, status: :unprocessable_entity }
       end
