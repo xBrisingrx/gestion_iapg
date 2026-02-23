@@ -49,7 +49,14 @@ class Course < ApplicationRecord
   end
 
   def name
-     self.course_type.name 
+     self.course_type.name
+  end
+
+  def has_turns
+    # verifico si el curso tiene turnos disponibles
+    # como la teoria suelen ser de a 100 personas nunca se llena
+    categories = self.units.pluck(:category)
+    (categories.include?("Teorico") || self.turns.where(status: :available).any?)
   end
 
   private
