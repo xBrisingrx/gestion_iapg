@@ -1,16 +1,20 @@
 <%= turbo_frame_tag "course_people" do %>
   <div class="mb-2">
-    <%= link_to new_course_course_person_path(@course), 
-      class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
-      title: 'Registrar cupo', 
-      data: { turbo_frame: "modal"} do %>
-      <i class="bi bi-person-add"></i>
-    <% end %>
-    <%= link_to particular_modal_course_course_people_path(@course), 
-      class: "btn btn-danger btn-sm btn-sm btn-icon text-white",
-      title: 'Registrar cupo particular', 
-      data: { turbo_frame: "modal"} do %>
-      <i class="bi bi-person-add"></i>
+    <% if @course.has_turns? %>
+      <%= link_to new_course_course_person_path(@course), 
+        class: "btn btn-primary btn-sm btn-sm btn-icon text-white",
+        title: 'Registrar cupo', 
+        data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-person-add"></i>
+      <% end %>
+      <%= link_to particular_modal_course_course_people_path(@course), 
+        class: "btn btn-danger btn-sm btn-sm btn-icon text-white",
+        title: 'Registrar cupo particular', 
+        data: { turbo_frame: "modal"} do %>
+        <i class="bi bi-person-add"></i>
+      <% end %>
+    <% else %>
+      <span class="badge bg-secondary mr-2">Curso completo</span>
     <% end %>
     
     <%= link_to register_attendance_course_path(@course), 
