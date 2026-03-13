@@ -13,7 +13,9 @@
         <% @courses.each do |course| %>
           <option 
             value="<%= course.id %>"
-            data-date="<%= course.date %>"> 
+            data-date="<%= course.date %>"
+            data-course="<%= course.course_id %>"
+            data-unit="<%= course.unit_id %>" > 
             <%= "#{date_format(course.date)} #{course.unit.name} sala: #{course.course.room.name}"  %>
           </option>
         <% end %>

@@ -121,21 +121,8 @@ class CoursesController < ApplicationController
   end
 
   def get_teoricos_by_category
-    # obtenemos cursos teoricos filtrando por categoria [inicio/renovacion]
-    units = Unit.where(category: "Teorico").pluck(:id)
-    courses_ids = CourseUnit.where(unit_id: units).pluck(:course_id)
-    # @courses = CourseUnit.where(unit_id: units).where("date >= ?", Date.today).order(:date)
-    @courses = Course.joins(:course_type)
-                .joins(:course_units)
-                .joins(:room)
-                .joins(course_units: :unit)
-                .where(id: courses_ids)
-                # .where("from_date >= ?", Date.today)
-                .where(course_types: { category: params[:course_category] })
-                .where(course_units: { unit_id: units })
-                .where(is_company: false)
-                .select("courses.id, courses.room_id, courses.from_date, course_units.id as course_unit_id, rooms.name as room_name, units.name as unit_name")
-                .order(date: :desc)
+    # obtenemos cursos teoricos filtrando por categoria [inicio/renovacion] y incompany [true/false]
+    @courses = Course.filter_by_category_and_fleet("Teorico", params[:course_category],  params[:is_in_company] == "true", params[:company_id])
   end
 
   def get_teoricos_in_company

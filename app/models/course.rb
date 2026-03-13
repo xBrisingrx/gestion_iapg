@@ -24,6 +24,7 @@ class Course < ApplicationRecord
   scope :actives, -> { where(active: true) }
   scope :count_general_number, ->(course_type_id) { where(active: true).where(course_type_id: course_type_id).count }
   scope :by_year, ->(year) { where("extract(year from created_at) = ?", year) }
+  scope :by_company, ->(company_id) { where(company_id: company_id) }
 
   before_create :set_to_date
   before_create :set_years_of_duration
@@ -57,6 +58,28 @@ class Course < ApplicationRecord
     # como la teoria suelen ser de a 100 personas nunca se llena
     categories = self.units.pluck(:category)
     (categories.include?("Teorico") || self.turns.where(status: :available).any?)
+  end
+
+  def self.filter_by_category_and_fleet(unit_category, course_category, is_in_company, company_id)
+    units = Unit.where(category: unit_category).pluck(:id)
+    courses_ids = CourseUnit.where(unit_id: units).pluck(:course_id)
+    # @courses = CourseUnit.where(unit_id: units).where("date >= ?", Date.today).order(:date)
+    @courses = Course.joins(:course_type)
+                .joins(:course_units)
+                .joins(:room)
+                .joins(course_units: :unit)
+                .where(id: courses_ids)
+                # .where("from_date >= ?", Date.today)
+                .where(course_types: { category: course_category })
+                .where(course_units: { unit_id: units })
+                .where(is_company: is_in_company)
+                .select("courses.id, courses.room_id, courses.from_date, course_units.id as course_unit_id, course_units.unit_id, rooms.name as room_name, units.name as unit_name")
+                .order(date: :desc)
+    if is_in_company
+      @courses.by_company(company_id)
+    else
+      @courses
+    end
   end
 
   private

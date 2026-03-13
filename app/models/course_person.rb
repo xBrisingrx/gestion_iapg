@@ -164,15 +164,13 @@ class CoursePerson < ApplicationRecord
   end
 
   def register_renovation
-    self.unit = self.course_unit.unit
-    self.course = self.course_unit.course
-    self.date = self.course_unit.date
+    # aca estamos seteando el precio del modulo que va a tomar la persona
+    # si el modulo es por turno, registramos el turno
     sectional_id = self.course.room.headquarter.sectional.id
     self.price = (self.is_free) ? 0 : self.unit.get_price(sectional_id, self.company_id)
-    course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.course_unit.unit_id)
+    course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.unit_id)
     if course_type_unit.is_by_turn
       self.from_hour = set_hour(course_unit.unit_id, self.course_id, self.date, course_type_unit.shift_time)
-      # self.from_hour = set_turn(turn_id, self.date, course_type_unit.shift_time)
       self.to_hour = self.from_hour + course_type_unit.shift_time.minutes
     end
     self.save

@@ -14,7 +14,7 @@
             value="<%= course.course_unit_id %>"
             data-date="<%= course.from_date %>"
             data-course="<%= course.id %>"
-            data-course-unit-id="<%= course.course_unit_id %>"> 
+            data-unit="<%= course.unit_id %>"> 
             <%= "#{date_format(course.from_date)} #{course.unit_name} sala: #{course.room_name}"  %>
           </option>
         <% end %>
