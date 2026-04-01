@@ -93,7 +93,11 @@ class CoursesController < ApplicationController
   end
 
   def by_course_type
-    @courses = Course.where(course_type_id: params[:course_type_id]).order(from_date: :desc)
+    @courses = Course
+                .where(course_type_id: params[:course_type_id])
+                .actives
+                .includes(:room)
+                .order(from_date: :desc)
   end
 
   def register_scoring_modal

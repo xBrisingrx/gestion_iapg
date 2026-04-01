@@ -63,7 +63,7 @@
   <div class="form-group row mb-2">
     <%= form.label :inscription_motive_id, "Motivo" %>
     <div class="col-6">
-      <%= form.select :inscription_motive_id, InscriptionMotive.actives.collect { |motive| [ motive.name, motive.id ] },
+      <%= form.select :inscription_motive_id, InscriptionMotive.actives.order(:name).collect { |motive| [ motive.name, motive.id ] },
         {:include_blank => "Seleccione motivo"},
         data: {
           controller: 'tselect',

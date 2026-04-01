@@ -161,6 +161,7 @@ Rails.application.routes.draw do
     get "imagenes_credenciales", to: "people#credential_images", on: :collection
     post "upload_multiple_images", on: :collection
     get "by_cuil", on: :collection
+    get "historico_persona", on: :member
   end
 
   get "calendar/month", to: "calendar#month"

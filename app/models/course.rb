@@ -10,14 +10,15 @@ class Course < ApplicationRecord
   has_many :instructors, through: :course_units
   has_many :course_exams, dependent: :destroy
   has_many :exams, through: :course_exams
+  has_many :surveys, dependent: :destroy
 
 
   accepts_nested_attributes_for :course_units, reject_if: :all_blank
   accepts_nested_attributes_for :course_exams, reject_if: :exam_id_is_blank
   accepts_nested_attributes_for :course_people
 
-  validates :year_number, uniqueness: { scope: [ :course_type_id, :general_number ], allow_blank: true }
-  validates :general_number, uniqueness: { scope: :course_type_id, allow_blank: true }
+  # validates :year_number, uniqueness: { scope: [ :course_type_id, :general_number ], allow_blank: true }
+  # validates :general_number, uniqueness: { scope: :course_type_id, allow_blank: true }
   validates :from_date, presence: true
   validates :company_id, presence: true, if: :course_is_company
 

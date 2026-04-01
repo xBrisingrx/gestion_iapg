@@ -205,6 +205,18 @@ class CoursePerson < ApplicationRecord
     scoring
   end
 
+  def nota_pdf_historico(categoria, instancia)
+    cp = CoursePerson.select("course_people.#{instancia} AS nota")
+      .where(person: self.person, course: self.course)
+      .joins(:unit)
+      .where(units: { category: categoria })
+    if cp.blank?
+      ""
+    else
+      (cp.first.nota > 0) ? cp.first.nota : ""
+    end
+  end
+
   def las_theoric_data
     cp = CoursePerson
       .where(person: self.person, course: self.course)
