@@ -5,9 +5,11 @@
       <%= form.select :person_id, Person.select(:id, :name, :last_name, :cuil).actives.collect { |person| [ "#{person.fullname} - #{person.cuil}", person.id ] },
         {:include_blank => "Seleccione persona"},
         data: {controller: 'tselect',
+          action: "forms--course-person#check_person_on_other_course",
           tselect_ids_value: [course_person.person_id]
         }
       %>
+      <p class="text-warning"></p>
     </div>
     <%= inline_error_for(:person_id, course_person, "offset-3") %>
   </div>

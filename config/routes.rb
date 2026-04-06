@@ -107,6 +107,7 @@ Rails.application.routes.draw do
   get "payments_statuses", to: "course_people#modal_payments_statuses"
   get "show_survey", to: "course_people#show_survey"
   get "get_pendings", to: "course_people#get_pendings"
+  get "check_person_on_other_course", to: "course_people#check_person_on_other_course"
   resources :instructors, except: [ :destroy ] do
     get "modal_disable", on: :member
     put "disable", on: :member

@@ -164,6 +164,17 @@ class CoursePeopleController < ApplicationController
     render :pendings_table
   end
 
+  def check_person_on_other_course
+    course_people = CoursePerson
+                    .where(person_id: params[:person_id])
+                    .where("date >= ?", Date.today)
+    if course_people.any?
+      render json: { message: "Esta persona tiene cursos pendientes.", pending: true  }
+    else
+      render json: { pending: false }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_course_person
