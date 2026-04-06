@@ -59,8 +59,10 @@
               <%= link_to 'Pendientes', payments_courses_path, class:"dropdown-item" %>
               <%= link_to 'Facturas', invoices_path, class:"dropdown-item" %>
             </ul>
-          </li>
         </ul>
+        <div class="d-flex">
+          <%= link_to "Salir", "#", class: "btn btn-sm btn-outline-danger" %>
+        </div>
       </div>
     <% end %>
   </div>
