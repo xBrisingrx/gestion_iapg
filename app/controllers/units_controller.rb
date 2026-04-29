@@ -3,7 +3,7 @@ class UnitsController < ApplicationController
 
   # GET /units or /units.json
   def index
-    @query = Unit.actives.ransack(params[:query])
+    @query = Unit.actives.order(:name).ransack(params[:query])
     @pagy, @units = pagy(@query.result)
     authorize @units
   end

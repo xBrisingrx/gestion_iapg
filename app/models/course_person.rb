@@ -213,7 +213,7 @@ class CoursePerson < ApplicationRecord
     if cp.blank?
       ""
     else
-      (cp.first.nota > 0) ? cp.first.nota : ""
+      (cp.first.nota.blank?) ? "" : cp.first.nota
     end
   end
 
@@ -400,5 +400,9 @@ class CoursePerson < ApplicationRecord
 
   def invoice_price
     (self.is_free) ? "Bonificado" : "$#{self.price}.00"
+  end
+
+  def canceled?
+    !self.expiration_date.blank?
   end
 end

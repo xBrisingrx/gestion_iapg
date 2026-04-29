@@ -3,7 +3,7 @@ class CourseTypesController < ApplicationController
 
   # GET /course_types or /course_types.json
   def index
-    @query = CourseType.actives.ransack(params[:query])
+    @query = CourseType.actives.order(:name).ransack(params[:query])
     @pagy, @course_types = pagy(@query.result.includes(:room))
     authorize @course_types
   end

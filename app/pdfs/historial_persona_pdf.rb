@@ -1,7 +1,6 @@
 class HistorialPersonaPdf < RBPDF
-
   def initialize(persona:, courses:)
-    super('L', 'mm', 'A4', true, 'UTF-8', false)
+    super("L", "mm", "A4", true, "UTF-8", false)
 
     @persona = persona
     @courses = courses
@@ -23,31 +22,31 @@ class HistorialPersonaPdf < RBPDF
 
     self.Image(image_file.to_s, 14, 11, 25)
 
-    self.SetFont('helvetica', 'B', 10)
+    self.SetFont("helvetica", "B", 10)
 
     self.SetXY(10, 7)
 
     # cajas superiores
-    self.Cell(33, 27, '', 1)
-    self.Cell(210, 27, '', 1)
-    self.Cell(33, 27, '', 1, 1)
+    self.Cell(33, 27, "", 1)
+    self.Cell(210, 27, "", 1)
+    self.Cell(33, 27, "", 1, 1)
 
-    self.Cell(276, 5, "Reporte Historial de Persona", 1, 1, 'C')
+    self.Cell(276, 5, "Reporte Historial de Persona", 1, 1, "C")
 
-    self.SetFont('helvetica', 'B', 14)
+    self.SetFont("helvetica", "B", 14)
     self.SetXY(0, 16)
-    self.Cell(0, 0, "Escuela de Conducción Defensiva", 0, 1, 'C')
+    self.Cell(0, 0, "Escuela de Conducción Defensiva", 0, 1, "C")
 
-    self.SetFont('helvetica', '', 12)
+    self.SetFont("helvetica", "", 12)
     self.SetXY(0, 22)
-    self.Cell(0, 0, "IAPG Instituto Argentino del Petróleo y del Gas", 0, 1, 'C')
+    self.Cell(0, 0, "IAPG Instituto Argentino del Petróleo y del Gas", 0, 1, "C")
 
-    self.SetFont('helvetica', '', 10)
+    self.SetFont("helvetica", "", 10)
     self.SetXY(250, 16)
-    self.Cell(0, 0, "Fecha emision", 0, 1, 'C')
+    self.Cell(0, 0, "Fecha emision", 0, 1, "C")
 
     self.SetXY(250, 22)
-    self.Cell(0, 0, Date.today.strftime("%d/%m/%Y"), 0, 1, 'C')
+    self.Cell(0, 0, Date.today.strftime("%d/%m/%Y"), 0, 1, "C")
   end
 
   # =========================
@@ -55,10 +54,10 @@ class HistorialPersonaPdf < RBPDF
   # =========================
   def Footer
     self.SetY(-15)
-    self.SetFont('helvetica', 'I', 8)
+    self.SetFont("helvetica", "I", 8)
 
     texto = "Página #{self.getAliasNumPage} de #{self.getAliasNbPages}"
-    self.Cell(0, 0, texto, 0, 0, 'R')
+    self.Cell(0, 0, texto, 0, 0, "R")
   end
 
   # =========================
@@ -66,7 +65,7 @@ class HistorialPersonaPdf < RBPDF
   # =========================
   def contenido
     self.SetXY(10, 43)
-    image_file = ActiveStorage::Blob.service.path_for(@persona.images.last.key)
+    image_file = (@persona.images.attached?) ? ActiveStorage::Blob.service.path_for(@persona.images.last.key) : Rails.root.join("app/assets/images/credencial/faces/example.jpg")
 
     self.Image(image_file.to_s, 10, 43, 40)
     html = <<~HTML
@@ -122,10 +121,9 @@ class HistorialPersonaPdf < RBPDF
     rows = @courses.map do |course|
       courses_person = CoursePerson.where(course: course, person: @persona)
       course_person = courses_person.first
-      <<~ROW
-        <tr>
+      data = "<tr>
           <td>#{course.from_date.strftime('%d/%m/%Y')}</td>
-          <td>#{courses_person.company.name}</td>
+          <td>#{course_person.company.name}</td>
           <td>#{course.course_type.name}</td>
           <td>#{course.room.headquarter.name}</td>
           <td>#{course_person.fleet_category.name}</td>
@@ -137,7 +135,28 @@ class HistorialPersonaPdf < RBPDF
           <td>#{course_person.nota_pdf_historico("Psicometrico", "scoring")}</td>
           <td>#{course_person.nota_pdf_historico("Practico", "scoring")}</td>
           <td></td>
-        </tr>
+        </tr>"
+
+      if !courses_person.joins(:unit).where(units: { category: "Practico" }).blank?
+        practica = courses_person.joins(:unit).where(units: { category: "Practico" }).first
+        data = data+"<tr>
+          <td>#{course.from_date.strftime('%d/%m/%Y')}</td>
+          <td>#{course_person.company.name}</td>
+          <td>Practico flota #{practica.unit.fleet}</td>
+          <td>#{course.room.headquarter.name}</td>
+          <td>#{course_person.fleet_category.name}</td>
+          <td>#{course_person.inscription_motive.name}</td>
+          <td></td>
+          <td>estado</td>
+          <td></td>
+          <td></td>
+          <td>#{course_person.nota_pdf_historico("Psicometrico", "scoring")}</td>
+          <td>#{course_person.nota_pdf_historico("Practico", "scoring")}</td>
+          <td></td>
+        </tr>"
+      end
+      <<~ROW
+        #{data}
       ROW
     end.join
 
