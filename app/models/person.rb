@@ -7,11 +7,11 @@ class Person < ApplicationRecord
     attachable.variant :thumb, resize_to_limit: [ 100, 100 ]
   end
   has_many_attached :psicometrics
-  normalizes :email, with: ->(email) {  email.strip.downcase }
+  # normalizes :email, with: ->(email) {  email.strip.downcase }
 
   validates :name, :last_name, :cuil, :birthdate, :phone, :celphone, :email, :direction, presence: true
   validates :cuil, uniqueness: { message: "Ya existe una persona registrada con este cuil." }
-  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "debe ingresar un  email  válido" }
+  # validates :email, format: { with: URI::MailTo::EMAIL_REGEXP, message: "debe ingresar un  email  válido" }
   before_save :set_province
 
   scope :actives, -> { where(active: true) }

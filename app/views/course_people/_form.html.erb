@@ -5,9 +5,11 @@
       <%= form.select :person_id, Person.select(:id, :name, :last_name, :cuil).actives.collect { |person| [ "#{person.fullname} - #{person.cuil}", person.id ] },
         {:include_blank => "Seleccione persona"},
         data: {controller: 'tselect',
+          action: "forms--course-person#check_person_on_other_course",
           tselect_ids_value: [course_person.person_id]
         }
       %>
+      <p class="text-warning"></p>
     </div>
     <%= inline_error_for(:person_id, course_person, "offset-3") %>
   </div>
@@ -63,7 +65,7 @@
   <div class="form-group row mb-2">
     <%= form.label :inscription_motive_id, "Motivo" %>
     <div class="col-6">
-      <%= form.select :inscription_motive_id, InscriptionMotive.actives.collect { |motive| [ motive.name, motive.id ] },
+      <%= form.select :inscription_motive_id, InscriptionMotive.actives.order(:name).collect { |motive| [ motive.name, motive.id ] },
         {:include_blank => "Seleccione motivo"},
         data: {
           controller: 'tselect',
@@ -74,12 +76,24 @@
     <%= inline_error_for(:inscription_motive_id, course_person, "offset-3") %>
   </div>
 
-  <% @units.each do |unit| %>
-    <% turns = Turn.where(course_id: course.id, unit_id: unit.unit_id, status: :available).order(:hour, :list) %>
+  <% @course_units.each do |course_unit| %>
+    <% if course_unit.is_by_turn %>
+      <% turns = Turn.where(course_id: course.id, unit_id: course_unit.unit_id, status: :available).order(:hour, :list) %>
+      <% if turns.blank? %>
+        <%= form.label course_unit.unit.name %>
+        <div class="col-6">
+          <span class="badge bg-soft-warning text-warning">Modulo sin turnos disponibles</span>
+        </div>
+      <% else %>
+        <%# aca tenemos que mostrar el label con los turnos disponibles a seleccionar %>
+      <% end %>
+    <% else %>
+    <%# aca mostramos el label de modulos que no son por turno, generalmente las teorias %>
+    <% end %>
     <% next if turns.blank?%>
     <div class="form-group row mb-2">
-      <% input_id = ( unit.unit.category == "Practico" ? :practical_turn_id : :psicometrico_turn_id ) %>
-      <%= form.label unit.unit.name %>
+      <% input_id = ( course_unit.unit.category == "Practico" ? :practical_turn_id : :psicometrico_turn_id ) %>
+      <%= form.label course_unit.unit.name %>
       <div class="col-6">
         <%= form.select input_id.to_sym, 
           turns.collect { |turn| [ "#{hour_format(turn.hour)} lista #{turn.list}", turn.id ] },

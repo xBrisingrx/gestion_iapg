@@ -11,13 +11,13 @@
         data-tselect-ids-value="[<%= @course_unit_id %>]" >
         <option value="">Seleccione practica</option>
         <% @courses.each do |course| %>
-          <%# if (course.course.course_type.category.downcase == @course_category) && ( course.course.course_type.fleet == @fleet || course.course.course_type.fleet == "both" )  %>
-            <option 
-              value="<%= course.id %>"
-              data-date="<%= course.date %>"> 
-              <%= "#{date_format(course.date)} #{course.unit.name} sala: #{course.course.room.name}"  %>
-            </option>
-          <%# end %>
+          <option 
+            value="<%= course.id %>"
+            data-date="<%= course.date %>"
+            data-course="<%= course.course_id %>"
+            data-unit="<%= course.unit_id %>">
+            <%= "#{date_format(course.date)} #{course.unit.name} sala: #{course.course.room.name}"  %>
+          </option>
         <% end %>
       </select>
     </div>

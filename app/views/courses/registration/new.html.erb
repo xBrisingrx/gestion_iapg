@@ -1,7 +1,11 @@
-<%= render "shared/modal", title: "Registrar a curso", fade_in: true do %>
-  <%= form_with( url: courses_registration_index_path,  builder: BootstrapBuilder, 
+<%= render "shared/modal", title: "Registrar persona a curso", fade_in: true do %>
+  <%= form_with( 
+    url: courses_registration_index_path, 
+    model: @course_person,  
+    builder: BootstrapBuilder, 
     data: { controller: "forms--register-to-course forms--course-person", 
-      forms__register_to_course_target: "form" } ) do |form| %>
+      forms__register_to_course_target: "form",
+      action: "forms--register-to-course#submit" } ) do |form| %>
     <div class="form-group row mb-2">
     <%= form.label :person_id, "Persona" %>
     <div class="col-6">
@@ -24,6 +28,10 @@
         }
       %>
     </div>
+  </div>
+  <div class="form-check form-switch form-switch-between mb-4">
+    <label class="form-check-label" for="formSwitch1">Es incompany</label>
+    <input type="checkbox" class="form-check-input" id="in_company">
   </div>
   <div class="form-group row mb-2">
     <%= form.label :manager_id, "Referente" %>

@@ -14,7 +14,7 @@
         <span class="input-group-text">
           <i class="bi bi-search"></i>
         </span>
-        <%= form.search_field :name_or_description_or_min_quota_or_max_quota_or_min_score_or_max_score_or_passing_score_or_need_code_or_number_of_repeat_cont,
+        <%= form.search_field :name_or_description_cont,
           placeholder: "Filtrar...",
           class: "form-control form-control-sm",
           autocomplete: "off",
@@ -24,7 +24,7 @@
     <% end %>
   </div>
 </div>
-<%= turbo_frame_tag 'table', id: 'course_types_table' do %>
+<%= turbo_frame_tag "table", id: "course_types_table" do %>
   <div class="table-responsive">
     <table class="table table-hover">
       <thead class="thead-light">
@@ -41,9 +41,9 @@
           <th>Acciones</th>
         </tr>
       </thead>
-      <tbody id='tbody_course_types'>
+      <tbody id="tbody_course_types">
         <%= render @course_types %>
-        <%= render(partial: "shared/not_found_data", locals: {colspan: 10}) if @course_types.empty?%>
+        <%= render(partial: "shared/not_found_data", locals: {colspan: 10}) if @course_types.empty? %>
       </tbody>
     </table>
     <%== pagy_bootstrap_nav(@pagy) %>

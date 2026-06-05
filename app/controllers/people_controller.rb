@@ -127,7 +127,7 @@ class PeopleController < ApplicationController
     end # open zip
     respond_to do |format|
       format.turbo_stream {
-          render turbo_stream: [            
+          render turbo_stream: [
             turbo_stream.replace("toasts",
               partial: "shared/toasts",
               locals: { message: "Carga exitosa", status_class: "primary" }),
@@ -141,10 +141,22 @@ class PeopleController < ApplicationController
   def by_cuil
     person = Person.find_by(cuil: params[:cuil])
     if person.blank?
-      render json: { name: '', cuil: '' }
+      render json: { name: "", cuil: "" }
     else
       render json: { name: person.fullname, id: person.id }
     end
+  end
+
+  def historico_persona
+    person = Person.find(params.expect(:id))
+    courses_person = CoursePerson.where(person: person)
+    courses_ids = courses_person.pluck(:course_id).uniq
+    courses = Course.where(id: courses_ids).order(:from_date)
+    pdf = HistorialPersonaPdf.new(persona: person, courses: courses)
+    send_data pdf.Output('', 'S'),
+      filename: "historial.pdf",
+      type: "application/pdf",
+      disposition: "inline"
   end
 
   private

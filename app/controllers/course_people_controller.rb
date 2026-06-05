@@ -27,7 +27,7 @@ class CoursePeopleController < ApplicationController
   def new
     @course = Course.find(params[:course_id])
     @course_person = CoursePerson.new
-    @units = @course.course_units.group(:unit_id)
+    @course_units = @course.course_units.group(:unit_id)
   end
 
   # GET /courses/1/edit
@@ -59,7 +59,7 @@ class CoursePeopleController < ApplicationController
         format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
         format.json { render :show, status: :created, location: @course_person }
       else
-        @units = @course.course_units.group(:unit_id)
+        @course_units = @course.course_units.group(:unit_id)
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @course_person.errors, status: :unprocessable_entity }
       end
@@ -162,6 +162,17 @@ class CoursePeopleController < ApplicationController
   def get_pendings
     @course_people = CoursePerson.actives.where(company_id: params[:company_id], pay_status: :no_pay)
     render :pendings_table
+  end
+
+  def check_person_on_other_course
+    course_people = CoursePerson
+                    .where(person_id: params[:person_id])
+                    .where("date >= ?", Date.today)
+    if course_people.any?
+      render json: { message: "Esta persona tiene cursos pendientes.", pending: true  }
+    else
+      render json: { pending: false }
+    end
   end
 
   private

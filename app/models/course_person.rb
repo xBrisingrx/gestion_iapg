@@ -164,15 +164,13 @@ class CoursePerson < ApplicationRecord
   end
 
   def register_renovation
-    self.unit = self.course_unit.unit
-    self.course = self.course_unit.course
-    self.date = self.course_unit.date
+    # aca estamos seteando el precio del modulo que va a tomar la persona
+    # si el modulo es por turno, registramos el turno
     sectional_id = self.course.room.headquarter.sectional.id
     self.price = (self.is_free) ? 0 : self.unit.get_price(sectional_id, self.company_id)
-    course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.course_unit.unit_id)
+    course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.unit_id)
     if course_type_unit.is_by_turn
       self.from_hour = set_hour(course_unit.unit_id, self.course_id, self.date, course_type_unit.shift_time)
-      # self.from_hour = set_turn(turn_id, self.date, course_type_unit.shift_time)
       self.to_hour = self.from_hour + course_type_unit.shift_time.minutes
     end
     self.save
@@ -205,6 +203,18 @@ class CoursePerson < ApplicationRecord
       .pluck(:scoring, :make_up_1, :make_up_2)
     scoring = (cp.blank?) ? 0 : cp[0].max
     scoring
+  end
+
+  def nota_pdf_historico(categoria, instancia)
+    cp = CoursePerson.select("course_people.#{instancia} AS nota")
+      .where(person: self.person, course: self.course)
+      .joins(:unit)
+      .where(units: { category: categoria })
+    if cp.blank?
+      ""
+    else
+      (cp.first.nota.blank?) ? "" : cp.first.nota
+    end
   end
 
   def las_theoric_data
@@ -390,5 +400,9 @@ class CoursePerson < ApplicationRecord
 
   def invoice_price
     (self.is_free) ? "Bonificado" : "$#{self.price}.00"
+  end
+
+  def canceled?
+    !self.expiration_date.blank?
   end
 end

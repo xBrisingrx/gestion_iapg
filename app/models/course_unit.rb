@@ -29,6 +29,12 @@ class CourseUnit < ApplicationRecord
     lists
   end
 
+  def is_by_turn
+    course_type = self.course.course_type
+    course_type_unit = CourseTypeUnit.find_by(course_type: course_type, unit: self.unit)
+    course_type_unit.is_by_turn
+  end
+
   private
 
   def set_date

@@ -14,6 +14,10 @@
           <i class="bi bi-file-pdf-fill"></i>
         <% end %>
       <% end %>
+      <%= link_to historico_persona_person_path(person, disposition: "attachment"), 
+        class: "btn btn-primary btn-sm btn-sm btn-icon text-white",title: 'Psicometrico' , target: "_blank" do %>
+        <i class="bi bi-file-pdf-fill"></i>
+      <% end %>
       <%= link_to edit_person_path(person), 
         class: "btn btn-warning btn-sm btn-sm btn-icon text-white",title: 'Editar' ,data: { turbo_frame: "modal"} do %>
         <i class="bi bi-pencil-square"></i>

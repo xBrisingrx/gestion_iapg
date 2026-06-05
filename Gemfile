@@ -52,7 +52,7 @@ group :development, :test do
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
 
-  gem 'rspec-rails', '~> 7.1'
+  gem "rspec-rails", "~> 7.1"
 end
 
 group :development do
@@ -61,13 +61,14 @@ group :development do
 end
 
 group :test do
-  gem 'shoulda-matchers', '~> 6.4'
-  gem 'capybara', '~> 3.40'
-  gem 'webdrivers', '~> 5.3', '>= 5.3.1'
+  gem "shoulda-matchers", "~> 6.4"
+  gem "capybara", "~> 3.40"
+  # gem "webdrivers", "~> 5.3", ">= 5.3.1"
+  gem "selenium-webdriver"
 end
 
-gem 'factory_bot_rails', '~> 6.4', '>= 6.4.4'
-gem 'pagy', '~> 9.2', '>= 9.2.2'
+gem "factory_bot_rails", "~> 6.4", ">= 6.4.4"
+gem "pagy", "~> 9.2", ">= 9.2.2"
 gem "ransack", "~> 4.2"
 gem "pundit", "~> 2.4"
 gem "authentication-zero", "~> 4.0"
@@ -81,3 +82,5 @@ gem "prawn", "~> 2.5"
 
 gem "hexapdf", "~> 1.3"
 gem "prawn-table", "~> 0.2.2"
+
+gem "rbpdf", "~> 1.21"
