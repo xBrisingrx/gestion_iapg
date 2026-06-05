@@ -61,7 +61,7 @@
             </ul>
         </ul>
         <div class="d-flex">
-          <%= link_to "Salir", "#", class: "btn btn-sm btn-outline-danger" %>
+          <%= link_to "Salir", Current.session, data:{ turbo_method: :delete}, class: "btn btn-sm btn-outline-danger" %>
         </div>
       </div>
     <% end %>
