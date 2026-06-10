@@ -12,17 +12,33 @@ class CourseUnit < ApplicationRecord
   before_validation :set_date
   after_create :generate_turns
 
+
+  # Lookup memoizado: una sola query, una sola vez por instancia.
+  # course_type_unit con @course_type_unit ||= → la primera vez consulta la DB, la segunda devuelve la variable de instancia. Tres lookups idénticos se vuelven uno.
+  def course_type_unit
+    @course_type_unit ||= CourseTypeUnit.find_by(
+      course_type_id: course.course_type_id,
+      unit_id: unit_id,
+      shift: shift
+    )
+  end
+  
+  # delegate :is_by_turn, :shift_time, to: :course_type_unit → Rails genera ambos métodos como course_type_unit.is_by_turn y course_type_unit.shift_time. Te ahorrás escribirlos.
+  # allow_nil: true → si course_type_unit no existe (datos rotos), te devuelve nil en lugar de explotar con NoMethodError. Importante para defensive code.
+
+  delegate :is_by_turn, :shift_time, to: :course_type_unit, allow_nil: true
+
   def schedule
     "De #{self.start_hour&.strftime("%k:%M")} a #{self.end_hour&.strftime("%k:%M")}"
   end
 
-  def is_by_turn
-    CourseTypeUnit.find_by(course_type: self.course.course_type, unit: self.unit).is_by_turn
-  end
+  # def course_type_unit
+  #   @course_type_unit ||= CourseTypeUnit.find_by(course_type: course.course_type, unit: unit)
+  # end
 
-  def shift_time
-    CourseTypeUnit.find_by(course_type: self.course.course_type, unit: self.unit).shift_time
-  end
+  # def shift_time
+  #   CourseTypeUnit.find_by(course_type: self.course.course_type, unit: self.unit).shift_time
+  # end
 
   def lists
     lists = Course.find(self.course_id).course_units.where(unit_id: self.unit_id).select(:list).distinct.count
