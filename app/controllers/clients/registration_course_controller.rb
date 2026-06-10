@@ -2,7 +2,6 @@ class Clients::RegistrationCourseController < ApplicationController
   def new;end
 
   def create
-    # debugger
     teorico = CourseUnit.find_by(id: params[:course][:teorico_id])
     course = Course.find_by(id: teorico.course_id)
     data = {

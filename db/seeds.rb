@@ -73,7 +73,6 @@
 #   if new_question.valid?
 #     new_question.save
 #   else
-#     debugger
 #   end
 # end
 

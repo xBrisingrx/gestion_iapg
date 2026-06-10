@@ -21,7 +21,6 @@ class InvoiceItem < ApplicationRecord
   end
 
   def set_payments
-    debugger
     self.course_person.pay_status = :pay
     if self.set_free
       self.course_person.is_free = true

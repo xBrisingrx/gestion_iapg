@@ -15,7 +15,6 @@ class Referente < ApplicationRecord
       if manager.valid?
         manager.save
       else
-        debugger
       end
     end
   end

@@ -7,7 +7,6 @@ class CoursePeopleController < ApplicationController
       @query = CoursePerson.actives.by_course(params[:course_id])
     else
       @query = CoursePerson.actives.by_course_and_company(params[:course_id], current_user.company_id)
-      # debugger
     end
     @course = Course.find(params[:course_id])
     @pagy, @course_people = pagy(@query)
@@ -146,7 +145,6 @@ class CoursePeopleController < ApplicationController
         format.html { redirect_to courses_path, notice: "Inscripción exitosa." }
         format.json { render :show, status: :created, location: @course_person }
       else
-        debugger
         @people = Person.select(:id, :name, :last_name, :cuil).actives
         format.html { render :particular_modal, status: :unprocessable_entity }
         format.json { render json: @course_person.errors, status: :unprocessable_entity }

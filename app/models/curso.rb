@@ -12,7 +12,6 @@ class Curso < ApplicationRecord
       course_type = CourseType.find 27
       cursos = Curso.where(idtipocurso: course_type.id)
       course_type_units = CourseTypeUnit.where(course_type: course_type)
-      debugger
       cursos.each do |curso|
         company = (curso.cuitempresa != "") ? Company.find_by(cuit: curso.cuitempresa) : nil
         company_id = (company.blank?) ? 5 : company.id

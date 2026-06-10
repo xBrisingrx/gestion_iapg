@@ -22,7 +22,6 @@ class Persona < ApplicationRecord
       if person.valid?
         person.save
       else
-        debugger
       end
     end # each personas
   end # metodo crear_personas
