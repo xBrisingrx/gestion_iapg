@@ -1,12 +1,15 @@
 <%= turbo_frame_tag "calendar" do %>
-  <%= render "calendar/month", date: @date do |day|%>
-    <p><%= t(day.strftime("%d")) %></p>
+  <%= render "calendar/month", date: @date do |day| %>
     <% @courses[day]&.each do |course| %>
-     <%= link_to course_path(course), data: { turbo_frame: "modal2"}  do %>
-        <div class="badge bg-info">
-          <%= course.course_type.name %> <%= (course.is_company ? "In Company" : "")%>
-        </div>
-     <% end %>
+      <%= link_to course_path(course),
+            data: { turbo_frame: "modal2" },
+            class: course_event_class(course),
+            title: "#{course.course_type.name}#{course.is_company ? ' (In Company)' : ''}" do %>
+        <%= course.course_type.name %>
+        <% if course.is_company %>
+          <span class="calendar-event__badge">IC</span>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
