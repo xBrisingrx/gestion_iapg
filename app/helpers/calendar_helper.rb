@@ -1,5 +1,5 @@
 module CalendarHelper
-  def calendar_weeks(date)
+  def calendar_weeks(date) # genera la grilla completa (incluye días del mes anterior/siguiente, como gcal)
     start_date = date.beginning_of_month.beginning_of_week(:monday)
     end_date = date.end_of_month.end_of_week(:monday)
     (start_date..end_date).each_slice(7).to_a
@@ -9,14 +9,14 @@ module CalendarHelper
     date == Date.today
   end
 
-  def calendar_day_class(day, month_date)
+  def calendar_day_class(day, month_date) # clase de celda con modifiers --today y --out
     classes = [ "calendar-day" ]
     classes << "calendar-day--today" if today?(day)
     classes << "calendar-day--out" if day.month != month_date.month
     classes.join(" ")
   end
 
-  def course_event_class(course)
+  def course_event_class(course) # clase del evento según course_type.category (teórico/práctico/psicométrico) o in_company
     category = course.course_type.category.to_s.downcase
     base = "calendar-event"
     modifier =
