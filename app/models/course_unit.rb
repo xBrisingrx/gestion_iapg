@@ -34,6 +34,12 @@ class CourseUnit < ApplicationRecord
   #   CourseTypeUnit.find_by(course_type: self.course.course_type, unit: self.unit).is_by_turn
   # end
 
+  # def is_by_turn
+  #   course_type = self.course.course_type
+  #   course_type_unit = CourseTypeUnit.find_by(course_type: course_type, unit: self.unit)
+  #   course_type_unit.is_by_turn
+  # end
+
   # def shift_time
   #   CourseTypeUnit.find_by(course_type: self.course.course_type, unit: self.unit).shift_time
   # end
@@ -41,12 +47,6 @@ class CourseUnit < ApplicationRecord
   def lists
     lists = Course.find(self.course_id).course_units.where(unit_id: self.unit_id).select(:list).distinct.count
     lists
-  end
-
-  def is_by_turn
-    course_type = self.course.course_type
-    course_type_unit = CourseTypeUnit.find_by(course_type: course_type, unit: self.unit)
-    course_type_unit.is_by_turn
   end
 
   private
