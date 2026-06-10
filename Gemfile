@@ -73,6 +73,7 @@ gem "ransack", "~> 4.2"
 gem "pundit", "~> 2.4"
 gem "authentication-zero", "~> 4.0"
 gem "image_processing", ">= 1.2"
+gem "mini_magick", "~> 5.0"
 
 gem "jwt", "~> 2.10"
 
@@ -80,7 +81,6 @@ gem "rack-cors", "~> 2.0"
 
 gem "prawn", "~> 2.5"
 
-gem "hexapdf", "~> 1.3"
 gem "prawn-table", "~> 0.2.2"
 
 gem "rbpdf", "~> 1.21"
