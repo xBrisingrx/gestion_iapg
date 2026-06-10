@@ -1,9 +1,198 @@
-.calendar-container {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr))
+:root {
+  --cal-border: #e0e0e0;
+  --cal-text: #3c4043;
+  --cal-text-muted: #70757a;
+  --cal-today-bg: #e8f0fe;
+  --cal-today-num: #1a73e8;
+  --cal-hover: #f1f3f4;
+  --cal-out-bg: #fafafa;
+  --cal-out-text: #bdc1c6;
+
+  --cal-event-theoric: #1a73e8;
+  --cal-event-practico: #188038;
+  --cal-event-psicometrico: #b06000;
+  --cal-event-company: #8430ce;
+  --cal-event-default: #5f6368;
 }
 
-.bg-calendar-today {
-  --bs-bg-opacity: .4;
-  background-color: rgba(var(--bs-success-rgb), var(--bs-bg-opacity)) !important;
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .5rem 0 1rem;
+  flex-wrap: wrap;
+}
+
+.calendar-toolbar__nav {
+  display: inline-flex;
+  align-items: center;
+  gap: .25rem;
+}
+
+.calendar-toolbar__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  border: 0;
+  background: transparent;
+  color: var(--cal-text);
+  text-decoration: none;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.calendar-toolbar__btn:hover {
+  background: var(--cal-hover);
+  color: var(--cal-text);
+}
+
+.calendar-toolbar__today {
+  padding: .35rem .9rem;
+  border: 1px solid var(--cal-border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--cal-text);
+  text-decoration: none;
+  font-size: .85rem;
+  line-height: 1;
+  height: 2rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+.calendar-toolbar__today:hover {
+  background: var(--cal-hover);
+  color: var(--cal-text);
+}
+
+.calendar-toolbar__title {
+  font-size: 1.4rem;
+  font-weight: 400;
+  color: var(--cal-text);
+  margin: 0;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  border-top: 1px solid var(--cal-border);
+  border-left: 1px solid var(--cal-border);
+  background: #fff;
+}
+
+.calendar-weekday {
+  padding: .5rem .5rem;
+  text-align: center;
+  font-size: .7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: var(--cal-text-muted);
+  border-right: 1px solid var(--cal-border);
+  border-bottom: 1px solid var(--cal-border);
+  background: #fff;
+}
+
+.calendar-day {
+  position: relative;
+  min-height: 7rem;
+  padding: .35rem .35rem .25rem;
+  border-right: 1px solid var(--cal-border);
+  border-bottom: 1px solid var(--cal-border);
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: .15rem;
+  overflow: hidden;
+}
+
+.calendar-day__num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: flex-start;
+  min-width: 1.6rem;
+  height: 1.6rem;
+  padding: 0 .35rem;
+  font-size: .8rem;
+  font-weight: 500;
+  color: var(--cal-text);
+  border-radius: 999px;
+  margin-bottom: .15rem;
+}
+
+.calendar-day--today .calendar-day__num {
+  background: var(--cal-today-num);
+  color: #fff;
+}
+
+.calendar-day--today {
+  background: var(--cal-today-bg);
+}
+
+.calendar-day--out {
+  background: var(--cal-out-bg);
+}
+
+.calendar-day--out .calendar-day__num {
+  color: var(--cal-out-text);
+}
+
+.calendar-event {
+  display: block;
+  padding: .15rem .4rem;
+  font-size: .75rem;
+  line-height: 1.2;
+  color: #fff;
+  background: var(--cal-event-default);
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-decoration: none;
+}
+
+.calendar-event:hover {
+  filter: brightness(.92);
+  color: #fff;
+}
+
+.calendar-event--theoric { background: var(--cal-event-theoric); }
+.calendar-event--practico { background: var(--cal-event-practico); }
+.calendar-event--psicometrico { background: var(--cal-event-psicometrico); }
+.calendar-event--company { background: var(--cal-event-company); }
+
+.calendar-event__badge {
+  font-size: .65rem;
+  padding: 0 .3rem;
+  margin-left: .25rem;
+  background: rgba(255, 255, 255, .25);
+  border-radius: 3px;
+  vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+  .calendar-day {
+    min-height: 4.5rem;
+    padding: .25rem;
+  }
+
+  .calendar-day__num {
+    min-width: 1.3rem;
+    height: 1.3rem;
+    font-size: .7rem;
+  }
+
+  .calendar-event {
+    font-size: .65rem;
+    padding: .1rem .3rem;
+  }
+
+  .calendar-weekday {
+    font-size: .6rem;
+    padding: .3rem .2rem;
+  }
 }
