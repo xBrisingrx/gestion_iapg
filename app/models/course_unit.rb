@@ -3,12 +3,18 @@ class CourseUnit < ApplicationRecord
   # registramos quien lo dicta, en que turno y que horario
   belongs_to :course
   belongs_to :unit
+  belongs_to :course_type_unit
   belongs_to :instructor, optional: true
   has_many :turns
 
   validates :list, :start_hour, :end_hour, presence: true
   validate :start_hour_less_than_end_hour
+  # Rails genera los métodos por vos — no escribís nada más.
+  # delegate :is_by_turn, :shift_time, to: :course_type_unit → Rails genera ambos métodos como course_type_unit.is_by_turn y course_type_unit.shift_time. Te ahorrás escribirlos.
+  # allow_nil: true → si course_type_unit no existe (datos rotos), te devuelve nil en lugar de explotar con NoMethodError. Importante para defensive code.
+  delegate :is_by_turn, :shift_time, to: :course_type_unit, allow_nil: true
 
+  before_validation :set_course_type_unit, on: :create
   before_validation :set_date
   after_create :generate_turns
 
@@ -21,10 +27,6 @@ class CourseUnit < ApplicationRecord
       shift: shift
     )
   end
-  # Rails genera los métodos por vos — no escribís nada más.
-  # delegate :is_by_turn, :shift_time, to: :course_type_unit → Rails genera ambos métodos como course_type_unit.is_by_turn y course_type_unit.shift_time. Te ahorrás escribirlos.
-  # allow_nil: true → si course_type_unit no existe (datos rotos), te devuelve nil en lugar de explotar con NoMethodError. Importante para defensive code.
-  delegate :is_by_turn, :shift_time, to: :course_type_unit, allow_nil: true
 
   def schedule
     "De #{self.start_hour&.strftime("%k:%M")} a #{self.end_hour&.strftime("%k:%M")}"
@@ -50,6 +52,16 @@ class CourseUnit < ApplicationRecord
   end
 
   private
+  def set_course_type_unit
+    return if course_type_unit_id.present?
+    return unless course && unit_id && shift
+
+    self.course_type_unit = CourseTypeUnit.find_by(
+      course_type_id: course.course_type_id,
+      unit_id: unit_id,
+      shift: shift
+    )
+  end
 
   def set_date
     self.date = self.course.from_date + (self.day - 1).day
@@ -57,18 +69,15 @@ class CourseUnit < ApplicationRecord
 
   def generate_turns
     # course_type_unit = CourseTypeUnit.find_by(course_type_id: self.course.course_type_id, unit_id: self.unit_id, shift: self.shift)
-    return if !course_type_unit.is_by_turn
-    # turn_hour = self.start_hour
-    date = self.date
-    turn_hours = CourseHoursTurn.where(course_type_unit: course_type_unit)
+    return unless course_type_unit&.is_by_turn
 
-    turn_hours.each do |turn_hour|
-      self.turns.create(
-        course_id: self.course_id,
-        unit_id: self.unit_id,
+    course_type_unit.course_hours_turns.each do |turn_hour|
+      turns.create(
+        course_id: course_id,
+        unit_id: unit_id,
         date: date,
         hour: turn_hour.hour,
-        list: self.list,
+        list: list,
         status: :available
       )
     end
