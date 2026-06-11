@@ -22,9 +22,9 @@ Rails.application.routes.draw do
     # credenciales
     post "credential_login", to: "credential#login"
     get "credential_person_data", to: "credential#credential_person_data"
-    get "provincias", to: "credential#provincias"
-    get "localidades", to: "credential#localidades"
-    get "empresas", to: "credential#empresas"
+    get "provincias",  to: "lookups#provincias"
+    get "localidades", to: "lookups#localidades"
+    get "empresas",    to: "lookups#empresas"
     get "savedatos", to: "credential#savedatos"
     get "validar", to: "credential#validar"
     get "mostrar_credencial", to: "credential#mostrar_credencial"
