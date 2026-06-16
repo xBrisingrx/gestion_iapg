@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
+ActiveRecord::Schema[8.0].define(version: 2026_06_10_013538) do
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -160,6 +160,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
     t.string "status"
     t.boolean "is_free", default: false
     t.boolean "invoiced", default: false
+    t.date "cancellation_date"
+    t.integer "idcupoempresa", comment: "columna q agregamos para migrar datos. cuando termina se elimina"
+    t.boolean "canceled", default: false
     t.index ["company_id"], name: "index_course_people_on_company_id"
     t.index ["course_id"], name: "index_course_people_on_course_id"
     t.index ["course_unit_id"], name: "index_course_people_on_course_unit_id"
@@ -222,7 +225,9 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "instructor_id"
+    t.bigint "course_type_unit_id", null: false
     t.index ["course_id"], name: "index_course_units_on_course_id"
+    t.index ["course_type_unit_id"], name: "index_course_units_on_course_type_unit_id"
     t.index ["instructor_id"], name: "index_course_units_on_instructor_id"
     t.index ["unit_id"], name: "index_course_units_on_unit_id"
   end
@@ -302,17 +307,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
     t.index ["name"], name: "index_headquarters_on_name", unique: true
     t.index ["province_id"], name: "index_headquarters_on_province_id"
     t.index ["sectional_id"], name: "index_headquarters_on_sectional_id"
-  end
-
-  create_table "incoive_items", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
-    t.bigint "invoice_id", null: false
-    t.bigint "course_people_id", null: false
-    t.integer "status"
-    t.boolean "active", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["course_people_id"], name: "index_incoive_items_on_course_people_id"
-    t.index ["invoice_id"], name: "index_incoive_items_on_invoice_id"
   end
 
   create_table "inscription_motives", charset: "utf8mb4", collation: "utf8mb4_uca1400_ai_ci", force: :cascade do |t|
@@ -588,6 +582,107 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "z_cuposempresas", primary_key: "idcupoempresa", id: :integer, charset: "utf8mb3", collation: "utf8mb3_spanish_ci", force: :cascade do |t|
+    t.integer "idempresa", null: false
+    t.integer "idpersona", null: false
+    t.integer "idreferente", null: false
+    t.timestamp "fechasolicitud", default: -> { "current_timestamp()" }, null: false
+    t.datetime "fechacancelacion", precision: nil
+    t.integer "idcurso", null: false
+    t.integer "practicaautoempresa"
+    t.string "turnoteoiniciodia2", limit: 1
+    t.string "turnoteorenovacion", limit: 1
+    t.integer "nrocupo", null: false
+    t.string "tipocupo", limit: 1, null: false
+    t.integer "paraoperadora", null: false
+    t.integer "categoriaflota", null: false
+    t.integer "subcategoriamotivo"
+    t.boolean "covid", default: false
+  end
+
+  create_table "z_cursos", primary_key: "idcurso", id: :integer, charset: "utf8mb3", collation: "utf8mb3_spanish_ci", force: :cascade do |t|
+    t.date "fechadesde", null: false
+    t.date "fechahasta", null: false
+    t.integer "esincompany", null: false
+    t.boolean "espapel", default: false, null: false
+    t.boolean "solopesado", default: false, null: false
+    t.string "cuitempresa", limit: 13
+    t.integer "nrogeneral", null: false
+    t.integer "nroanual", null: false
+    t.string "observaciones", limit: 150
+    t.timestamp "fechaalta", default: -> { "current_timestamp()" }, null: false
+    t.date "fechaanulacion"
+    t.integer "idtipocurso", null: false
+    t.integer "idsala", null: false
+    t.integer "cerrado", default: 0, null: false
+    t.string "code", limit: 6
+    t.integer "examen_id"
+    t.integer "recu1l_id"
+    t.integer "recu2l_id"
+    t.integer "recu1p_id"
+    t.integer "recu2p_id"
+    t.integer "lista_id"
+  end
+
+  create_table "z_empresas", primary_key: "idempresa", id: :integer, charset: "utf8mb3", collation: "utf8mb3_spanish_ci", force: :cascade do |t|
+    t.string "razonsocial", limit: 50, null: false
+    t.string "cuit", limit: 13, null: false
+    t.string "condicioniva", limit: 25, null: false
+    t.string "domicilio", limit: 100, null: false
+    t.string "telefono", limit: 30, null: false
+    t.string "contrato", limit: 25, null: false
+    t.integer "operadora", null: false
+    t.string "observaciones", limit: 250
+    t.string "localidad", limit: 50, null: false
+    t.string "provincia", limit: 50, null: false
+    t.integer "idcategoriaempresa", null: false
+    t.integer "debecupo", default: 0
+    t.index ["cuit"], name: "cuit", unique: true
+  end
+
+  create_table "z_examenesempresa", primary_key: "idexamen", id: :integer, charset: "utf8mb3", collation: "utf8mb3_spanish_ci", force: :cascade do |t|
+    t.integer "notaexamenteorico"
+    t.integer "notarecuperatorio1"
+    t.datetime "notarecuperatorio1fecha", precision: nil
+    t.integer "notarecuperatorio2"
+    t.datetime "notarecuperatorio2fecha", precision: nil
+    t.integer "resultadoteorico"
+    t.integer "notapractico"
+    t.integer "resultadopractico"
+    t.integer "idcupoempresa", null: false
+    t.integer "notapracticorecup1"
+    t.integer "notapracticorecup2"
+    t.integer "notapsico"
+    t.integer "resultadopsico"
+  end
+
+  create_table "z_personas", primary_key: "idpersona", id: :integer, charset: "utf8mb3", collation: "utf8mb3_spanish_ci", force: :cascade do |t|
+    t.string "cuil", limit: 13, null: false
+    t.string "apellido", limit: 50, null: false
+    t.string "nombre", limit: 50, null: false
+    t.date "fechanacimiento", null: false
+    t.string "telefono", limit: 30, null: false
+    t.string "nrocelular", limit: 30, null: false
+    t.string "mail", limit: 50, null: false
+    t.string "domicilio", limit: 100, null: false
+    t.string "localidad", limit: 50
+    t.string "provincia", limit: 50
+    t.integer "idlocalidad"
+    t.string "code", limit: 4
+    t.index ["cuil"], name: "cuil", unique: true
+  end
+
+  create_table "z_referentes_empresas", primary_key: "idreferente", id: :integer, charset: "utf8mb3", collation: "utf8mb3_spanish_ci", force: :cascade do |t|
+    t.integer "idpersona", null: false
+    t.integer "idempresa", null: false
+    t.string "mail", limit: 50, null: false
+    t.timestamp "fechadesde", default: -> { "current_timestamp()" }, null: false
+    t.string "funcion", limit: 50, null: false
+    t.date "fechabaja"
+    t.string "password", limit: 30, null: false
+    t.integer "recibenotificacion", default: 1, null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "answers", "questions"
@@ -614,6 +709,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
   add_foreign_key "course_type_units", "course_types"
   add_foreign_key "course_type_units", "units"
   add_foreign_key "course_types", "rooms"
+  add_foreign_key "course_units", "course_type_units"
   add_foreign_key "course_units", "courses"
   add_foreign_key "course_units", "instructors"
   add_foreign_key "course_units", "units"
@@ -626,8 +722,6 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
   add_foreign_key "headquarters", "cities"
   add_foreign_key "headquarters", "provinces"
   add_foreign_key "headquarters", "sectionals"
-  add_foreign_key "incoive_items", "course_people", column: "course_people_id"
-  add_foreign_key "incoive_items", "invoices"
   add_foreign_key "instructors", "people"
   add_foreign_key "invoice_items", "course_people"
   add_foreign_key "invoice_items", "invoices"
@@ -659,4 +753,5 @@ ActiveRecord::Schema[8.0].define(version: 2026_02_04_140232) do
   add_foreign_key "turns", "people"
   add_foreign_key "turns", "units"
   add_foreign_key "users", "companies"
+  add_foreign_key "users", "people"
 end

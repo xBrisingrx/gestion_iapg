@@ -16,6 +16,8 @@ default: &default
   username: <%= ENV["DB_USER"] %>
   password: <%= ENV["DB_PASSWORD"] %>
   socket: /var/run/mysqld/mysqld.sock
+  variables:
+    innodb_snapshot_isolation: OFF
 
 development:
   <<: *default
@@ -49,20 +51,7 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
-    <<: *default
-    database: gestion_iapg_production
-    username: <%= ENV["GESTION_IAPG_DATABASE_USER"] %>
-    password: <%= ENV["GESTION_IAPG_DATABASE_PASSWORD"] %>
-  cache:
-    <<: *primary_production
-    database: gestion_iapg_production_cache
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    database: gestion_iapg_production_queue
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    database: gestion_iapg_production_cable
-    migrations_paths: db/cable_migrate
+  <<: *default
+  database: gestion_iapg_production
+  username: <%= ENV["GESTION_IAPG_DATABASE_USER"] %>
+  password: <%= ENV["GESTION_IAPG_DATABASE_PASSWORD"] %>
